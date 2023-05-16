@@ -1,0 +1,15 @@
+﻿Differences in the program compared to Rules As Written
+
+*** SETTLEMENT TYPE ***
+Rules say this should be GM decision.  There is a "Select" button for that, however I've added a "Rand" button
+I've then made up a random selection process (see in the RandomPlanet.cs)
+
+*** COLONY POPULATION ***
+Rather than using the table, I'm essentially backing out the table from some Species parameters
+Basically rebuilding the table in code as per the breakout box on Space page 93
+
+*** LIMITS ***
+Some limits can be breached on user inputs.  For example, on the random table planets can only get resources in the range (-2,+2)
+The user input screen I've done however just has a note on this, and permits the user to select any value (-5,+5)
+I could have limited the planet option list, however chose to permit the wider range
+Other things, such as physical planetary characteristics, I've retained the limits to ensure results are reasonable

@@ -1,0 +1,297 @@
+﻿<Window x:Class="GurpsSpace.PlanetCreation.PlanetCreator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GurpsSpace.PlanetCreation"
+        mc:Ignorable="d"
+        Title="GURPS Space - Planet Creator" Width="500" SizeToContent="Height">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Row="0" Grid.Column="0">
+
+            <TabItem Header="Physical" HorizontalAlignment="Left" Width="54">
+
+                <StackPanel Orientation="Vertical">
+
+                    <GroupBox Header="Basic Information">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Name, Mode=TwoWay}" />
+                            <Button Grid.Row="0" Grid.Column="3" Tag="Name" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="1" Grid.Column="0" >Type</Label>
+                            <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=Type, Mode=OneWay}" />
+                            <Button Grid.Row="1" Grid.Column="2" Tag="Type" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="1" Grid.Column="3" Tag="Type" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="2" Grid.Column="0">Resources</Label>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=ResourceValueString, Mode=OneWay}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Tag="ResourceValueCategory" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="2" Grid.Column="3" Tag="ResourceValueCategory" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="3" Grid.Column="0">Description</Label>
+                            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=Description, Mode=TwoWay}" />
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Atmosphere" IsEnabled="{Binding Path=HasAtmosphere, Mode=OneWay}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Atmospheric mass</Label>
+                            <Slider Grid.Row="0" Grid.Column="1" Minimum="0.5" Maximum="1.5" Value="{Binding Path=AtmosphericMass, Mode=TwoWay}" TickFrequency="0.05" TickPlacement="BottomRight" IsSnapToTickEnabled="true"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=AtmosphericMass, Mode=OneWay}" ContentStringFormat="N2" HorizontalAlignment="Center"></Label>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="AtmosphericMass" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="1" Grid.Column="0">Conditions</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=AtmosphericConditionsString, Mode=OneWay}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Tag="AtmosphericConditions" Click="btnSelect_Click" IsEnabled="{Binding Path=HasAtmosphericOptions, Mode=OneWay}">Select</Button>
+                            <Button Grid.Row="1" Grid.Column="3" Tag="AtmosphericConditions" Click="btnRandom_Click" IsEnabled="{Binding Path=HasAtmosphericOptions, Mode=OneWay}">Rand</Button>
+
+                            <Label Grid.Row="2" Grid.Column="0">Description</Label>
+                            <Label Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" >
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Path=AtmosphericDescription, Mode=OneWay}"/>
+                            </Label>
+
+                            <Label Grid.Row="3" Grid.Column="0">Pressure</Label>
+                            <Label Grid.Row="3" Grid.Column="1">
+                                <TextBlock>
+                                    <Run Text="{Binding Path=AtmosphericPressure, Mode=OneWay, StringFormat=N2}"/><Run Text=" ("/><Run Text="{Binding Path=AtmosphericPressureCategory, Mode=OneWay}"/><Run Text=")"/>
+                                </TextBlock>
+                            </Label>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Aquasphere" IsEnabled="{Binding Path=HasLiquid, Mode=OneWay}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Hydrographic coverage</Label>
+                            <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=MinimumHydrographicCoverage, Mode=OneWay}" Maximum="{Binding Path=MaximumHydrographicCoverage, Mode=OneWay}" Value="{Binding Path=HydrographicCoverage, Mode=TwoWay}"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=HydrographicCoverage, Mode=OneWay}" ContentStringFormat="P0" HorizontalAlignment="Center"/>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="HydrographicCoverage" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="1" Grid.Column="0">Liquid type</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=LiquidType, Mode=OneWay}"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Climate">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Average temperature</Label>
+                            <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=TempMin, Mode=OneWay}" Maximum="{Binding Path=TempMax, Mode=OneWay}" Value="{Binding Path=AverageSurfaceTempK, Mode=TwoWay}" TickFrequency="{Binding Path=TempStep, Mode=OneWay}" TickPlacement="BottomRight"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=AverageSurfaceTempK, Mode=OneWay}" ContentStringFormat="0 K"/>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="AverageSurfaceTempK" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="1" Grid.Column="0">Climate type</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=ClimateType, Mode=OneWay}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0">Blackbody temperature</Label>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=BlackbodyTempK, Mode=OneWay}"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Lithosphere" IsEnabled="{Binding Path=IsPlanet, Mode=OneWay}">
+                        <Grid>
+
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Core Type</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=CoreType, Mode=OneWay}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0">Density</Label>
+                            <Slider Grid.Row="1" Grid.Column="1" Minimum="{Binding Path=MinDensity, Mode=OneWay}" Maximum="{Binding Path=MaxDensity, Mode=OneWay}" Value="{Binding Path=Density,Mode=TwoWay}" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="true"/>
+                            <Label Grid.Row="1" Grid.Column="2" Content="{Binding Path=Density, Mode=OneWay}" ContentStringFormat="N1"/>
+                            <Button Grid.Row="1" Grid.Column="3" Tag="Density" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="2" Grid.Column="0">Gravity</Label>
+                            <Slider Grid.Row="2" Grid.Column="1" Minimum="{Binding Path=MinGravity, Mode=OneWay}" Maximum="{Binding Path=MaxGravity, Mode=OneWay}" Value="{Binding Path=Gravity,Mode=TwoWay}" TickFrequency="0.05" TickPlacement="BottomRight" IsSnapToTickEnabled="false"/>
+                            <Label Grid.Row="2" Grid.Column="2" Content="{Binding Path=Gravity, Mode=OneWay}" ContentStringFormat="N2"/>
+                            <Button Grid.Row="2" Grid.Column="3" Tag="Gravity" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="3" Grid.Column="0">Diameter</Label>
+                            <Label Grid.Row="3" Grid.Column="1">
+                                <TextBlock>
+                                        <Run Text="{Binding Path=DiameterEarths, Mode=OneWay, StringFormat=N2}"/><Run Text=" Earths ("/><Run Text="{Binding Path=DiameterMiles, Mode=OneWay,StringFormat=N0}"/><Run Text=" miles)"/>
+                                </TextBlock>
+                            </Label>
+
+                            <Label Grid.Row="4" Grid.Column="0">Mass</Label>
+                            <Label Grid.Row="4" Grid.Column="1">
+                                <TextBlock>
+                                        <Run Text="{Binding Path=Mass, Mode=OneWay, StringFormat=N2}"/><Run Text=" Earths"/>
+                                </TextBlock>
+                            </Label>
+
+
+                        </Grid>
+
+                    </GroupBox>
+
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Social Window" HorizontalAlignment="Center" Width="43">
+                <StackPanel Orientation="Vertical">
+
+                    <GroupBox Header="Basic Information">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay}"/>
+
+                            <Label Grid.Row="1" Grid.Column="0">Type</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Type, Mode=OneWay}"/>
+
+                            <Label Grid.Row="2" Grid.Column="0">Description</Label>
+                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding Path=Description, Mode=TwoWay}" />
+
+                            <Label Grid.Row="3" Grid.Column="0">Settlement</Label>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=SettlementType, Mode=OneWay}"/>
+                            <Button Grid.Row="3" Grid.Column="2" Tag="SettlementType" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="3" Grid.Column="3" Tag="SettlementType" Click="btnRandom_Click">Rand</Button>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Social Overview">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Species</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=LocalSpecies.Name, Mode=OneWay}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Tag="Species" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="Species" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="1" Grid.Column="0">Affinity</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}    (Resources: {1}, Habitability: {2})">
+                                            <Binding Path="AffinityScore" Mode="OneWay"/>
+                                            <Binding Path="ResourceValueModifier" Mode="OneWay"/>
+                                            <Binding Path="Habitability" Mode="OneWay"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label>
+
+                            <Label Grid.Row="2" Grid.Column="0">Local Tech Level</Label>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelDescription, Mode=OneWay}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Tag="TechLevel" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="2" Grid.Column="3">Rand</Button>
+
+                        </Grid>
+                    </GroupBox>
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Button IsCancel="true">Cancel</Button>
+            <Button Click="btnOK_Click">OK</Button>
+            <Button Click="btnTest_Click">Test</Button>
+        </StackPanel>
+
+
+    </Grid>
+</Window>

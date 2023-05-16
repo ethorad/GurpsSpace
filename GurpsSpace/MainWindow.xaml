@@ -1,0 +1,58 @@
+﻿<Window x:Class="GurpsSpace.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GurpsSpace"
+        mc:Ignorable="d"
+        Title="GURPS Space" Width="400" SizeToContent="Height">
+
+    <StackPanel Orientation="Vertical">
+
+        <GroupBox Header="Setting">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0">Setting</Label>
+                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=Name, Mode=OneWay}"/>
+
+                <Label Grid.Row="1" Grid.Column="0">Base Tech Level</Label>
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=TechLevelParams.Description, Mode=OneWay}"/>
+
+                <Label Grid.Row="2" Grid.Column="0">Main species</Label>
+                <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=MainSpecies.Name, Mode=OneWay}"/>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Planet Creation">
+            <WrapPanel>
+                <Button Click="btnCreatePlanet">New Planet</Button>
+                <Label Content="{Binding Path=Planets[0].Name, Mode=OneWay}"/>
+            </WrapPanel>
+        </GroupBox>
+        
+        <GroupBox Header="Testing">
+
+            <WrapPanel>
+                <Button Click="btnNameClick">Name</Button>
+                <Button Click="btnTestClick">Test</Button>
+            </WrapPanel>
+
+        </GroupBox>
+
+    </StackPanel>
+
+
+</Window>
