@@ -10,26 +10,7 @@ namespace GurpsSpace
     {
         private int tL; public int TL { get { return tL; } }
         private string age; public string Age { get { return age; } }
-        public string Description 
-        { 
-            get 
-            {
-                string TLval = "TL" + TL;
-                string AgeDesc = "(" + Age;
-                if (IsDelayed)
-                {
-                    TLval += "-1";
-                    AgeDesc += " - Delayed";
-                }
-                if (IsAdvanced)
-                {
-                    TLval += "+1";
-                    AgeDesc += " - Advanced";
-                }
-                AgeDesc += ")";
-                return TLval + " " + AgeDesc; 
-            } 
-        }
+
         private bool isDelayed;
         public bool IsDelayed
         {

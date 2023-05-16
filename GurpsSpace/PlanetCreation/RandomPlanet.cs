@@ -7,14 +7,14 @@ namespace GurpsSpace.PlanetCreation
 {
     internal class RandomPlanetNameAndType : IPlanetCreator
     {
-        public string SetName(Planet p)
+        public string SetName(ViewModelPlanet p)
         {
             string name = "Randomia-" + DiceBag.Rand(1, 100);
             p.Name = name;
             return p.Name;
         }
 
-        public (eSize, eSubtype) SetSizeAndSubtype(Planet p)
+        public (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p)
         {
             eSize size;
             eSubtype subtype;
@@ -42,7 +42,7 @@ namespace GurpsSpace.PlanetCreation
             return (p.Size, p.Subtype);
         }
 
-        public eResourceValueCategory SetResourceValueCategory(Planet p)
+        public eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p)
         {
             int roll = DiceBag.Roll(3);
             if (p.IsPlanet)
@@ -52,7 +52,7 @@ namespace GurpsSpace.PlanetCreation
             return p.ResourceValueCategory;
         }
 
-        public double SetAtmosphericMass(Planet p)
+        public double SetAtmosphericMass(ViewModelPlanet p)
         {
 
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
@@ -72,7 +72,7 @@ namespace GurpsSpace.PlanetCreation
             return p.AtmosphericMass;
         }
 
-        public (fAtmosphericConditions, string) SetAtmosphericConditions(Planet p)
+        public (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p)
         {
 
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
@@ -97,7 +97,7 @@ namespace GurpsSpace.PlanetCreation
 
             return (p.AtmosphericConditions, p.AtmosphericDescription);
         }
-        private (fAtmosphericConditions, string) GetBaseAtmosphericConditions(Planet p)
+        private (fAtmosphericConditions, string) GetBaseAtmosphericConditions(ViewModelPlanet p)
         {
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
                 return (fAtmosphericConditions.None, "None");
@@ -109,7 +109,7 @@ namespace GurpsSpace.PlanetCreation
                 return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereB;
 
         }
-        private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(Planet p)
+        private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(ViewModelPlanet p)
         {
             int roll = DiceBag.Roll(3);
 
@@ -163,7 +163,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public double SetHydrographicCoverage(Planet p)
+        public double SetHydrographicCoverage(ViewModelPlanet p)
         {
             PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
             double cover = 0;
@@ -182,7 +182,7 @@ namespace GurpsSpace.PlanetCreation
             return p.HydrographicCoverage;
         }
 
-        public int SetAverageSurfaceTempK(Planet p)
+        public int SetAverageSurfaceTempK(ViewModelPlanet p)
         {
             int tempMin = p.TempMin;
             int tempStep = p.TempStep;
@@ -190,7 +190,7 @@ namespace GurpsSpace.PlanetCreation
             return p.AverageSurfaceTempK;
         }
 
-        public double SetDensity(Planet p)
+        public double SetDensity(ViewModelPlanet p)
         {
             switch(p.CoreType)
             {
@@ -207,7 +207,7 @@ namespace GurpsSpace.PlanetCreation
             return p.Density;
         }
 
-        public double SetGravity(Planet p)
+        public double SetGravity(ViewModelPlanet p)
         {
             double minG = p.MinGravity;
             double maxG = p.MaxGravity;
@@ -224,7 +224,7 @@ namespace GurpsSpace.PlanetCreation
             return p.Gravity;
         }
 
-        public eSettlementType SetSettlementType(Planet p)
+        public eSettlementType SetSettlementType(ViewModelPlanet p)
         {
             int roll = DiceBag.Roll(1);
             switch(roll)
@@ -252,7 +252,7 @@ namespace GurpsSpace.PlanetCreation
             return p.SettlementType;
         }
 
-        public Species SetLocalSpecies(Planet p)
+        public Species SetLocalSpecies(ViewModelPlanet p)
         {
             int numSpecies = p.Setting.Species.Count;
             int randNum = DiceBag.Rand(0, numSpecies - 1);
@@ -260,7 +260,7 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalSpecies;
         }
 
-        public int SetLocalTechLevel(Planet p)
+        public int SetLocalTechLevel(ViewModelPlanet p)
         {
             int roll = DiceBag.Roll(3);
 

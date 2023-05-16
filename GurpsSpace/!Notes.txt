@@ -11,6 +11,9 @@ then set the DataContext to be the planetviewmodel class
 Half way through the random TL method
 However some adjustments on the roll depend on the settlement type (i.e. Homeworld etc)
 
+Change the "CheckRanges" on the planet class to just run when the key assumptions are changed
+Could split into CheckGravityRange, etc.
+
 Need window for marginal atmospheric options
 
 At some point add in trade routes?  Can only really do once we have multiple planets or systems
@@ -44,7 +47,7 @@ Also can try to ensure that each species only has at most 1 Homeworld
 
 GENERAL
 
-Add some namespaces, so that the planet creation has its own namespace?
+Change everything to be protected instead of public
 
 change to have a viewer class, which just feeds through to the planet class but does the memberupdate stuff
 So that way can remove some of the UI update code from the base planet class

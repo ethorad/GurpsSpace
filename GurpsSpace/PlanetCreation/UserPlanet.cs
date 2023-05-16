@@ -8,7 +8,7 @@ namespace GurpsSpace.PlanetCreation
     {
 
 
-        public string SetName(Planet p)
+        public string SetName(ViewModelPlanet p)
         {
             InputString inStr = new("Enter planet's name:", p.Name);
             if (inStr.ShowDialog()==true)
@@ -18,7 +18,7 @@ namespace GurpsSpace.PlanetCreation
             return p.Name;
         }
 
-        public (eSize, eSubtype) SetSizeAndSubtype(Planet p)
+        public (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p)
         {
             PlanetTypeSelection typeDiag = new();
             if (typeDiag.ShowDialog() == true)
@@ -29,7 +29,7 @@ namespace GurpsSpace.PlanetCreation
             return (p.Size, p.Subtype);
         }
 
-        public eResourceValueCategory SetResourceValueCategory(Planet p)
+        public eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
@@ -46,12 +46,12 @@ namespace GurpsSpace.PlanetCreation
             return p.ResourceValueCategory;
         }
 
-        public double SetAtmosphericMass(Planet p)
+        public double SetAtmosphericMass(ViewModelPlanet p)
         {
             throw new NotImplementedException();
         }
 
-        public (fAtmosphericConditions, string) SetAtmosphericConditions(Planet p)
+        public (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p)
         {
             if (!p.HasAtmosphericOptions)
             {
@@ -74,27 +74,27 @@ namespace GurpsSpace.PlanetCreation
             return (p.AtmosphericConditions, p.AtmosphericDescription);
         }
 
-        public double SetHydrographicCoverage(Planet p)
+        public double SetHydrographicCoverage(ViewModelPlanet p)
         {
             throw new NotImplementedException();
         }
 
-        public int SetAverageSurfaceTempK(Planet p)
+        public int SetAverageSurfaceTempK(ViewModelPlanet p)
         { 
             throw new NotImplementedException(); 
         }
 
-        public double SetDensity(Planet p)
+        public double SetDensity(ViewModelPlanet p)
         {
             throw new NotImplementedException();
         }
 
-        public double SetGravity(Planet p)
+        public double SetGravity(ViewModelPlanet p)
         {
             throw new NotImplementedException();
         }
 
-        public eSettlementType SetSettlementType(Planet p)
+        public eSettlementType SetSettlementType(ViewModelPlanet p)
         {
             string question = "Select the settlement type to be present:";
             List<(string, string)> options = new List<(string, string)>();
@@ -163,7 +163,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public Species SetLocalSpecies(Planet p)
+        public Species SetLocalSpecies(ViewModelPlanet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             foreach (Species s in p.Setting.Species)
@@ -179,7 +179,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public int SetLocalTechLevel(Planet p)
+        public int SetLocalTechLevel(ViewModelPlanet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             foreach (TechLevelParameters tlp in RuleBook.TechLevelParams)

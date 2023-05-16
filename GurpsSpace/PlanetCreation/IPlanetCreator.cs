@@ -3,25 +3,25 @@ namespace GurpsSpace.PlanetCreation
 {
     internal interface IPlanetCreator
     {
-        string SetName(Planet p);
-        (eSize, eSubtype) SetSizeAndSubtype(Planet p);
-        eResourceValueCategory SetResourceValueCategory(Planet p);
+        string SetName(ViewModelPlanet p);
+        (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p);
+        eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p);
 
-        double SetAtmosphericMass(Planet p);
-        (fAtmosphericConditions, string) SetAtmosphericConditions(Planet p);
+        double SetAtmosphericMass(ViewModelPlanet p);
+        (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p);
 
-        double SetHydrographicCoverage(Planet p);
+        double SetHydrographicCoverage(ViewModelPlanet p);
 
-        int SetAverageSurfaceTempK(Planet p);
+        int SetAverageSurfaceTempK(ViewModelPlanet p);
 
-        double SetDensity(Planet p);
+        double SetDensity(ViewModelPlanet p);
 
-        double SetGravity(Planet p);
+        double SetGravity(ViewModelPlanet p);
 
-        eSettlementType SetSettlementType(Planet p);
+        eSettlementType SetSettlementType(ViewModelPlanet p);
 
-        Species SetLocalSpecies(Planet p);
+        Species SetLocalSpecies(ViewModelPlanet p);
 
-        int SetLocalTechLevel(Planet p);
+        int SetLocalTechLevel(ViewModelPlanet p);
     }
 }

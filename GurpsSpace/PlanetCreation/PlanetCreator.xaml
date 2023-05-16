@@ -41,7 +41,7 @@
                             <Button Grid.Row="0" Grid.Column="3" Tag="Name" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0" >Type</Label>
-                            <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=Type, Mode=OneWay}" />
+                            <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=TypeString, Mode=OneWay}" />
                             <Button Grid.Row="1" Grid.Column="2" Tag="Type" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="1" Grid.Column="3" Tag="Type" Click="btnRandom_Click">Rand</Button>
 
@@ -88,11 +88,7 @@
                             </Label>
 
                             <Label Grid.Row="3" Grid.Column="0">Pressure</Label>
-                            <Label Grid.Row="3" Grid.Column="1">
-                                <TextBlock>
-                                    <Run Text="{Binding Path=AtmosphericPressure, Mode=OneWay, StringFormat=N2}"/><Run Text=" ("/><Run Text="{Binding Path=AtmosphericPressureCategory, Mode=OneWay}"/><Run Text=")"/>
-                                </TextBlock>
-                            </Label>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=AtmosphericPressureString, Mode=OneWay}"/>
 
                         </Grid>
                     </GroupBox>
@@ -144,7 +140,7 @@
                             <Button Grid.Row="0" Grid.Column="3" Tag="AverageSurfaceTempK" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Climate type</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=ClimateType, Mode=OneWay}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=ClimateTypeString, Mode=OneWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0">Blackbody temperature</Label>
                             <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=BlackbodyTempK, Mode=OneWay}"/>
@@ -171,7 +167,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">Core Type</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=CoreType, Mode=OneWay}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=CoreTypeString, Mode=OneWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0">Density</Label>
                             <Slider Grid.Row="1" Grid.Column="1" Minimum="{Binding Path=MinDensity, Mode=OneWay}" Maximum="{Binding Path=MaxDensity, Mode=OneWay}" Value="{Binding Path=Density,Mode=TwoWay}" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="true"/>
@@ -184,19 +180,10 @@
                             <Button Grid.Row="2" Grid.Column="3" Tag="Gravity" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="3" Grid.Column="0">Diameter</Label>
-                            <Label Grid.Row="3" Grid.Column="1">
-                                <TextBlock>
-                                        <Run Text="{Binding Path=DiameterEarths, Mode=OneWay, StringFormat=N2}"/><Run Text=" Earths ("/><Run Text="{Binding Path=DiameterMiles, Mode=OneWay,StringFormat=N0}"/><Run Text=" miles)"/>
-                                </TextBlock>
-                            </Label>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=DiameterString, Mode=OneWay}"/>
 
                             <Label Grid.Row="4" Grid.Column="0">Mass</Label>
-                            <Label Grid.Row="4" Grid.Column="1">
-                                <TextBlock>
-                                        <Run Text="{Binding Path=Mass, Mode=OneWay, StringFormat=N2}"/><Run Text=" Earths"/>
-                                </TextBlock>
-                            </Label>
-
+                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding Path=MassString, Mode=OneWay}"/>
 
                         </Grid>
 
@@ -228,13 +215,13 @@
                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay}"/>
 
                             <Label Grid.Row="1" Grid.Column="0">Type</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Type, Mode=OneWay}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=TypeString, Mode=OneWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0">Description</Label>
                             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding Path=Description, Mode=TwoWay}" />
 
                             <Label Grid.Row="3" Grid.Column="0">Settlement</Label>
-                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=SettlementType, Mode=OneWay}"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=SettlementTypeString, Mode=OneWay}"/>
                             <Button Grid.Row="3" Grid.Column="2" Tag="SettlementType" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="3" Grid.Column="3" Tag="SettlementType" Click="btnRandom_Click">Rand</Button>
 
@@ -257,25 +244,15 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">Species</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=LocalSpecies.Name, Mode=OneWay}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=LocalSpeciesName, Mode=OneWay}"/>
                             <Button Grid.Row="0" Grid.Column="2" Tag="Species" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="0" Grid.Column="3" Tag="Species" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Affinity</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
-                                <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0}    (Resources: {1}, Habitability: {2})">
-                                            <Binding Path="AffinityScore" Mode="OneWay"/>
-                                            <Binding Path="ResourceValueModifier" Mode="OneWay"/>
-                                            <Binding Path="Habitability" Mode="OneWay"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Label>
+                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="{Binding Path=AffinityString, Mode=OneWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0">Local Tech Level</Label>
-                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelDescription, Mode=OneWay}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelString, Mode=OneWay}"/>
                             <Button Grid.Row="2" Grid.Column="2" Tag="TechLevel" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="2" Grid.Column="3">Rand</Button>
 
