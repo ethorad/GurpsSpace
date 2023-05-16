@@ -9,16 +9,14 @@ namespace GurpsSpace.PlanetCreation
     /// </summary>
     public partial class PlanetCreator : Window
     {
-        public Setting Setting;
         public Planet Planet;
         private IPlanetCreator randomiser;
         private IPlanetCreator userInput;
 
         public PlanetCreator(Setting setting)
         {
-            Setting = setting;
-            InitializeComponent(); 
-            Planet = new(Setting);
+            Planet = new(setting);
+            InitializeComponent();
             randomiser = new RandomPlanetNameAndType();
             userInput = new UserPlanet();
 
