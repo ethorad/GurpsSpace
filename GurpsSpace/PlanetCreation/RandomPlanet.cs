@@ -1,8 +1,4 @@
 ﻿
-using System;
-using System.Security.Permissions;
-using System.Windows.Media.Animation;
-
 namespace GurpsSpace.PlanetCreation
 {
     internal class RandomPlanetNameAndType : IPlanetCreator

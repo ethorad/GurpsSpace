@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Randomisers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="InputWindows\InputRadio.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
