@@ -9,6 +9,7 @@ namespace GurpsSpace.PlanetCreation
     /// </summary>
     public partial class PlanetCreator : Window
     {
+        public ViewModelPlanet vmPlanet;
         public Planet Planet;
         private IPlanetCreator randomiser;
         private IPlanetCreator userInput;
@@ -16,11 +17,12 @@ namespace GurpsSpace.PlanetCreation
         public PlanetCreator(Setting setting)
         {
             Planet = new(setting);
+            vmPlanet = new ViewModelPlanet(Planet);
             InitializeComponent();
             randomiser = new RandomPlanetNameAndType();
             userInput = new UserPlanet();
 
-            this.DataContext = Planet;
+            this.DataContext = vmPlanet;
         }
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
@@ -30,42 +32,41 @@ namespace GurpsSpace.PlanetCreation
             switch (val)
             {
                 case "Name":
-                    randomiser.SetName(Planet);
+                    randomiser.SetName(vmPlanet);
                     break;
                 case "Type":
-                    randomiser.SetSizeAndSubtype(Planet);
+                    randomiser.SetSizeAndSubtype(vmPlanet);
                     break;
                 case "ResourceValueCategory":
-                    randomiser.SetResourceValueCategory(Planet);
+                    randomiser.SetResourceValueCategory(vmPlanet);
                     break;
                 case "AtmosphericMass":
-                    randomiser.SetAtmosphericMass(Planet);
+                    randomiser.SetAtmosphericMass(vmPlanet);
                     break;
                 case "AtmosphericConditions":
-                    randomiser.SetAtmosphericConditions(Planet);
+                    randomiser.SetAtmosphericConditions(vmPlanet);
                     break;
                 case "HydrographicCoverage":
-                    randomiser.SetHydrographicCoverage(Planet);
+                    randomiser.SetHydrographicCoverage(vmPlanet);
                     break;
                 case "AverageSurfaceTempK":
-                    randomiser.SetAverageSurfaceTempK(Planet);
+                    randomiser.SetAverageSurfaceTempK(vmPlanet);
                     break;
                 case "Density":
-                    randomiser.SetDensity(Planet);
+                    randomiser.SetDensity(vmPlanet);
                     break;
                 case "Gravity":
-                    randomiser.SetGravity(Planet);
+                    randomiser.SetGravity(vmPlanet);
                     break;
                 case "SettlementType":
-                    randomiser.SetSettlementType(Planet);
+                    randomiser.SetSettlementType(vmPlanet);
                     break;
                 case "Species":
-                    randomiser.SetLocalSpecies(Planet);
+                    randomiser.SetLocalSpecies(vmPlanet);
                     break;
                 case "TechLevel":
-                    randomiser.SetLocalTechLevel(Planet);
+                    randomiser.SetLocalTechLevel(vmPlanet);
                     break;
-
             }
         }
 
@@ -76,22 +77,22 @@ namespace GurpsSpace.PlanetCreation
             switch (val)
             {
                 case "Type":
-                    userInput.SetSizeAndSubtype(Planet);
+                    userInput.SetSizeAndSubtype(vmPlanet);
                     break;
                 case "ResourceValueCategory":
-                    userInput.SetResourceValueCategory(Planet);
+                    userInput.SetResourceValueCategory(vmPlanet);
                     break;
                 case "AtmosphericConditions":
-                    userInput.SetAtmosphericConditions(Planet);
+                    userInput.SetAtmosphericConditions(vmPlanet);
                     break;
                 case "SettlementType":
-                    userInput.SetSettlementType(Planet);
+                    userInput.SetSettlementType(vmPlanet);
                     break;
                 case "Species":
-                    userInput.SetLocalSpecies(Planet);
+                    userInput.SetLocalSpecies(vmPlanet);
                     break;
                 case "TechLevel":
-                    userInput.SetLocalTechLevel(Planet);
+                    userInput.SetLocalTechLevel(vmPlanet);
                     break;
             }
         }
@@ -103,7 +104,7 @@ namespace GurpsSpace.PlanetCreation
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(Planet.LocalTechLevelDescription);
+            MessageBox.Show(vmPlanet.LocalTechLevelString);
         }
 
     }

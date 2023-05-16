@@ -11,9 +11,10 @@ using System.Windows.Navigation;
 
 namespace GurpsSpace
 {
-    public class Planet : INotifyPropertyChanged
+    public class Planet
     {
-        private Setting setting; public Setting Setting { get { return setting; } }
+        private Setting setting;
+        public Setting Setting { get { return setting; } set { setting = value; } }
 
         private PlanetParameters? parameters;
         private string name;
@@ -23,7 +24,7 @@ namespace GurpsSpace
             set
             {
                 name = value; 
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public eOverallType OverallType { get { return (parameters == null) ? eOverallType.None : parameters.OverallType; } }
@@ -34,7 +35,7 @@ namespace GurpsSpace
             set
             {
                 description = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         private eSize size; 
@@ -49,7 +50,7 @@ namespace GurpsSpace
                     parameters = RuleBook.PlanetParams[(Size, Subtype)];
                 else
                     parameters = null;
-                MemberUpdated();
+                CheckRanges();
                 if (change)
                     PlanetTypeChanged();
             }
@@ -66,23 +67,12 @@ namespace GurpsSpace
                     parameters = RuleBook.PlanetParams[(Size, Subtype)];
                 else
                     parameters = null;
-                MemberUpdated();
+                CheckRanges();
                 if (change)
                     PlanetTypeChanged();
             }
         }
-        public string Type
-        {
-            get
-            {
-                if ((Size == eSize.None) || (subtype == eSubtype.None))
-                    return "n/a";
-                if (Size == eSize.AsteroidBelt)
-                    return "Asteroid Belt (" + OverallType + ")";
-                else
-                    return Size + " " + Subtype + " (" + OverallType + ")";
-            }
-        }
+
         public bool IsPlanet
         {
             get
@@ -104,7 +94,7 @@ namespace GurpsSpace
                 if (value < 0)
                     value = 0;
                 atmosphericMass = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public bool HasAtmosphericOptions { get { return (parameters == null) ? true : (parameters.AtmosphereANumber < 18); } }
@@ -115,19 +105,7 @@ namespace GurpsSpace
             set
             {
                 atmosphericConditions = value;
-                MemberUpdated();
-            }
-        }
-        public string AtmosphericConditionsString
-        {
-            get 
-            {
-                if (!HasAtmosphere) // no atmosphere
-                    return "n/a";
-                if (HasAtmosphere && AtmosphericDescription == "") // has atmosphere, but not yet set
-                    return "tbc";
-                else
-                    return atmosphericConditions.ToString();
+                CheckRanges();
             }
         }
         private string atmosphericDescription;
@@ -137,7 +115,7 @@ namespace GurpsSpace
             set
             {
                 atmosphericDescription = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public bool IsSuffocating { get { return ((AtmosphericConditions & fAtmosphericConditions.Suffocating) == fAtmosphericConditions.Suffocating); } }
@@ -161,7 +139,7 @@ namespace GurpsSpace
                 if (value < 0) value = 0;
                 if (value > 1) value = 1;
                 hydrographicCoverage = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public eLiquid LiquidType { get { return (parameters == null) ? eLiquid.None : parameters.Liquid; } }
@@ -176,7 +154,7 @@ namespace GurpsSpace
             set
             {
                 averageSurfaceTempK = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public eClimateType ClimateType { get { return RuleBook.ClimateType(AverageSurfaceTempK); } }
@@ -248,7 +226,7 @@ namespace GurpsSpace
             set
             {
                 density = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public double MinGravity
@@ -276,7 +254,7 @@ namespace GurpsSpace
             set
             {
                 gravity = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public double DiameterEarths 
@@ -309,7 +287,7 @@ namespace GurpsSpace
             set
             {
                 localSpecies = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
 
@@ -320,7 +298,7 @@ namespace GurpsSpace
             set 
             { 
                 localTechLevelParams = value.Copy();
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public int LocalTechLevel
@@ -329,17 +307,17 @@ namespace GurpsSpace
             set
             {
                 LocalTechLevelParams = RuleBook.TechLevelParams[value].Copy();
-                MemberUpdated();
+                CheckRanges();
             }
         }
-        public string LocalTechLevelDescription { get { return LocalTechLevelParams.Description; } }
+        public string LocalTechLevelAge { get { return LocalTechLevelParams.Age; } }
         public bool LocalTechLevelIsDelayed
         {
             get { return LocalTechLevelParams.IsDelayed; }
             set
             {
                 LocalTechLevelParams.IsDelayed = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public bool LocalTechLevelIsAdvanced 
@@ -348,7 +326,7 @@ namespace GurpsSpace
             set
             {
                 LocalTechLevelParams.IsAdvanced = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public bool LocalTechLevelIsNormal { get { return (!LocalTechLevelIsDelayed && !LocalTechLevelIsAdvanced); } }
@@ -359,11 +337,10 @@ namespace GurpsSpace
             set
             {
                 resourceValueCategory = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         public int ResourceValueModifier { get { return (int)ResourceValueCategory; } }
-        public string ResourceValueString { get { return ResourceValueModifier.ToString() + " (" + ResourceValueCategory.ToString() + ")"; } }
         public int Habitability { get { return LocalSpecies.Habitability(this); } }
         public int AffinityScore { get { return ResourceValueModifier + Habitability; } }
 
@@ -375,7 +352,7 @@ namespace GurpsSpace
             {
                 bool change = (settlementType != value);
                 settlementType = value;
-                MemberUpdated();
+                CheckRanges();
                 if (change)
                     SettlementTypeChanged();
             }
@@ -388,7 +365,7 @@ namespace GurpsSpace
             set
             {
                 interstellar = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
         private int colonyAge;
@@ -398,7 +375,7 @@ namespace GurpsSpace
             set
             {
                 colonyAge = value;
-                MemberUpdated();
+                CheckRanges();
             }
         }
 
@@ -412,13 +389,11 @@ namespace GurpsSpace
             description = "";
             atmosphericDescription = "";
             localTechLevelParams = RuleBook.TechLevelParams[setting.TechLevel].Copy();
-            MemberUpdated();
+            CheckRanges();
         }
 
-        private void MemberUpdated()
+        private void CheckRanges()
         {
-            // update all properties, can't just update one as there's lots of dependencies
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
 
             // check that any values are still in the (min, max) range
             if (HydrographicCoverage < MinimumHydrographicCoverage)
@@ -471,8 +446,6 @@ namespace GurpsSpace
             ColonyAge = 0;
             Interstellar = true;
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
     }
 }

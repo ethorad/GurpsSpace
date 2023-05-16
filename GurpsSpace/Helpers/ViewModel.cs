@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GurpsSpace
 {
-    internal class ViewModel
+    public class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
