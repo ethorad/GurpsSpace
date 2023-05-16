@@ -218,6 +218,7 @@ namespace GurpsSpace.PlanetCreation
             get { return Planet.SettlementType; }
             set { Planet.SettlementType = value; MemberUpdated(); }
         }
+        public bool HasSettlement { get { return Planet.HasSettlement; } }
         public string SettlementTypeString
         {
             get
