@@ -116,11 +116,14 @@ namespace GurpsSpace
         }
 
 
-        public virtual long CarryingCapacity(Planet p)
+        public virtual ulong CarryingCapacity(Planet p)
         {
-            return DefaultCarryingCapacity(p);
+            if (p.Habitability <= 3 && p.LocalTechLevel <= 7)
+                return 0;
+            else
+                return DefaultCarryingCapacity(p);
         }
-        protected long DefaultCarryingCapacity(Planet p)
+        protected ulong DefaultCarryingCapacity(Planet p)
         {
             double defaultCarryCap = CarryingCapacityBase(p)
                 * CarryingCapacityMultiplier(p)
@@ -132,7 +135,7 @@ namespace GurpsSpace
 
             defaultCarryCap = RuleBook.RoundToSignificantDigits(defaultCarryCap,2);
 
-            return (long)defaultCarryCap;
+            return (ulong)defaultCarryCap;
         }
         protected double CarryingCapacityBase(Planet p)
         {

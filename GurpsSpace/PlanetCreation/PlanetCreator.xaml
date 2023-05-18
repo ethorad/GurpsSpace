@@ -192,7 +192,7 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Social Window" HorizontalAlignment="Center" Width="43">
+            <TabItem Header="Social Window" HorizontalAlignment="Right" Width="43">
                 <StackPanel Orientation="Vertical">
 
                     <GroupBox Header="Basic Information">
@@ -255,6 +255,27 @@
                             <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelString, Mode=OneWay}"/>
                             <Button Grid.Row="2" Grid.Column="2" Tag="TechLevel" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="2" Grid.Column="3" Tag="TechLevel" Click="btnRandom_Click">Rand</Button>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="Population" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Carrying Capacity</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=CarryingCapacity, Mode=OneWay}" ContentStringFormat="N0"/>
 
                         </Grid>
                     </GroupBox>

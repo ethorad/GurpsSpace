@@ -370,6 +370,11 @@ namespace GurpsSpace
             }
         }
 
+        public ulong CarryingCapacity
+        {
+            get { return LocalSpecies.CarryingCapacity(this); }
+        }
+
 
 
         public Planet(Setting setting)
