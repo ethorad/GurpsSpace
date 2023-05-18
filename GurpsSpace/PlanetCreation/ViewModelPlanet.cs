@@ -307,6 +307,15 @@ namespace GurpsSpace.PlanetCreation
 
         // habitants
         public ulong CarryingCapacity { get { return Planet.CarryingCapacity; } }
+        public ulong Population
+        {
+            get { return Planet.Population; }
+            set
+            {
+                Planet.Population = value;
+                MemberUpdated();
+            }
+        }
 
     }
 }

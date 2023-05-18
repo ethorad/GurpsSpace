@@ -23,5 +23,7 @@ namespace GurpsSpace.PlanetCreation
         Species SetLocalSpecies(ViewModelPlanet p);
 
         int SetLocalTechLevel(ViewModelPlanet p);
+
+        ulong SetPopulation(ViewModelPlanet p);
     }
 }

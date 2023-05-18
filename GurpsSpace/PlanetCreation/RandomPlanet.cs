@@ -311,5 +311,43 @@ namespace GurpsSpace.PlanetCreation
 
             return p.LocalTechLevel;
         }
+
+        public ulong SetPopulation(ViewModelPlanet p)
+        {
+            switch (p.SettlementType)
+            {
+                case eSettlementType.Homeworld:
+                    return SetPopulationHomeworld(p);
+                case eSettlementType.Colony:
+                    return SetPopulationColony(p);
+                case eSettlementType.Outpost:
+                    return SetPopulationOutpost(p);
+                default:
+                    p.Population = 0;
+                    return p.Population;
+            }
+        }
+        private ulong SetPopulationHomeworld(ViewModelPlanet p)
+        {
+            double proportion;
+            if (p.LocalTechLevel <= 4)
+                proportion = ((double)DiceBag.Roll(2) + 3) / 10;
+            else
+                proportion = 10 / (double)DiceBag.Roll(2);
+            double pop = proportion * (double)p.CarryingCapacity;
+            pop = RuleBook.RoundToSignificantDigits(pop, 3);
+            p.Population = (ulong)pop;
+            return p.Population;
+        }
+        private ulong SetPopulationColony(ViewModelPlanet p)
+        {
+            p.Population = 0;
+            return p.Population;
+        }
+        private ulong SetPopulationOutpost(ViewModelPlanet p)
+        {
+            p.Population = 0;
+            return p.Population;
+        }
     }
 }

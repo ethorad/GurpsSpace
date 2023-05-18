@@ -1,5 +1,10 @@
 ﻿To do
 
+GENERAL
+
+RoundSigDig followed by a type conversion to an integer type sometimes gives 999999
+Change it to allow a generic numeric type?
+
 PLANETS
 
 Maybe change the "CheckRanges" on the planet class to just run when the key assumptions are changed
