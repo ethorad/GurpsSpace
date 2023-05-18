@@ -2,16 +2,7 @@
 
 PLANETS
 
-Change to a MVVM structure to simplify the planet class
-have a base class "ViewModel" which has the MemberUpdated method and inherits the INotifyPropertyChanged
-Then derive child classes from that for things like PlanetViewModel class
-the window will then create a planet class and a planetviewmodel class, and link the two
-then set the DataContext to be the planetviewmodel class
-
-Half way through the random TL method
-However some adjustments on the roll depend on the settlement type (i.e. Homeworld etc)
-
-Change the "CheckRanges" on the planet class to just run when the key assumptions are changed
+Maybe change the "CheckRanges" on the planet class to just run when the key assumptions are changed
 Could split into CheckGravityRange, etc.
 
 Need window for marginal atmospheric options
@@ -34,7 +25,7 @@ Make the setting editable
 
 SYSTEM
 
-Add in the generation code for 
+Add in the generation code for star systems
 
 MAIN
 
