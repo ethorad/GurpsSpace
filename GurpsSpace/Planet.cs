@@ -353,11 +353,7 @@ namespace GurpsSpace
         public bool Interstellar
         {
             get { return interstellar; }
-            set
-            {
-                interstellar = value;
-                CheckRanges();
-            }
+            set { interstellar = value; }
         }
         private int colonyAge;
         public int ColonyAge
@@ -374,7 +370,12 @@ namespace GurpsSpace
         {
             get { return LocalSpecies.CarryingCapacity(this); }
         }
-
+        private ulong population;
+        public ulong Population
+        {
+            get { return population; }
+            set { population = value; }
+        }
 
 
         public Planet(Setting setting)

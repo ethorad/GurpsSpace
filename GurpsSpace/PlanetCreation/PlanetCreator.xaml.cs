@@ -67,6 +67,9 @@ namespace GurpsSpace.PlanetCreation
                 case "TechLevel":
                     randomiser.SetLocalTechLevel(vmPlanet);
                     break;
+                case "Population":
+                    randomiser.SetPopulation(vmPlanet);
+                    break;
             }
         }
 
@@ -93,6 +96,9 @@ namespace GurpsSpace.PlanetCreation
                     break;
                 case "TechLevel":
                     userInput.SetLocalTechLevel(vmPlanet);
+                    break;
+                case "Population":
+                    userInput.SetPopulation(vmPlanet);
                     break;
             }
         }

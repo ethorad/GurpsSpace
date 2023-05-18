@@ -220,5 +220,36 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalTechLevel;
         }
 
+        public ulong SetPopulation(ViewModelPlanet p)
+        {
+            switch (p.SettlementType)
+            {
+                case eSettlementType.Homeworld:
+                    return SetPopulationHomeworld(p);
+                case eSettlementType.Colony:
+                    return SetPopulationColony(p);
+                case eSettlementType.Outpost:
+                    return SetPopulationOutpost(p);
+                default:
+                    p.Population = 0;
+                    return p.Population;
+            }
+        }
+        private ulong SetPopulationHomeworld(ViewModelPlanet p)
+        {
+            p.Population = 0;
+            return p.Population;
+        }
+        private ulong SetPopulationColony(ViewModelPlanet p)
+        {
+            p.Population = 0;
+            return p.Population;
+        }
+        private ulong SetPopulationOutpost(ViewModelPlanet p)
+        {
+            p.Population = 0;
+            return p.Population;
+        }
+
     }
 }
