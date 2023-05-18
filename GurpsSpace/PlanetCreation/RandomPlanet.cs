@@ -1,7 +1,9 @@
 ﻿
+using System;
+
 namespace GurpsSpace.PlanetCreation
 {
-    internal class RandomPlanetNameAndType : IPlanetCreator
+    internal class RandomPlanet : IPlanetCreator
     {
         public string SetName(ViewModelPlanet p)
         {
@@ -259,6 +261,53 @@ namespace GurpsSpace.PlanetCreation
         public int SetLocalTechLevel(ViewModelPlanet p)
         {
             int roll = DiceBag.Roll(3);
+
+            // -10 if uncontacted homeworld
+            if (p.SettlementType == eSettlementType.Homeworld && !p.Interstellar)
+                roll -= 10;
+
+            if ((p.Habitability >= 4 && p.Habitability <= 6) &&
+                (p.SettlementType == eSettlementType.Colony || p.SettlementType == eSettlementType.Homeworld))
+                roll += 1;
+
+            if ((p.Habitability <=3) &&
+                (p.SettlementType == eSettlementType.Colony || p.SettlementType == eSettlementType.Homeworld))
+                roll += 2;
+
+            if (p.SettlementType == eSettlementType.Outpost)
+                roll += 3;
+
+            string res = RuleBook.TechLevelTable[roll];
+
+            // could try and read the return strings from that table, however would be complex as a few different formats
+            // since there's not many return values, easier just to do a switch on them
+
+            switch (res)
+            {
+                case "Primitive":
+                    p.LocalTechLevel = Math.Max(0, DiceBag.Roll(3) - 12);
+                    break;
+                case "Standard -3":
+                    p.LocalTechLevel = p.Setting.TechLevel - 3;
+                    break;
+                case "Standard -2":
+                    p.LocalTechLevel = p.Setting.TechLevel-2;
+                    break;
+                case "Standard -1":
+                    p.LocalTechLevel= p.Setting.TechLevel-1;
+                    break;
+                case "Standard (Delayed)":
+                    p.LocalTechLevel = p.Setting.TechLevel;
+                    p.LocalTechLevelIsDelayed = true;
+                    break;
+                case "Standard":
+                    p.LocalTechLevel = p.Setting.TechLevel;
+                    break;
+                case "Standard (Advanced)":
+                    p.LocalTechLevel = p.Setting.TechLevel;
+                    p.LocalTechLevelIsAdvanced = true;
+                    break;
+            }
 
             return p.LocalTechLevel;
         }

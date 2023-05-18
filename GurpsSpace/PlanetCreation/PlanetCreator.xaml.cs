@@ -19,7 +19,7 @@ namespace GurpsSpace.PlanetCreation
             Planet = new(setting);
             vmPlanet = new ViewModelPlanet(Planet);
             InitializeComponent();
-            randomiser = new RandomPlanetNameAndType();
+            randomiser = new RandomPlanet();
             userInput = new UserPlanet();
 
             this.DataContext = vmPlanet;

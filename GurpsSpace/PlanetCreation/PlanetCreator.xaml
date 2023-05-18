@@ -254,7 +254,7 @@
                             <Label Grid.Row="2" Grid.Column="0">Local Tech Level</Label>
                             <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelString, Mode=OneWay}"/>
                             <Button Grid.Row="2" Grid.Column="2" Tag="TechLevel" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="2" Grid.Column="3">Rand</Button>
+                            <Button Grid.Row="2" Grid.Column="3" Tag="TechLevel" Click="btnRandom_Click">Rand</Button>
 
                         </Grid>
                     </GroupBox>

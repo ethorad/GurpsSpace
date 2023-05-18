@@ -263,6 +263,7 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
+        public int Habitability { get { return Planet.Habitability; } }
         public int LocalTechLevel
         {
             get { return Planet.LocalTechLevel; }
