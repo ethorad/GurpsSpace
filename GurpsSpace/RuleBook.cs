@@ -240,12 +240,26 @@ namespace GurpsSpace
             float f = (float)c * 1.8F + 32F;
             return (int)(Math.Round(f, 0));
         }
-        public static double RoundToSignificantDigits(double value, int sigDig)
+        public static double RoundToSignificantFigures(double value, int sigFig)
         {
             double magnitude = Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(value))) + 1);
             value /= magnitude;
-            value = Math.Round(value, sigDig);
+            value = Math.Round(value, sigFig);
             value *= magnitude;
+            return value;
+        }
+        public static long RoundToSignificantFigures(long value, int sigFig)
+        {
+            int magnitude = (int)Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(value))) + 1);
+            value /= magnitude;
+            value = (int)(Math.Round((double)value, sigFig));
+            return value;
+        }
+        public static ulong RoundToSignificantFigures(ulong value, int sigFig)
+        {
+            ulong magnitude = (ulong)Math.Pow(10, Math.Floor(Math.Log10(value)) + 1);
+            value /= magnitude;
+            value = (ulong)(Math.Round((double)value, sigFig));
             return value;
         }
 

@@ -133,7 +133,7 @@ namespace GurpsSpace
                 * CarryingCapacityReducedConsumptionModifier()
                 * CarryingCapacityDoesNotEatOrDrinkModifier();
 
-            defaultCarryCap = RuleBook.RoundToSignificantDigits(defaultCarryCap,2);
+            defaultCarryCap = RuleBook.RoundToSignificantFigures(defaultCarryCap,2);
 
             return (ulong)defaultCarryCap;
         }
