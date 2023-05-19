@@ -442,6 +442,7 @@ namespace GurpsSpace
         {
             ColonyAge = 0;
             Interstellar = true;
+            Population = 0;
         }
 
     }
