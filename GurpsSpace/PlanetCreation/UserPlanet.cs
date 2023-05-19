@@ -264,12 +264,47 @@ namespace GurpsSpace.PlanetCreation
         }
         private ulong SetPopulationColony(ViewModelPlanet p)
         {
-            p.Population = 0;
+            // calculate the suggested colony size using the same approach as the random one
+            // but assuming a roll of 10
+            // this is to include in the user prompt
+
+            Species s = p.LocalSpecies;
+
+            int ageInDecades = p.ColonyAge / 10;
+            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplier) / Math.Log(1 + s.AnnualGrowthRate) / 10, 0);
+            int minRoll = 10 + 5 * affinityMod;
+
+            int roll = 10 + p.AffinityScore * affinityMod + ageInDecades; // assuming a roll of 10
+
+            // effective decades of growth is the difference between the roll and the min
+            int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
+
+            // then calculate the population
+            ulong population = (ulong)(s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10));
+            population = RuleBook.RoundToSignificantFigures(population, 2);
+            if (population > s.CarryingCapacity(p.Planet))
+                population = s.CarryingCapacity(p.Planet);
+
+            string question = "Enter the colony population below. ";
+            question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
+            question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
+
+            InputString inDiag = new InputString(question, "", true);
+            if (inDiag.ShowDialog()==true)
+            {
+                p.Population = ulong.Parse(inDiag.Answer);
+            }
+
             return p.Population;
         }
         private ulong SetPopulationOutpost(ViewModelPlanet p)
         {
-            p.Population = 0;
+            string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
+            InputString inDiag = new InputString(question, "", true);
+            if(inDiag.ShowDialog()==true)
+            {
+                p.Population = ulong.Parse(inDiag.Answer);
+            }
             return p.Population;
         }
 
