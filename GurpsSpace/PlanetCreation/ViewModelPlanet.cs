@@ -318,5 +318,8 @@ namespace GurpsSpace.PlanetCreation
             }
         }
 
+        // governance
+        public eWorldUnityLevel WorldUnityLevel { get { return Planet.WorldUnityLevel; } }
+
     }
 }

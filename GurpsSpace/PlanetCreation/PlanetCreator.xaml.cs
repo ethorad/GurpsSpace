@@ -27,78 +27,43 @@ namespace GurpsSpace.PlanetCreation
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
         {
-            string? val = ((Button)sender).Tag.ToString();
-
-            switch (val)
-            {
-                case "Name":
-                    randomiser.SetName(vmPlanet);
-                    break;
-                case "Type":
-                    randomiser.SetSizeAndSubtype(vmPlanet);
-                    break;
-                case "ResourceValueCategory":
-                    randomiser.SetResourceValueCategory(vmPlanet);
-                    break;
-                case "AtmosphericMass":
-                    randomiser.SetAtmosphericMass(vmPlanet);
-                    break;
-                case "AtmosphericConditions":
-                    randomiser.SetAtmosphericConditions(vmPlanet);
-                    break;
-                case "HydrographicCoverage":
-                    randomiser.SetHydrographicCoverage(vmPlanet);
-                    break;
-                case "AverageSurfaceTempK":
-                    randomiser.SetAverageSurfaceTempK(vmPlanet);
-                    break;
-                case "Density":
-                    randomiser.SetDensity(vmPlanet);
-                    break;
-                case "Gravity":
-                    randomiser.SetGravity(vmPlanet);
-                    break;
-                case "SettlementType":
-                    randomiser.SetSettlementType(vmPlanet);
-                    break;
-                case "Species":
-                    randomiser.SetLocalSpecies(vmPlanet);
-                    break;
-                case "TechLevel":
-                    randomiser.SetLocalTechLevel(vmPlanet);
-                    break;
-                case "Population":
-                    randomiser.SetPopulation(vmPlanet);
-                    break;
-            }
+            string val = ((Button)sender).Tag.ToString() ?? "";
+            SetParameter(val, randomiser);
         }
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
-            string? val = ((Button)sender).Tag.ToString();
+            string val = ((Button)sender).Tag.ToString() ?? "";
+            SetParameter(val, userInput);
+        }
 
-            switch (val)
+        private void SetParameter(string param, IPlanetCreator pc)
+        {
+            switch (param)
             {
                 case "Type":
-                    userInput.SetSizeAndSubtype(vmPlanet);
+                    pc.SetSizeAndSubtype(vmPlanet);
                     break;
                 case "ResourceValueCategory":
-                    userInput.SetResourceValueCategory(vmPlanet);
+                    pc.SetResourceValueCategory(vmPlanet);
                     break;
                 case "AtmosphericConditions":
-                    userInput.SetAtmosphericConditions(vmPlanet);
+                    pc.SetAtmosphericConditions(vmPlanet);
                     break;
                 case "SettlementType":
-                    userInput.SetSettlementType(vmPlanet);
+                    pc.SetSettlementType(vmPlanet);
                     break;
                 case "Species":
-                    userInput.SetLocalSpecies(vmPlanet);
+                    pc.SetLocalSpecies(vmPlanet);
                     break;
                 case "TechLevel":
-                    userInput.SetLocalTechLevel(vmPlanet);
+                    pc.SetLocalTechLevel(vmPlanet);
                     break;
                 case "Population":
-                    userInput.SetPopulation(vmPlanet);
+                    pc.SetPopulation(vmPlanet);
+                    break;
+                case "WorldUnityLevel":
+                    pc.SetWorldUnityLevel(vmPlanet);
                     break;
             }
         }

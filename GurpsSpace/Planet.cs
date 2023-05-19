@@ -377,6 +377,9 @@ namespace GurpsSpace
             set { population = value; }
         }
 
+        private eWorldUnityLevel worldUnityLevel;
+        public eWorldUnityLevel WorldUnityLevel { get { return worldUnityLevel; } }
+
 
         public Planet(Setting setting)
         {

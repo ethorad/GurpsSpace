@@ -192,14 +192,13 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Social Window" HorizontalAlignment="Right" Width="43">
+            <TabItem Header="Social" HorizontalAlignment="Right" Width="43">
                 <StackPanel Orientation="Vertical">
 
                     <GroupBox Header="Basic Information">
                         <Grid>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -220,18 +219,16 @@
                             <Label Grid.Row="2" Grid.Column="0">Description</Label>
                             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" TextWrapping="Wrap" Text="{Binding Path=Description, Mode=TwoWay}" />
 
-                            <Label Grid.Row="3" Grid.Column="0">Settlement</Label>
-                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=SettlementTypeString, Mode=OneWay}"/>
-                            <Button Grid.Row="3" Grid.Column="2" Tag="SettlementType" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="3" Grid.Column="3" Tag="SettlementType" Click="btnRandom_Click">Rand</Button>
-
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Social Overview" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                    <GroupBox Header="Population Overview" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
                         <Grid>
 
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -243,26 +240,39 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0">Species</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=LocalSpeciesName, Mode=OneWay}"/>
-                            <Button Grid.Row="0" Grid.Column="2" Tag="Species" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="0" Grid.Column="3" Tag="Species" Click="btnRandom_Click">Rand</Button>
+                            <Label Grid.Row="0" Grid.Column="0">Settlement</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=SettlementTypeString, Mode=OneWay}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Tag="SettlementType" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="SettlementType" Click="btnRandom_Click">Rand</Button>
 
-                            <Label Grid.Row="1" Grid.Column="0">Affinity</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="{Binding Path=AffinityString, Mode=OneWay}"/>
+                            <Label Grid.Row="1" Grid.Column="0">Species</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=LocalSpeciesName, Mode=OneWay}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Tag="Species" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="1" Grid.Column="3" Tag="Species" Click="btnRandom_Click">Rand</Button>
 
-                            <Label Grid.Row="2" Grid.Column="0">Local Tech Level</Label>
-                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelString, Mode=OneWay}"/>
-                            <Button Grid.Row="2" Grid.Column="2" Tag="TechLevel" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="2" Grid.Column="3" Tag="TechLevel" Click="btnRandom_Click">Rand</Button>
+                            <Label Grid.Row="2" Grid.Column="0">Affinity</Label>
+                            <Label Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Content="{Binding Path=AffinityString, Mode=OneWay}"/>
 
+                            <Label Grid.Row="3" Grid.Column="0">Local Tech Level</Label>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=LocalTechLevelString, Mode=OneWay}"/>
+                            <Button Grid.Row="3" Grid.Column="2" Tag="TechLevel" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="3" Grid.Column="3" Tag="TechLevel" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="4" Grid.Column="0">Carrying Capacity</Label>
+                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding Path=CarryingCapacity, Mode=OneWay}" ContentStringFormat="N0"/>
+
+                            <Label Grid.Row="5" Grid.Column="0">Population</Label>
+                            <Label Grid.Row="5" Grid.Column="1" Content="{Binding Path=Population, Mode=OneWay}" ContentStringFormat="N0"/>
+                            <Button Grid.Row="5" Grid.Column="2" Tag="Population" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="5" Grid.Column="3" Tag="Population" Click="btnRandom_Click">Rand</Button>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Population" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                    <GroupBox Header="Governance" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
                         <Grid>
 
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -274,13 +284,16 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0">Carrying Capacity</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=CarryingCapacity, Mode=OneWay}" ContentStringFormat="N0"/>
+                            <Label Grid.Row="0" Grid.Column="0">World Unity</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=WorldUnityLevel, Mode=OneWay}"></Label>
+                            <Button Grid.Row="0" Grid.Column="2" Tag="WorldUnity" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="WorldUnity" Click="btnRandom_Click">Rand</Button>
 
-                            <Label Grid.Row="1" Grid.Column="0">Population</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Population, Mode=OneWay}" ContentStringFormat="N0"/>
-                            <Button Grid.Row="1" Grid.Column="2" Tag="Population" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="1" Grid.Column="3" Tag="Population" Click="btnRandom_Click">Rand</Button>
+                            <Label Grid.Row="1" Grid.Column="0">Society Type</Label>
+
+                            <Label Grid.Row="2" Grid.Column="0">Special Conditions</Label>
+
+                            <Label Grid.Row="3" Grid.Column="0">Control Rating</Label>
 
                         </Grid>
                     </GroupBox>

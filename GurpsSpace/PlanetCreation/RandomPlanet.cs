@@ -379,5 +379,10 @@ namespace GurpsSpace.PlanetCreation
             p.Population = population;
             return p.Population;
         }
+
+        public eWorldUnityLevel SetWorldUnityLevel(ViewModelPlanet p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

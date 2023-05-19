@@ -290,9 +290,10 @@ namespace GurpsSpace.PlanetCreation
             question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
             InputString inDiag = new InputString(question, "", true);
-            if (inDiag.ShowDialog()==true)
+            if (inDiag.ShowDialog() == true)
             {
-                p.Population = ulong.Parse(inDiag.Answer);
+                if (inDiag.Answer != "")
+                    p.Population = ulong.Parse(inDiag.Answer);
             }
 
             return p.Population;
@@ -306,6 +307,11 @@ namespace GurpsSpace.PlanetCreation
                 p.Population = ulong.Parse(inDiag.Answer);
             }
             return p.Population;
+        }
+
+        public eWorldUnityLevel SetWorldUnityLevel(ViewModelPlanet p)
+        {
+            throw new NotImplementedException();
         }
 
     }
