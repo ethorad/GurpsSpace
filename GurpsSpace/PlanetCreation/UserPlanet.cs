@@ -237,7 +237,29 @@ namespace GurpsSpace.PlanetCreation
         }
         private ulong SetPopulationHomeworld(ViewModelPlanet p)
         {
-            p.Population = 0;
+            string question;
+            if (p.LocalTechLevel <= 4)
+            {
+                question = "The carrying capacity for this " + ((p.IsPlanet) ? "planet" : "asteroid belt") + " is " + p.CarryingCapacity.ToString("N0") + ". " +
+                    "At up to TL 4, homeworld populations will generally be around 50-150% of carrying capacity due to limited " +
+                    "control over birth and death rates.  Enter the percentage below:";
+            }
+            else // TL 5+
+            {
+                question = "The carrying capacity for this " + ((p.IsPlanet) ? "planet" : "asteroid belt") + " is " + p.CarryingCapacity.ToString("N0") + ". " +
+                    "At TL 5 and higher, advances in medical care and resource extraction mean the population can vary widely, from " +
+                    "80-500%.  Enter the percentage below:";
+            }
+            InputString inDiag = new InputString(question, "", true);
+
+            if (inDiag.ShowDialog() == true)
+            {
+                double perc = double.Parse(inDiag.Answer) / 100;
+                ulong pop = (ulong)((double)p.CarryingCapacity * perc);
+                pop = RuleBook.RoundToSignificantFigures(pop, 2);
+                p.Population = pop;
+            }
+
             return p.Population;
         }
         private ulong SetPopulationColony(ViewModelPlanet p)
