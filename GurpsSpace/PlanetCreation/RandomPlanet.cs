@@ -334,19 +334,49 @@ namespace GurpsSpace.PlanetCreation
                 proportion = ((double)DiceBag.Roll(2) + 3) / 10;
             else
                 proportion = 10 / (double)DiceBag.Roll(2);
-            double pop = proportion * (double)p.CarryingCapacity;
-            pop = RuleBook.RoundToSignificantDigits(pop, 3);
-            p.Population = (ulong)pop;
+            ulong pop = (ulong)(proportion * (double)p.CarryingCapacity);
+            p.Population = RuleBook.RoundToSignificantFigures(pop, 2);
             return p.Population;
         }
         private ulong SetPopulationColony(ViewModelPlanet p)
-        {
-            p.Population = 0;
+        { 
+            // rather than using the table directly, instead calculating based on the box on page 93
+            // each race has a starting colony size, a growth rate, and an affinity multiplier
+
+            // min size is on a roll of 10 + average affinity of 5 * affinity multiplier
+            // each +1 on the roll represents 10y growth, so is *(1+growth)^10
+            // the affinity multiplier shows how much extra for each +1 affinity
+            // LN(affinitymult) / LN(1+growth) gives how many years of growth is equal to the affinity multiplier
+            // and this figure / 10 is how many rows on the table from each +1 to affinity
+
+            Species s = p.LocalSpecies;
+
+            int ageInDecades = p.ColonyAge / 10;
+            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplier) / Math.Log(1 + s.AnnualGrowthRate) / 10, 0);
+            int minRoll = 10 + 5 * affinityMod;
+
+            int roll = DiceBag.Roll(3) + p.AffinityScore * affinityMod + ageInDecades;
+
+            // effective decades of growth is the difference between the roll and the min
+            int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
+
+            // then calculate the population
+            ulong population = (ulong)(s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10));
+            population = RuleBook.RoundToSignificantFigures(population, 2);
+            if (population > s.CarryingCapacity(p.Planet))
+                population = s.CarryingCapacity(p.Planet);
+
+            p.Population = population;
             return p.Population;
         }
         private ulong SetPopulationOutpost(ViewModelPlanet p)
         {
-            p.Population = 0;
+            int roll = DiceBag.Roll(3);
+            ulong population = RuleBook.OutpostPopulation[roll];
+            double adj = 1 + (double)(DiceBag.Roll(2) - 7) * 0.1;
+            population = (ulong)((double)population * adj);
+            population = RuleBook.RoundToSignificantFigures(population, 2);
+            p.Population = population;
             return p.Population;
         }
     }

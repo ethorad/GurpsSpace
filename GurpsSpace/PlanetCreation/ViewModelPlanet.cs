@@ -252,6 +252,7 @@ namespace GurpsSpace.PlanetCreation
         {
             get { return Planet.LocalSpecies.Name; }
         }
+        public int AffinityScore { get { return Planet.AffinityScore; } }
         public string AffinityString
         {
             get

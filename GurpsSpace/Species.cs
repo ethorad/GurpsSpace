@@ -13,14 +13,14 @@ namespace GurpsSpace
         protected int increasedConsumption; public int IncreasedConsumption { get { return increasedConsumption; } }
         protected int reducedConsumption; public int ReducedConsumption { get { return reducedConsumption; } }
         protected bool doesNotEatOrDrink; public bool DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
-        protected long startingColonyPopulation; public long StartingColonyPopulation { get { return startingColonyPopulation; } }
+        protected ulong startingColonyPopulation; public ulong StartingColonyPopulation { get { return startingColonyPopulation; } }
         protected double annualGrowthRate; public double AnnualGrowthRate { get { return annualGrowthRate; } }
         protected double affinityMultiplier; public double AffinityMultiplier { get { return affinityMultiplier; } }
 
 
         public Species(Setting setting, string name, string description,
             eSpeciesDiet diet, int increasedConsumption, int reducedConsumption, bool doesNotEatOrDrink,
-            long startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
+            ulong startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
         {
             this.setting = setting;
             this.name = name;
