@@ -13,7 +13,7 @@ namespace GurpsSpace
         public InputString(string question, string defaultAnswer="", bool onlyNumbers=false)
         {
             InitializeComponent();
-            lblQuestion.Content = question;
+            lblQuestion.Text = question;
             txtAnswer.Text = defaultAnswer;
             this.onlyNumbers = onlyNumbers;
         }
@@ -35,7 +35,7 @@ namespace GurpsSpace
             if (onlyNumbers)
                 e.Handled = reg.IsMatch(e.Text);
             else
-                e.Handled = true;
+                e.Handled = false;
         }
 
         public string Answer

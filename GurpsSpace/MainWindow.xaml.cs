@@ -37,7 +37,14 @@ namespace GurpsSpace
 
         private void btnTestClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(s.MainSpecies.Name);
+            string question = "Some really long text which will wrap over the line.  This is so that we can test that the " +
+                "wrapping functionality in the string input dialog box is working correctly.  I should perhaps have copied " +
+                "the lorem ipsum text rather than writing my own, but there we go.  This is probably long enough ...";
+            InputString testDiag = new InputString(question);
+            if (testDiag.ShowDialog()==true)
+            {
+                MessageBox.Show(testDiag.Answer);
+            }
         }
 
     }

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GurpsSpace"
-        mc:Ignorable="d" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" Width="500" SizeToContent="Height" WindowStartupLocation="CenterOwner"
         ContentRendered="Window_ContentRendered">
     <Grid Margin="15">
         <Grid.ColumnDefinitions>
@@ -18,7 +18,9 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">?</Label>
-        <Label Grid.Row="0" Grid.Column="1" Name="lblQuestion">Enter text:</Label>
+        <Label Grid.Row="0" Grid.Column="1">
+            <TextBlock Name="lblQuestion" TextWrapping="WrapWithOverflow">Enter text:</TextBlock>
+        </Label>
         <TextBox Grid.Row="1" Grid.Column="1" Name="txtAnswer" MinWidth="250" PreviewTextInput="textboxNumbersOnly" >Answer here</TextBox>
 
         <WrapPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,15,0,0">
