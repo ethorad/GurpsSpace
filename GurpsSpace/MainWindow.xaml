@@ -30,8 +30,11 @@
                 <Label Grid.Row="1" Grid.Column="0">Base Tech Level</Label>
                 <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=TechLevelParams.Description, Mode=OneWay}"/>
 
-                <Label Grid.Row="2" Grid.Column="0">Main species</Label>
-                <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=MainSpecies.Name, Mode=OneWay}"/>
+                <Label Grid.Row="2" Grid.Column="0">Society Type</Label>
+                <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=SocietyType, Mode=OneWay}"/>
+
+                <Label Grid.Row="3" Grid.Column="0">Main species</Label>
+                <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=MainSpecies.Name, Mode=OneWay}"/>
 
             </Grid>
         </GroupBox>

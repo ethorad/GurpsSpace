@@ -284,14 +284,16 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">World Unity</Label>
-                            <Label Grid.Row="0" Grid.Column="1">
-                                <TextBlock Text="{Binding Path=WorldGovernanceString, Mode=OneWay}" TextWrapping="WrapWithOverflow"/>
-                            </Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=WorldUnityLevel, Mode=OneWay}"/>
+                            
+
                             <Button Grid.Row="0" Grid.Column="2" Tag="WorldGovernance" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="0" Grid.Column="3" Tag="WorldGovernance" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Society Type</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=SocietyType, Mode=OneWay}"/>
+                            <Label Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="{Binding Path=SocietyTypeString, Mode=OneWay}" TextWrapping="WrapWithOverflow"/>
+                            </Label>
                             <Button Grid.Row="1" Grid.Column="2" Tag="SocietyType" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="1" Grid.Column="3" Tag="SocietyType" Click="btnRandom_Click">Rand</Button>
 

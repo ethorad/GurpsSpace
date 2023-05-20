@@ -338,16 +338,6 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
-        public string WorldGovernanceString
-        {
-            get
-            {
-                string res = Planet.WorldUnityLevel.ToString();
-                if (Planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
-                    res += " (" + Planet.GovernmentSpecialConditions.ToString() + ")";
-                return res;
-            }
-        }
         public eSocietyType SocietyType
         {
             get { return Planet.SocietyType; }
@@ -355,6 +345,16 @@ namespace GurpsSpace.PlanetCreation
             {
                 Planet.SocietyType = value;
                 MemberUpdated();
+            }
+        }
+        public string SocietyTypeString
+        {
+            get
+            {
+                string res = Planet.SocietyType.ToString();
+                if (Planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
+                    res += " (" + Planet.GovernmentSpecialConditions.ToString() + ")";
+                return res;
             }
         }
 
