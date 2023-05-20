@@ -291,6 +291,9 @@
                             <Button Grid.Row="0" Grid.Column="3" Tag="WorldGovernance" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Society Type</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=SocietyType, Mode=OneWay}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Tag="SocietyType" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="1" Grid.Column="3" Tag="SocietyType" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="2" Grid.Column="0">Control Rating</Label>
 

@@ -348,6 +348,15 @@ namespace GurpsSpace.PlanetCreation
                 return res;
             }
         }
+        public eSocietyType SocietyType
+        {
+            get { return Planet.SocietyType; }
+            set
+            {
+                Planet.SocietyType = value;
+                MemberUpdated();
+            }
+        }
 
     }
 }

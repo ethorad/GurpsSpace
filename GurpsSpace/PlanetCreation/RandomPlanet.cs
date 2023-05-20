@@ -431,5 +431,10 @@ namespace GurpsSpace.PlanetCreation
 
             return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
         }
+
+        public eSocietyType SetSocietyType(ViewModelPlanet p)
+        {
+            return p.SocietyType;
+        }
     }
 }
