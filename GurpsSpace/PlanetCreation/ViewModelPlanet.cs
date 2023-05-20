@@ -338,11 +338,20 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
-        public string WorldGovernanceString
+        public eSocietyType SocietyType
+        {
+            get { return Planet.SocietyType; }
+            set
+            {
+                Planet.SocietyType = value;
+                MemberUpdated();
+            }
+        }
+        public string SocietyTypeString
         {
             get
             {
-                string res = Planet.WorldUnityLevel.ToString();
+                string res = Planet.SocietyType.ToString();
                 if (Planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
                     res += " (" + Planet.GovernmentSpecialConditions.ToString() + ")";
                 return res;

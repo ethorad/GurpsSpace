@@ -83,6 +83,9 @@ namespace GurpsSpace.PlanetCreation
                 case "WorldGovernance":
                     pc.SetWorldGovernance(vmPlanet);
                     break;
+                case "SocietyType":
+                    pc.SetSocietyType(vmPlanet);
+                    break;
             }
         }
 

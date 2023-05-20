@@ -390,6 +390,12 @@ namespace GurpsSpace
             get { return governmentSpecialConditions; }
             set { governmentSpecialConditions = value; }
         }
+        private eSocietyType societyType;
+        public eSocietyType SocietyType
+        {
+            get { return societyType; }
+            set { societyType = value; }
+        }
 
         public Planet(Setting setting)
         {

@@ -2,8 +2,7 @@
 
 GENERAL
 
-RoundSigDig followed by a type conversion to an integer type sometimes gives 999999
-Change it to allow a generic numeric type?
+?
 
 PLANETS
 

@@ -431,5 +431,34 @@ namespace GurpsSpace.PlanetCreation
 
             return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
         }
+
+        public eSocietyType SetSocietyType(ViewModelPlanet p)
+        {
+            int roll = DiceBag.Roll(3);
+
+            roll += Math.Min(10, p.LocalTechLevel);
+            switch (p.Setting.SocietyType)
+            {
+                case eSettingSocietyType.Anarchy:
+                    p.SocietyType = RuleBook.SocietyTypeAnarchy[roll];
+                    break;
+                case eSettingSocietyType.Alliance:
+                    p.SocietyType = RuleBook.SocietyTypeAlliance[roll];
+                    break;
+                case eSettingSocietyType.Federation:
+                    p.SocietyType = RuleBook.SocietyTypeFederation[roll];
+                    break;
+                case eSettingSocietyType.CorporateState:
+                    p.SocietyType = RuleBook.SocietyTypeCorporateState[roll];
+                    break;
+                case eSettingSocietyType.Empire:
+                    p.SocietyType = RuleBook.SocietyTypeEmpire[roll];
+                    break;
+            }
+            if (!p.Interstellar)
+                p.SocietyType = RuleBook.SocietyTypeAnarchy[roll];
+
+            return p.SocietyType;
+        }
     }
 }
