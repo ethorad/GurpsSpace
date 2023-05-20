@@ -233,6 +233,111 @@ namespace GurpsSpace
             (fGovernmentSpecialConditions.Cyberocracy, false)          // 18 (but reroll if TL<=7)
         }, 5);
 
+        static public IndexedTable1D<eSocietyType> SocietyTypeAnarchy = new IndexedTable1D<eSocietyType>(new eSocietyType[]
+        {
+            eSocietyType.Anarchy,                 // 6
+            eSocietyType.ClanTribal,              // 7
+            eSocietyType.ClanTribal,              // 8
+            eSocietyType.Caste,                   // 9
+            eSocietyType.Feudal,                  // 10
+            eSocietyType.Feudal,                  // 11
+            eSocietyType.Theocracy,               // 12
+            eSocietyType.Dictatorship,            // 13
+            eSocietyType.Dictatorship,            // 14
+            eSocietyType.Dictatorship,            // 15
+            eSocietyType.RepresentativeDemocracy, // 16
+            eSocietyType.RepresentativeDemocracy, // 17
+            eSocietyType.RepresentativeDemocracy, // 18
+            eSocietyType.AthenianDemocracy,       // 19
+            eSocietyType.AthenianDemocracy,       // 20
+            eSocietyType.Corporate,               // 21
+            eSocietyType.Corporate,               // 22
+            eSocietyType.Technocracy,             // 23
+            eSocietyType.Technocracy,             // 24
+            eSocietyType.Technocracy,             // 25
+            eSocietyType.Caste,                   // 26
+            eSocietyType.Caste,                   // 27
+            eSocietyType.Anarchy                  // 28
+        }, 6);
+        static public IndexedTable1D<eSocietyType> SocietyTypeAlliance = SocietyTypeAnarchy;
+        static public IndexedTable1D<eSocietyType> SocietyTypeFederation = new IndexedTable1D<eSocietyType>(new eSocietyType[]
+        {
+            eSocietyType.Anarchy,                 // 6
+            eSocietyType.ClanTribal,              // 7
+            eSocietyType.ClanTribal,              // 8
+            eSocietyType.Caste,                   // 9
+            eSocietyType.Feudal,                  // 10
+            eSocietyType.Theocracy,               // 11
+            eSocietyType.Dictatorship,            // 12
+            eSocietyType.Dictatorship,            // 13
+            eSocietyType.Dictatorship,            // 14
+            eSocietyType.RepresentativeDemocracy, // 15
+            eSocietyType.RepresentativeDemocracy, // 16
+            eSocietyType.RepresentativeDemocracy, // 17
+            eSocietyType.RepresentativeDemocracy, // 18
+            eSocietyType.RepresentativeDemocracy, // 19
+            eSocietyType.AthenianDemocracy,       // 20
+            eSocietyType.AthenianDemocracy,       // 21
+            eSocietyType.AthenianDemocracy,       // 22
+            eSocietyType.Corporate,               // 23
+            eSocietyType.Technocracy,             // 24
+            eSocietyType.Technocracy,             // 25
+            eSocietyType.Caste,                   // 26
+            eSocietyType.Caste,                   // 27
+            eSocietyType.Anarchy                  // 28
+        }, 6);
+        static public IndexedTable1D<eSocietyType> SocietyTypeCorporateState = new IndexedTable1D<eSocietyType>(new eSocietyType[]
+        {
+            eSocietyType.Anarchy,                 // 6
+            eSocietyType.ClanTribal,              // 7
+            eSocietyType.ClanTribal,              // 8
+            eSocietyType.Caste,                   // 9
+            eSocietyType.Theocracy,               // 10
+            eSocietyType.Feudal,                  // 11
+            eSocietyType.Feudal,                  // 12
+            eSocietyType.Dictatorship,            // 13
+            eSocietyType.Dictatorship,            // 14
+            eSocietyType.Dictatorship,            // 15
+            eSocietyType.RepresentativeDemocracy, // 16
+            eSocietyType.RepresentativeDemocracy, // 17
+            eSocietyType.AthenianDemocracy,       // 18
+            eSocietyType.Corporate,               // 19
+            eSocietyType.Corporate,               // 20
+            eSocietyType.Corporate,               // 21
+            eSocietyType.Technocracy,             // 22
+            eSocietyType.Technocracy,             // 23
+            eSocietyType.Technocracy,             // 24
+            eSocietyType.Technocracy,             // 25
+            eSocietyType.Caste,                   // 26
+            eSocietyType.Caste,                   // 27
+            eSocietyType.Anarchy                  // 28
+        }, 6);
+        static public IndexedTable1D<eSocietyType> SocietyTypeEmpire = new IndexedTable1D<eSocietyType>(new eSocietyType[]
+        {
+            eSocietyType.Anarchy,                 // 6
+            eSocietyType.ClanTribal,              // 7
+            eSocietyType.ClanTribal,              // 8
+            eSocietyType.Caste,                   // 9
+            eSocietyType.Feudal,                  // 10
+            eSocietyType.Feudal,                  // 11
+            eSocietyType.Feudal,                  // 12
+            eSocietyType.Theocracy,               // 13
+            eSocietyType.Dictatorship,            // 14
+            eSocietyType.Dictatorship,            // 15
+            eSocietyType.Dictatorship,            // 16
+            eSocietyType.Dictatorship,            // 17
+            eSocietyType.RepresentativeDemocracy, // 18
+            eSocietyType.RepresentativeDemocracy, // 19
+            eSocietyType.Corporate,               // 20
+            eSocietyType.Corporate,               // 21
+            eSocietyType.Corporate,               // 22
+            eSocietyType.Technocracy,             // 23
+            eSocietyType.Technocracy,             // 24
+            eSocietyType.Technocracy,             // 25
+            eSocietyType.Caste,                   // 26
+            eSocietyType.Caste,                   // 27
+            eSocietyType.Anarchy                  // 28
+        }, 6);
 
         static public ePressureCategory PressureCategory(double pressure)
         {
@@ -256,7 +361,6 @@ namespace GurpsSpace
                     return ePressureCategory.Superdense;
             }
         }
-
         static public int KtoC(int k)
         {
             // convert Kelvin to Celsius
