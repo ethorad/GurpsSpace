@@ -26,6 +26,6 @@ namespace GurpsSpace.PlanetCreation
 
         ulong SetPopulation(ViewModelPlanet p);
 
-        eWorldUnityLevel SetWorldUnityLevel(ViewModelPlanet p);
+        (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p);
     }
 }

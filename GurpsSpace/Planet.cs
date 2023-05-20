@@ -376,10 +376,20 @@ namespace GurpsSpace
             get { return population; }
             set { population = value; }
         }
+        public int PopulationRating { get { return (int)Math.Log10(Population); } }
 
         private eWorldUnityLevel worldUnityLevel;
-        public eWorldUnityLevel WorldUnityLevel { get { return worldUnityLevel; } }
-
+        public eWorldUnityLevel WorldUnityLevel 
+        { 
+            get { return worldUnityLevel; }
+            set {  worldUnityLevel = value; }
+        }
+        private fGovernmentSpecialConditions governmentSpecialConditions;
+        public fGovernmentSpecialConditions GovernmentSpecialConditions
+        {
+            get { return governmentSpecialConditions; }
+            set { governmentSpecialConditions = value; }
+        }
 
         public Planet(Setting setting)
         {

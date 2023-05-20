@@ -41,14 +41,32 @@ namespace GurpsSpace.PlanetCreation
         {
             switch (param)
             {
+                case "Name":
+                    pc.SetName(vmPlanet);
+                    break;
                 case "Type":
                     pc.SetSizeAndSubtype(vmPlanet);
                     break;
                 case "ResourceValueCategory":
                     pc.SetResourceValueCategory(vmPlanet);
                     break;
+                case "AtmosphericMass":
+                    pc.SetAtmosphericMass(vmPlanet);
+                    break;
                 case "AtmosphericConditions":
                     pc.SetAtmosphericConditions(vmPlanet);
+                    break;
+                case "HydrographicCoverage":
+                    pc.SetHydrographicCoverage(vmPlanet);
+                    break;
+                case "AverageSurfaceTempK":
+                    pc.SetAverageSurfaceTempK(vmPlanet);
+                    break;
+                case "Density":
+                    pc.SetDensity(vmPlanet);
+                    break;
+                case "Gravity":
+                    pc.SetGravity(vmPlanet);
                     break;
                 case "SettlementType":
                     pc.SetSettlementType(vmPlanet);
@@ -62,8 +80,8 @@ namespace GurpsSpace.PlanetCreation
                 case "Population":
                     pc.SetPopulation(vmPlanet);
                     break;
-                case "WorldUnityLevel":
-                    pc.SetWorldUnityLevel(vmPlanet);
+                case "WorldGovernance":
+                    pc.SetWorldGovernance(vmPlanet);
                     break;
             }
         }
@@ -75,7 +93,7 @@ namespace GurpsSpace.PlanetCreation
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(vmPlanet.LocalTechLevelString);
+            MessageBox.Show(vmPlanet.PopulationRating.ToString());
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
@@ -206,6 +207,31 @@ namespace GurpsSpace
         static public IndexedTable1D<ulong> OutpostPopulation = new IndexedTable1D<ulong>(
             new ulong[] { 100, 150, 250, 400, 600, 1000, 1500, 2500, 4000, 6000, 10000, 15000, 25000, 40000, 60000, 100000 }, 3);
 
+        static public IndexedTable1D<(eWorldUnityLevel, bool)> WorldUnityLevel = new IndexedTable1D<(eWorldUnityLevel,bool)>(new (eWorldUnityLevel,bool)[]
+        {
+            (eWorldUnityLevel.Diffuse,false),          // 5
+            (eWorldUnityLevel.Factionalised,false),    // 6
+            (eWorldUnityLevel.Coalition,false),        // 7
+            (eWorldUnityLevel.WorldGovernment,true),   // 8
+            (eWorldUnityLevel.WorldGovernment,false)   // 9
+        }, 5);
+        static public IndexedTable1D<(fGovernmentSpecialConditions, bool)> GovernmentSpecialConditions = new IndexedTable1D<(fGovernmentSpecialConditions, bool)>(new (fGovernmentSpecialConditions, bool)[]
+        {
+            (fGovernmentSpecialConditions.Subjugated, true),          // 5
+            (fGovernmentSpecialConditions.Sanctuary, false),          // 6
+            (fGovernmentSpecialConditions.MilitaryGovernment, false), // 7
+            (fGovernmentSpecialConditions.MilitaryGovernment, false), // 8
+            (fGovernmentSpecialConditions.Socialist, true),           // 9
+            (fGovernmentSpecialConditions.Bureaucracy, false),        // 10
+            (fGovernmentSpecialConditions.Colony, false),             // 11
+            (fGovernmentSpecialConditions.Colony, false),             // 12
+            (fGovernmentSpecialConditions.Oligarchy, true),           // 13
+            (fGovernmentSpecialConditions.Oligarchy, true),           // 14
+            (fGovernmentSpecialConditions.Meritocracy, true),         // 15
+            (fGovernmentSpecialConditions.Patriarchy, false),         // 16 (or Matriarchy)
+            (fGovernmentSpecialConditions.Utopia, false),             // 17
+            (fGovernmentSpecialConditions.Cybercracy, false)          // 18 (but reroll if TL<=7)
+        }, 5);
 
 
         static public ePressureCategory PressureCategory(double pressure)
@@ -245,6 +271,9 @@ namespace GurpsSpace
         }
         public static double RoundToSignificantFigures(double value, int sigFig)
         {
+            if (value==0)
+                return 0;
+
             double magnitude = Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(value))) + 1);
             value /= magnitude;
             value = Math.Round(value, sigFig);
@@ -253,6 +282,9 @@ namespace GurpsSpace
         }
         public static long RoundToSignificantFigures(long value, int sigFig)
         {
+            if (value==0)
+                return 0;
+
             int magnitude = (int)Math.Pow(10, Math.Floor(Math.Log10(Math.Abs(value))) + 1 - sigFig);
             value /= magnitude;
             value = (int)(Math.Round((double)value, sigFig));
@@ -261,6 +293,9 @@ namespace GurpsSpace
         }
         public static ulong RoundToSignificantFigures(ulong value, int sigFig)
         {
+            if (value==0)
+                return 0;
+
             ulong magnitude = (ulong)Math.Pow(10, Math.Floor(Math.Log10(value)) + 1 - sigFig);
             value /= magnitude;
             value = (ulong)(Math.Round((double)value, sigFig));

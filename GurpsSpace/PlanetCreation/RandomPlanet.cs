@@ -380,9 +380,56 @@ namespace GurpsSpace.PlanetCreation
             return p.Population;
         }
 
-        public eWorldUnityLevel SetWorldUnityLevel(ViewModelPlanet p)
+        public (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p)
         {
-            throw new NotImplementedException();
+            int roll;
+            bool hasSpecial;
+            if (p.LocalTechLevel<=7)
+                roll = DiceBag.Roll(1);
+            else
+                roll = DiceBag.Roll(2);
+
+            switch(p.PopulationRating)
+            {
+                case <= 4:
+                    roll += 4;
+                    break;
+                case 5:
+                    roll += 3;
+                    break;
+                case 6:
+                    roll += 2;
+                    break;
+                case 7:
+                    roll += 1;
+                    break; ;
+            }
+            (p.WorldUnityLevel, hasSpecial) = RuleBook.WorldUnityLevel[roll];
+
+            if (hasSpecial)
+            {
+                bool hasSecond;
+                do
+                {
+                    roll = DiceBag.Roll(3);
+                    (p.GovernmentSpecialConditions, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
+                } while (p.LocalTechLevel <= 7 && p.GovernmentSpecialConditions == fGovernmentSpecialConditions.Cybercracy);
+                
+                if (hasSecond)
+                {
+                    fGovernmentSpecialConditions secondCond;
+                    do
+                    {
+                        roll = DiceBag.Roll(3);
+                        (secondCond, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
+                    } while (p.LocalTechLevel <= 7 && secondCond == fGovernmentSpecialConditions.Cybercracy);
+                    p.GovernmentSpecialConditions |= secondCond;
+                }
+            }
+            else
+                p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+
+            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
         }
     }
 }

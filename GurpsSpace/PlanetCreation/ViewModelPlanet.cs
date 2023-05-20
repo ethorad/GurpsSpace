@@ -317,9 +317,37 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
+        public int PopulationRating { get { return Planet.PopulationRating; } }
 
         // governance
-        public eWorldUnityLevel WorldUnityLevel { get { return Planet.WorldUnityLevel; } }
+        public eWorldUnityLevel WorldUnityLevel 
+        { 
+            get { return Planet.WorldUnityLevel; }
+            set 
+            { 
+                Planet.WorldUnityLevel = value;
+                MemberUpdated(); 
+            }
+        }
+        public fGovernmentSpecialConditions GovernmentSpecialConditions
+        {
+            get { return Planet.GovernmentSpecialConditions; }
+            set
+            {
+                Planet.GovernmentSpecialConditions = value;
+                MemberUpdated();
+            }
+        }
+        public string WorldGovernanceString
+        {
+            get
+            {
+                string res = Planet.WorldUnityLevel.ToString();
+                if (Planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
+                    res += " (" + Planet.GovernmentSpecialConditions.ToString() + ")";
+                return res;
+            }
+        }
 
     }
 }

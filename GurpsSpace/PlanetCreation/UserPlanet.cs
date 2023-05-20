@@ -309,7 +309,7 @@ namespace GurpsSpace.PlanetCreation
             return p.Population;
         }
 
-        public eWorldUnityLevel SetWorldUnityLevel(ViewModelPlanet p)
+        public (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p)
         {
             throw new NotImplementedException();
         }
