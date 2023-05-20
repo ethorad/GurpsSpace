@@ -230,7 +230,7 @@ namespace GurpsSpace
             (fGovernmentSpecialConditions.Meritocracy, true),         // 15
             (fGovernmentSpecialConditions.Patriarchy, false),         // 16 (or Matriarchy)
             (fGovernmentSpecialConditions.Utopia, false),             // 17
-            (fGovernmentSpecialConditions.Cybercracy, false)          // 18 (but reroll if TL<=7)
+            (fGovernmentSpecialConditions.Cyberocracy, false)          // 18 (but reroll if TL<=7)
         }, 5);
 
 

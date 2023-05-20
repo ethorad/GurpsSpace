@@ -130,7 +130,7 @@ namespace GurpsSpace
         None = 0,
         Bureaucracy = 1,
         Colony = 2,
-        Cybercracy = 4,
+        Cyberocracy = 4,
         Matriarchy = 8,
         Meritocracy = 16,
         MilitaryGovernment = 32,

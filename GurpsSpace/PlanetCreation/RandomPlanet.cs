@@ -413,7 +413,7 @@ namespace GurpsSpace.PlanetCreation
                 {
                     roll = DiceBag.Roll(3);
                     (p.GovernmentSpecialConditions, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
-                } while (p.LocalTechLevel <= 7 && p.GovernmentSpecialConditions == fGovernmentSpecialConditions.Cybercracy);
+                } while (p.LocalTechLevel <= 7 && p.GovernmentSpecialConditions == fGovernmentSpecialConditions.Cyberocracy);
                 
                 if (hasSecond)
                 {
@@ -422,7 +422,7 @@ namespace GurpsSpace.PlanetCreation
                     {
                         roll = DiceBag.Roll(3);
                         (secondCond, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
-                    } while (p.LocalTechLevel <= 7 && secondCond == fGovernmentSpecialConditions.Cybercracy);
+                    } while (p.LocalTechLevel <= 7 && secondCond == fGovernmentSpecialConditions.Cyberocracy);
                     p.GovernmentSpecialConditions |= secondCond;
                 }
             }

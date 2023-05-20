@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Windows.Annotations;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -311,7 +313,92 @@ namespace GurpsSpace.PlanetCreation
 
         public (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p)
         {
-            throw new NotImplementedException();
+            string question = "Select the degree to which the settlement is socially unified. " +
+                "Higher technology levels, and smaller populations, tend to be more unified.";
+
+            List<(string, string)> answers = new List<(string, string)>();
+            answers.Add(("Diffuse", "A variety of social structure, none dominating."));
+            answers.Add(("Factionalised", "A few competing social structures."));
+            answers.Add(("Coalition", "A few cooperating social structures."));
+            answers.Add(("World Government", "A single world government, which may have special conditions."));
+
+            InputRadio inDiag = new InputRadio(question, answers);
+            if (inDiag.ShowDialog()==true)
+            {
+                switch(inDiag.Answer.Item1)
+                {
+                    case "Diffuse":
+                        p.WorldUnityLevel = eWorldUnityLevel.Diffuse;
+                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        break;
+                    case "Factionalised":
+                        p.WorldUnityLevel = eWorldUnityLevel.Factionalised;
+                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        break;
+                    case "Coalition":
+                        p.WorldUnityLevel = eWorldUnityLevel.Coalition;
+                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        break;
+                    case "World Government":
+                        p.WorldUnityLevel = eWorldUnityLevel.WorldGovernment;
+                        p.GovernmentSpecialConditions = GetGovernmentSpecialConditions(p);
+                        break;
+                }
+            }
+
+            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
+        }
+        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(ViewModelPlanet p)
+        {
+            string question = "Select a special condition, or none. ";
+            List<(string, string)> options = new List<(string, string)>();
+            List<(fGovernmentSpecialConditions, bool)> answers = new List<(fGovernmentSpecialConditions, bool)>();
+            options.Add(("None", "No special conditions prevail."));
+            answers.Add((fGovernmentSpecialConditions.None, false));
+            options.Add(("Subjugated", "Under the control of another civilisation. Second condition is possible."));
+            answers.Add((fGovernmentSpecialConditions.Subjugated, true));
+            options.Add(("Sanctuary", "Particularly welcoming of refugees, likely to be an independent settlement."));
+            answers.Add((fGovernmentSpecialConditions.Sanctuary, false));
+            options.Add(("Military Government", "Run by the military, citizenship likely tied to service."));
+            answers.Add((fGovernmentSpecialConditions.MilitaryGovernment, false));
+            options.Add(("Socialist", "Significant government support to individuals.  Second condition is possible."));
+            answers.Add((fGovernmentSpecialConditions.Socialist, true));
+            options.Add(("Bureaucracy", "Significant rules and regulations governing life."));
+            answers.Add((fGovernmentSpecialConditions.Bureaucracy, false));
+            options.Add(("Colony", "An offshoot of a larger galactic civilisation."));
+            answers.Add((fGovernmentSpecialConditions.Colony, false));
+            options.Add(("Oligarchy", "Ruled by a small group of individuals, likely very wealthy. Second condition is possible."));
+            answers.Add((fGovernmentSpecialConditions.Oligarchy, true));
+            options.Add(("Meritocracy", "Ruled according to merit, defined in some manner. Second condition is possible."));
+            answers.Add((fGovernmentSpecialConditions.Meritocracy, true));
+            options.Add(("Matriarchy", "Ruled by women (or equivalent alien gender)."));
+            answers.Add((fGovernmentSpecialConditions.Matriarchy, false));
+            options.Add(("Patriarchy", "Ruled by men (or equivalent alien gender)."));
+            answers.Add((fGovernmentSpecialConditions.Patriarchy, false));
+            options.Add(("Utopia", "Egalitarian society which aims to be perfect."));
+            answers.Add((fGovernmentSpecialConditions.Utopia, false));
+            if (p.LocalTechLevel > 7)
+            {
+                options.Add(("Cyberocracy", "Ruled by interconnected computer systems, with lifeforms only used for unusual situations."));
+                answers.Add((fGovernmentSpecialConditions.Cyberocracy, false));
+            }
+
+            InputRadio inDiag = new InputRadio(question, options);
+            if (inDiag.ShowDialog() == true)
+            {
+                p.GovernmentSpecialConditions = answers[inDiag.Selected].Item1;
+            }
+
+            if (answers[inDiag.Selected].Item2)
+            {
+                // give option for a second condition
+                // can't seem to reopen the same dialog box, so refreshing it with new
+                inDiag = new InputRadio(question, options);
+                if (inDiag.ShowDialog() == true)
+                    p.GovernmentSpecialConditions |= answers[inDiag.Selected].Item1;
+            }
+
+            return p.GovernmentSpecialConditions;
         }
 
     }
