@@ -184,7 +184,7 @@ namespace GurpsSpace.PlanetCreation
         public int SetLocalTechLevel(ViewModelPlanet p)
         {
             List<(string, string)> options = new List<(string, string)>();
-            foreach (TechLevelParameters tlp in RuleBook.TechLevelParams)
+            foreach (TechLevelParameters tlp in RuleBook.TechLevelParams.Values)
             {
                 options.Add((tlp.TL.ToString(), tlp.Age));
             }
