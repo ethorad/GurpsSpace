@@ -12,6 +12,7 @@ namespace GurpsSpace
 
         static public Dictionary<(eSize, eSubtype), PlanetParameters> PlanetParams;
         static public Dictionary<int, TechLevelParameters> TechLevelParams;
+        static public Dictionary<eSocietyType, SocietyTypeParameters> SocietyTypeParams;
 
         static public IndexedTable1D<eOverallType> OverallType = new IndexedTable1D<eOverallType>(new eOverallType[]
         {
@@ -413,6 +414,8 @@ namespace GurpsSpace
             SetUpPlanetParameters();
             TechLevelParams = new Dictionary<int, TechLevelParameters>();
             SetUpTechLevelParameters();
+            SocietyTypeParams = new Dictionary<eSocietyType, SocietyTypeParameters>();
+            SetUpSocietyTypeParameters();
 
         }
 
@@ -685,6 +688,41 @@ namespace GurpsSpace
                 130000, // cash
                 45000000); // carry cap - GM option, set to 45m
             TechLevelParams.Add(12,tlp);
+        }
+
+        static private void SetUpSocietyTypeParameters()
+        {
+            SocietyTypeParameters stp;
+
+            stp = new SocietyTypeParameters(eSocietyType.Anarchy, 0, 0);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.AthenianDemocracy, 2, 4);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.Caste, 3, 6);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.ClanTribal, 3, 5);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.Corporate, 4, 6);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.Dictatorship, 3, 6);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.Feudal, 4, 6);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.RepresentativeDemocracy, 2, 4);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.Technocracy, 3, 6);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
+
+            stp = new SocietyTypeParameters(eSocietyType.Theocracy, 3, 6);
+            SocietyTypeParams.Add(stp.SocietyType, stp);
         }
 
     }
