@@ -290,53 +290,15 @@ namespace GurpsSpace
             set
             {
                 localTechLevel = value;
-                LocalTechLevelIsNormal = true;
-                CheckRanges();
+                localTechLevelRelativity = eTechLevelRelativity.Normal;
             }
         }
         public string LocalTechLevelAge { get { return RuleBook.TechLevelParams[LocalTechLevel].Age; } }
-        private bool localTechLevelIsDelayed;
-        public bool LocalTechLevelIsDelayed
+        private eTechLevelRelativity localTechLevelRelativity;
+        public eTechLevelRelativity LocalTechLevelRelativity
         {
-            get { return localTechLevelIsDelayed; }
-            set
-            {
-                localTechLevelIsDelayed = value;
-                if (localTechLevelIsDelayed)
-                    localTechLevelIsAdvanced = false;
-                CheckRanges();
-            }
-        }
-        private bool localTechLevelIsAdvanced;
-        public bool LocalTechLevelIsAdvanced 
-        { 
-            get { return localTechLevelIsAdvanced; } 
-            set
-            {
-                localTechLevelIsAdvanced = value;
-                if (localTechLevelIsAdvanced)
-                    localTechLevelIsDelayed = false;
-                CheckRanges();
-            }
-        }
-        public bool LocalTechLevelIsNormal 
-        { 
-            get { return (!LocalTechLevelIsDelayed && !LocalTechLevelIsAdvanced); }
-            set
-            {
-                if (value) // value = true -> setting to normal
-                {
-                    localTechLevelIsDelayed = false;
-                    localTechLevelIsAdvanced = false;
-                }
-                else // value = false -> not normal, choose delayed or advanced randomly
-                {
-                    if (DiceBag.Rand(1, 2) == 1)
-                        localTechLevelIsDelayed = true;
-                    else
-                        localTechLevelIsAdvanced = true;
-                }
-            }
+            get { return localTechLevelRelativity; }
+            set { localTechLevelRelativity = value;}
         }
         private eResourceValueCategory resourceValueCategory;
         public eResourceValueCategory ResourceValueCategory

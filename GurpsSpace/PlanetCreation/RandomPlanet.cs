@@ -298,14 +298,14 @@ namespace GurpsSpace.PlanetCreation
                     break;
                 case "Standard (Delayed)":
                     p.LocalTechLevel = p.Setting.TechLevel;
-                    p.LocalTechLevelIsDelayed = true;
+                    p.LocalTechLevelRelativity = eTechLevelRelativity.Delayed;
                     break;
                 case "Standard":
                     p.LocalTechLevel = p.Setting.TechLevel;
                     break;
                 case "Standard (Advanced)":
                     p.LocalTechLevel = p.Setting.TechLevel;
-                    p.LocalTechLevelIsAdvanced = true;
+                    p.LocalTechLevelRelativity = eTechLevelRelativity.Advanced;
                     break;
             }
 

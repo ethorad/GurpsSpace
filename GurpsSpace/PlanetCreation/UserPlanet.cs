@@ -205,17 +205,16 @@ namespace GurpsSpace.PlanetCreation
             radioDiag = new InputRadio(question, options);
             if (radioDiag.ShowDialog()== true)
             {
-                switch (radioDiag.Selected)
+                switch (radioDiag.Answer.Item1)
                 {
-                    case 0:
-                        p.LocalTechLevelIsDelayed = true; 
+                    case "Delayed":
+                        p.LocalTechLevelRelativity = eTechLevelRelativity.Delayed;
                         break;
-                    case 1:
-                        p.LocalTechLevelIsDelayed = false;
-                        p.LocalTechLevelIsAdvanced = false;
+                    case "Normal":
+                        p.LocalTechLevelRelativity = eTechLevelRelativity.Normal;
                         break;
-                    case 2:
-                        p.LocalTechLevelIsAdvanced = true;
+                    case "Advanced":
+                        p.LocalTechLevelRelativity = eTechLevelRelativity.Advanced;
                         break;
                 }
             }

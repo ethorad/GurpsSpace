@@ -116,6 +116,13 @@ namespace GurpsSpace
         Homeworld
     }
 
+    public enum eTechLevelRelativity
+    {
+        Delayed = -1,
+        Normal = 0,
+        Advanced = 1
+    }
+
     public enum eWorldUnityLevel
     {
         Diffuse,
