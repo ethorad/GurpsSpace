@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace GurpsSpace
 {
@@ -282,45 +283,61 @@ namespace GurpsSpace
             }
         }
 
-        private TechLevelParameters localTechLevelParams;
-        public TechLevelParameters LocalTechLevelParams
-        {
-            get { return localTechLevelParams; }
-            set 
-            { 
-                localTechLevelParams = value.Copy();
-                CheckRanges();
-            }
-        }
+        private int localTechLevel;
         public int LocalTechLevel
         {
-            get { return LocalTechLevelParams.TL; }
+            get { return localTechLevel; }
             set
             {
-                LocalTechLevelParams = RuleBook.TechLevelParams[value].Copy();
+                localTechLevel = value;
+                LocalTechLevelIsNormal = true;
                 CheckRanges();
             }
         }
-        public string LocalTechLevelAge { get { return LocalTechLevelParams.Age; } }
+        public string LocalTechLevelAge { get { return RuleBook.TechLevelParams[LocalTechLevel].Age; } }
+        private bool localTechLevelIsDelayed;
         public bool LocalTechLevelIsDelayed
         {
-            get { return LocalTechLevelParams.IsDelayed; }
+            get { return localTechLevelIsDelayed; }
             set
             {
-                LocalTechLevelParams.IsDelayed = value;
+                localTechLevelIsDelayed = value;
+                if (localTechLevelIsDelayed)
+                    localTechLevelIsAdvanced = false;
                 CheckRanges();
             }
         }
+        private bool localTechLevelIsAdvanced;
         public bool LocalTechLevelIsAdvanced 
         { 
-            get { return LocalTechLevelParams.IsAdvanced; } 
+            get { return localTechLevelIsAdvanced; } 
             set
             {
-                LocalTechLevelParams.IsAdvanced = value;
+                localTechLevelIsAdvanced = value;
+                if (localTechLevelIsAdvanced)
+                    localTechLevelIsDelayed = false;
                 CheckRanges();
             }
         }
-        public bool LocalTechLevelIsNormal { get { return (!LocalTechLevelIsDelayed && !LocalTechLevelIsAdvanced); } }
+        public bool LocalTechLevelIsNormal 
+        { 
+            get { return (!LocalTechLevelIsDelayed && !LocalTechLevelIsAdvanced); }
+            set
+            {
+                if (value) // value = true -> setting to normal
+                {
+                    localTechLevelIsDelayed = false;
+                    localTechLevelIsAdvanced = false;
+                }
+                else // value = false -> not normal, choose delayed or advanced randomly
+                {
+                    if (DiceBag.Rand(1, 2) == 1)
+                        localTechLevelIsDelayed = true;
+                    else
+                        localTechLevelIsAdvanced = true;
+                }
+            }
+        }
         private eResourceValueCategory resourceValueCategory;
         public eResourceValueCategory ResourceValueCategory
         {
@@ -404,7 +421,7 @@ namespace GurpsSpace
             name = "";
             description = "";
             atmosphericDescription = "";
-            localTechLevelParams = RuleBook.TechLevelParams[setting.TechLevel].Copy();
+            localTechLevel = setting.TechLevel;
             CheckRanges();
         }
 

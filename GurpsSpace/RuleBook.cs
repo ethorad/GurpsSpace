@@ -11,7 +11,7 @@ namespace GurpsSpace
         static public readonly int EarthDiameterInMiles = 7930;
 
         static public Dictionary<(eSize, eSubtype), PlanetParameters> PlanetParams;
-        static public List<TechLevelParameters> TechLevelParams;
+        static public Dictionary<int, TechLevelParameters> TechLevelParams;
 
         static public IndexedTable1D<eOverallType> OverallType = new IndexedTable1D<eOverallType>(new eOverallType[]
         {
@@ -411,7 +411,7 @@ namespace GurpsSpace
         {
             PlanetParams = new Dictionary<(eSize, eSubtype), PlanetParameters>();
             SetUpPlanetParameters();
-            TechLevelParams = new List<TechLevelParameters>();
+            TechLevelParams = new Dictionary<int, TechLevelParameters>();
             SetUpTechLevelParameters();
 
         }
@@ -618,75 +618,73 @@ namespace GurpsSpace
 
         static private void SetUpTechLevelParameters()
         {
-            // Note - TechLevelParams is a list, so need to add them in the right order
-            // otherwise indexing to find the right parameters won't work
 
             TechLevelParameters tlp;
 
-            tlp = new TechLevelParameters(0, "Stone Age",
+            tlp = new TechLevelParameters(0, "Stone Age", "Prehistory - 3500BC",
                 7500, // cash
                 10000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(0,tlp);
 
-            tlp = new TechLevelParameters(1, "Bronze Age", 
+            tlp = new TechLevelParameters(1, "Bronze Age", "3500 BC - 1200 BC",
                 7800, // cash
                 100000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(1,tlp);
 
-            tlp = new TechLevelParameters(2, "Iron Age", 
+            tlp = new TechLevelParameters(2, "Iron Age", "1200 BC - AD 600",
                 8100, // cash
                 500000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(2,tlp);
 
-            tlp = new TechLevelParameters(3, "Medieval", 
+            tlp = new TechLevelParameters(3, "Medieval", "AD 600 - AD 1450", 
                 8400, // cash
                 600000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(3,tlp);
 
-            tlp = new TechLevelParameters(4, "Age of Sail", 
+            tlp = new TechLevelParameters(4, "Age of Sail", "AD 1450 - AD 1730",
                 9600, // cash
                 700000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(4,tlp);
 
-            tlp = new TechLevelParameters(5, "Industrial Revolution", 
+            tlp = new TechLevelParameters(5, "Industrial Revolution", "AD 1730 - AD 1880",
                 13000, // cash
                 2500000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(5,tlp);
 
-            tlp = new TechLevelParameters(6, "Mechanised Age", 
+            tlp = new TechLevelParameters(6, "Mechanised Age", "AD 1880 - AD 1940",
                 19000, // cash
                 5000000);  // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(6,tlp);
 
-            tlp = new TechLevelParameters(7, "Nuclear Age", 
+            tlp = new TechLevelParameters(7, "Nuclear Age", "AD 1940 - AD 1980",
                 25000, // cash
                 7500000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(7,tlp);
 
-            tlp = new TechLevelParameters(8, "Digital Age", 
+            tlp = new TechLevelParameters(8, "Digital Age", "AD 1980 - AD 2025?",
                 31000, // cash
                 10000000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(8,tlp);
 
-            tlp = new TechLevelParameters(9, "Microtech Age", 
+            tlp = new TechLevelParameters(9, "Microtech Age", "AD 2025? - AD 2070?",
                 43000, // cash
                 15000000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(9,tlp);
 
-            tlp = new TechLevelParameters(10, "Robotic Age", 
+            tlp = new TechLevelParameters(10, "Robotic Age", "AD 2070? +",
                 67000, // cash
                 20000000); // carry cap
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(10,tlp);
 
-            tlp = new TechLevelParameters(11, "Age of Exotic Matter", 
+            tlp = new TechLevelParameters(11, "Age of Exotic Matter", "Unknown future",
                 97000, // cash
                 30000000); // carry cap - GM option, set to 30m
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(11,tlp);
 
-            tlp = new TechLevelParameters(12, "Far Future", 
+            tlp = new TechLevelParameters(12, "Far Future", "Unknown far future",
                 130000, // cash
                 45000000); // carry cap - GM option, set to 45m
-            TechLevelParams.Add(tlp);
+            TechLevelParams.Add(12,tlp);
         }
 
     }
