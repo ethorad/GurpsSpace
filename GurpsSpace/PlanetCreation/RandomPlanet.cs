@@ -414,8 +414,8 @@ namespace GurpsSpace.PlanetCreation
                     roll = DiceBag.Roll(3);
                     (p.GovernmentSpecialConditions, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
                 } while (p.LocalTechLevel <= 7 && p.GovernmentSpecialConditions == fGovernmentSpecialConditions.Cyberocracy);
-                
-                if (hasSecond)
+
+                if (hasSecond && DiceBag.Roll(1) <= 3)
                 {
                     fGovernmentSpecialConditions secondCond;
                     do
