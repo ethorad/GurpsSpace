@@ -270,15 +270,10 @@ namespace GurpsSpace.PlanetCreation
             get { return Planet.LocalTechLevel; }
             set { Planet.LocalTechLevel = value; MemberUpdated(); }
         }
-        public bool LocalTechLevelIsDelayed
+        public eTechLevelRelativity LocalTechLevelRelativity
         {
-            get { return Planet.LocalTechLevelIsDelayed; }
-            set { Planet.LocalTechLevelIsDelayed = value; MemberUpdated(); }
-        }
-        public bool LocalTechLevelIsAdvanced
-        {
-            get { return Planet.LocalTechLevelIsDelayed; }
-            set { Planet.LocalTechLevelIsAdvanced = value; MemberUpdated(); }
+            get { return Planet.LocalTechLevelRelativity; }
+            set { Planet.LocalTechLevelRelativity = value; MemberUpdated(); }
         }
         public string LocalTechLevelString
         {
@@ -286,12 +281,12 @@ namespace GurpsSpace.PlanetCreation
             {
                 string TLval = "TL" + Planet.LocalTechLevel.ToString("N0");
                 string AgeDesc = "(" + Planet.LocalTechLevelAge;
-                if (Planet.LocalTechLevelIsDelayed)
+                if (Planet.LocalTechLevelRelativity == eTechLevelRelativity.Delayed)
                 {
                     TLval += "-1";
                     AgeDesc += " - Delayed";
                 }
-                if (Planet.LocalTechLevelIsAdvanced)
+                if (Planet.LocalTechLevelRelativity == eTechLevelRelativity.Advanced)
                 {
                     TLval += "+1";
                     AgeDesc += " - Advanced";
