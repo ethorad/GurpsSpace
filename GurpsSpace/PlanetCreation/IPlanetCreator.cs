@@ -33,5 +33,7 @@ namespace GurpsSpace.PlanetCreation
         int SetControlRating(ViewModelPlanet p);
 
         double SetTradeVolume(ViewModelPlanet p);
+
+        int SetSpaceportClass(ViewModelPlanet p);
     }
 }

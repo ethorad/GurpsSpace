@@ -351,6 +351,16 @@ namespace GurpsSpace
             "Total control" // CR 6
         }, 0);
 
+        static public IndexedTable1D<string> SpaceportName = new IndexedTable1D<string>(new string[]
+        {
+            "No facilities",        // 0
+            "Emergency facilities", // 1
+            "Frontier facilities",  // 2
+            "Local facilities",     // 3
+            "Standard facilities",  // 4
+            "Full facilities"       // 5
+        }, 0);
+
         static public ePressureCategory PressureCategory(double pressure)
         {
             switch (pressure)

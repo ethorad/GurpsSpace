@@ -389,6 +389,41 @@ namespace GurpsSpace.PlanetCreation
         {
             get { return "$" + TradeVolume.ToString("N0"); }
         }
+        public int SpaceportClass
+        {
+            get { return Planet.SpaceportClass; }
+            set { Planet.SpaceportClass = value; MemberUpdated(); }
+        }
+        public string SpaceportClassString
+        {
+            get
+            {
+                string classNum = "";
+                switch (Planet.SpaceportClass)
+                {
+                    case 0:
+                        classNum = "0";
+                        break;
+                    case 1:
+                        classNum = "I";
+                        break;
+                    case 2:
+                        classNum = "II";
+                        break;
+                    case 3:
+                        classNum = "III";
+                        break;
+                    case 4:
+                        classNum = "IV";
+                        break;
+                    case 5:
+                        classNum = "V";
+                        break;
+                }
 
+                return "Class " + classNum + " (" + RuleBook.SpaceportName[Planet.SpaceportClass] + ")";
+
+            }
+        }
     }
 }

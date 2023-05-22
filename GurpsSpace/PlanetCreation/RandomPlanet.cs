@@ -505,5 +505,11 @@ namespace GurpsSpace.PlanetCreation
 
             return p.TradeVolume;
         }
+
+        public int SetSpaceportClass(ViewModelPlanet p)
+        {
+            p.SpaceportClass = 1;
+            return p.SpaceportClass;
+        }
     }
 }
