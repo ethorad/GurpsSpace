@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Windows.Controls;
 
 namespace GurpsSpace
 {
@@ -136,9 +137,9 @@ namespace GurpsSpace
         }
         public eLiquid LiquidType { get { return (parameters == null) ? eLiquid.None : parameters.Liquid; } }
 
-        public int TempMin { get { return (parameters == null) ? 0 : parameters.TempMin; } }
-        public int TempMax { get { return (parameters == null) ? 0 : parameters.TempMax; } }
-        public int TempStep { get { return (parameters == null) ? 0 : parameters.TempStep; } }
+        public int MinSurfaceTemperatureK { get { return (parameters == null) ? 0 : parameters.MinSurfaceTemperatureK; } }
+        public int MaxSurfaceTemperatureK { get { return (parameters == null) ? 0 : parameters.MaxSurfaceTemperatureK; } }
+        public int StepSurfaceTemperatureK { get { return (parameters == null) ? 0 : parameters.StepSurfaceTemperatureK; } }
         private int averageSurfaceTempK;
         public int AverageSurfaceTempK
         {
@@ -384,6 +385,61 @@ namespace GurpsSpace
             set { controlRating = value; }
         }
 
+        public double IncomePerCapita 
+        { 
+            get 
+            {
+                double baseIncome = RuleBook.TechLevelParams[LocalTechLevel].BaseIncome;
+                double multiplier = 1;
+                switch (AffinityScore)
+                {
+                    case <= 0:
+                        multiplier += -0.3;
+                        break;
+                    case >1 and <=3:
+                        multiplier += -0.2;
+                        break;
+                    case > 3 and <= 6:
+                        multiplier += -0.1;
+                        break;
+                    case > 6 and <= 8:
+                        multiplier += 0;
+                        break;
+                    case 9:
+                        multiplier += 0.2;
+                        break;
+                    case > 9:
+                        multiplier += 0.4;
+                        break;
+                }
+
+                if (CarryingCapacity < Population)
+                    multiplier *= ((double)CarryingCapacity / (double)Population);
+                
+                return baseIncome * multiplier; 
+            } 
+        }
+        public eWealthLevel WealthLevel
+        {
+            get
+            {
+                double relativeWealth = IncomePerCapita / Setting.AverageIncome;
+                switch (relativeWealth)
+                {
+                    case <= 0.09:
+                        return eWealthLevel.DeadBroke;
+                    case <= 0.31:
+                        return eWealthLevel.Poor;
+                    case <= 0.72:
+                        return eWealthLevel.Struggling;
+                    case <= 1.39:
+                        return eWealthLevel.Average;
+                    default:
+                        return eWealthLevel.Comfortable;
+                }
+            }
+        }
+
         public Planet(Setting setting)
         {
             this.setting = setting;
@@ -404,10 +460,10 @@ namespace GurpsSpace
             if (HydrographicCoverage > MaximumHydrographicCoverage)
                 HydrographicCoverage = MaximumHydrographicCoverage;
 
-            if (AverageSurfaceTempK < TempMin)
-                AverageSurfaceTempK = TempMin;
-            if (AverageSurfaceTempK > TempMax)
-                AverageSurfaceTempK = TempMax;
+            if (AverageSurfaceTempK < MinSurfaceTemperatureK)
+                AverageSurfaceTempK = MinSurfaceTemperatureK;
+            if (AverageSurfaceTempK > MaxSurfaceTemperatureK)
+                AverageSurfaceTempK = MaxSurfaceTemperatureK;
 
             if (Density < MinDensity)
                 Density = MinDensity;
@@ -444,7 +500,7 @@ namespace GurpsSpace
 
             // set ranged inputs to be the midpoint
             HydrographicCoverage = (MinimumHydrographicCoverage + MaximumHydrographicCoverage) / 2;
-            AverageSurfaceTempK = (TempMin + TempMax) / 2;
+            AverageSurfaceTempK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
             Density = Math.Round((MinDensity + MaxDensity) / 2, 1);
             Gravity = Math.Round((MinGravity + MaxGravity) / 2, 2);
         }

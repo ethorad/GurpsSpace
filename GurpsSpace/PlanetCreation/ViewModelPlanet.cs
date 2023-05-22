@@ -144,15 +144,15 @@ namespace GurpsSpace.PlanetCreation
         // Climate
         public int TempMin
         {
-            get { return Planet.TempMin; }
+            get { return Planet.MinSurfaceTemperatureK; }
         }
         public int TempMax
         {
-            get { return Planet.TempMax; }
+            get { return Planet.MaxSurfaceTemperatureK; }
         }
         public int TempStep
         {
-            get { return Planet.TempStep; }
+            get { return Planet.StepSurfaceTemperatureK; }
         }
         public int AverageSurfaceTempK
         {
@@ -363,6 +363,14 @@ namespace GurpsSpace.PlanetCreation
             {
                 return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[ControlRating] + ")";
             }
+        }
+
+        // economics
+        public double IncomePerCapita { get { return Planet.IncomePerCapita; } }
+        public eWealthLevel WealthLevel { get { return Planet.WealthLevel; } }
+        public string IncomePerCapitaString 
+        { 
+            get { return "$" + IncomePerCapita.ToString("N0") + " (" + WealthLevel + ")"; }
         }
 
     }

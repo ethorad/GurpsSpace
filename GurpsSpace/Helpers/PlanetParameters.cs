@@ -16,9 +16,9 @@ namespace GurpsSpace
         private readonly string hydroDesc; public string HydroDesc { get { return hydroDesc; } }
         private readonly int hydroDice; public int HydroDice { get { return hydroDice; } }
         private readonly int hydroAdj; public int HydroAdj { get { return hydroAdj; } }
-        private readonly int tempMin; public int TempMin { get { return tempMin; } }
-        private readonly int tempMax; public int TempMax { get { return tempMax; } }
-        private readonly int tempStep; public int TempStep { get { return tempStep; } }
+        private readonly int minSurfaceTemperatureK; public int MinSurfaceTemperatureK { get { return minSurfaceTemperatureK; } }
+        private readonly int maxSurfaceTemperatureK; public int MaxSurfaceTemperatureK { get { return maxSurfaceTemperatureK; } }
+        private readonly int stepSurfaceTemperatureK; public int StepSurfaceTemperatureK { get { return stepSurfaceTemperatureK; } }
         private readonly double blackbodyAbsorption; public double BlackbodyAbsorption { get { return blackbodyAbsorption; } }
         private readonly double blackbodyGreenhouse; public double BlackbodyGreenhouse { get { return blackbodyGreenhouse; } }
         private readonly eCoreType coreType; public eCoreType CoreType { get { return coreType; } }
@@ -46,9 +46,9 @@ namespace GurpsSpace
             this.hydroDesc = hydroDesc;
             this.hydroDice = hydroDice;
             this.hydroAdj = hydroAdj;
-            this.tempMin = tempMin;
-            this.tempMax = tempMax;
-            this.tempStep = tempStep;
+            this.minSurfaceTemperatureK = tempMin;
+            this.maxSurfaceTemperatureK = tempMax;
+            this.stepSurfaceTemperatureK = tempStep;
             this.blackbodyAbsorption = blackbodyAbsorption;
             this.blackbodyGreenhouse = blackbodyGreenhouse;
             this.coreType = coreType;
