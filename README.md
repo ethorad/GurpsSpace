@@ -20,3 +20,10 @@ Rather than using the table in the rulebook, I've used a formula approach from t
 
 ### Limits
 Some of the planet limits can be breached by user inputs.  For example, on the random table planets can only get resorce values in the range (-2,+2).  The user input screen notes this, but permits entries over the full range (-5,+5).  This could have the limit enforced, but I opted not to.  For things which are more linked to the consistency of the planet (such as density, temperature, etc) I have tended to keep the range limits.
+
+### Trade volume
+Strictly the trade volume for a planet should be calculated by reference to its various trade routes to other planets, as set out on GURPS Space page 95.  However, at this stage I haven't coded up the ability to link worlds with trade routes.  As such, user input trade volume just asks for what proportion of the total economic value to use as the trade volume.  For random trade volume I use the below to generate the proportion of total economic value:
+- Uncontacted homeworld: 0% trade volume, as no contact with other planets
+- Contacted homeworld: 10-40% trade volume, fairly low as expect to be reasonably sufficient so most economic activity is internal
+- Colony: 30-70% trade volume, higher volume as will generally have smaller economies and be more tightly linked back to other planets of the same civilisation
+- Outpost: 80-100% trade volume, very high as likely most goods will need to be brought in - and any stuff produced is likely for shipping back out
