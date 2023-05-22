@@ -86,6 +86,9 @@ namespace GurpsSpace.PlanetCreation
                 case "SocietyType":
                     pc.SetSocietyType(vmPlanet);
                     break;
+                case "ControlRating":
+                    pc.SetControlRating(vmPlanet);
+                    break;
             }
         }
 

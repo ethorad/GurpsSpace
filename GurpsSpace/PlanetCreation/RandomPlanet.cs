@@ -463,7 +463,12 @@ namespace GurpsSpace.PlanetCreation
 
         public int SetControlRating(ViewModelPlanet p)
         {
-            return 0;
+            int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
+
+            p.ControlRating = DiceBag.Rand(minCR, maxCR);
+
+            return p.ControlRating;
         }
     }
 }

@@ -373,8 +373,10 @@ namespace GurpsSpace
         public eSocietyType SocietyType
         {
             get { return societyType; }
-            set { societyType = value; }
+            set { societyType = value; CheckRanges(); }
         }
+        public int MinControlRating { get { return RuleBook.SocietyTypeParams[SocietyType].MinControlRating; } }
+        public int MaxControlRating { get { return RuleBook.SocietyTypeParams[SocietyType].MaxControlRating; } }
         private int controlRating;
         public int ControlRating 
         {
@@ -416,6 +418,11 @@ namespace GurpsSpace
                 Gravity = MinGravity;
             if (Gravity > MaxGravity)
                 Gravity = MaxGravity;
+
+            if (ControlRating < MinControlRating ||
+                ControlRating > MaxControlRating)
+                ControlRating = (MinControlRating + MaxControlRating) / 2;
+
         }
 
         private void PlanetTypeChanged()
