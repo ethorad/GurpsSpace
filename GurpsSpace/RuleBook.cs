@@ -340,6 +340,17 @@ namespace GurpsSpace
             eSocietyType.Anarchy                  // 28
         }, 6);
 
+        static public IndexedTable1D<string> ControlRatings = new IndexedTable1D<string>(new string[]
+        {
+            "Anarchy",      // CR 0
+            "Very free",    // CR 1
+            "Free",         // CR 2
+            "Moderate",     // CR 3
+            "Controlled",   // CR 4
+            "Repressive",   // CR 5
+            "Total control" // CR 6
+        }, 0);
+
         static public ePressureCategory PressureCategory(double pressure)
         {
             switch (pressure)

@@ -375,6 +375,12 @@ namespace GurpsSpace
             get { return societyType; }
             set { societyType = value; }
         }
+        private int controlRating;
+        public int ControlRating 
+        {
+            get { return controlRating; }
+            set { controlRating = value; }
+        }
 
         public Planet(Setting setting)
         {

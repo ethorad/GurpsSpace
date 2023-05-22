@@ -352,6 +352,18 @@ namespace GurpsSpace.PlanetCreation
                 return res;
             }
         }
+        public int ControlRating
+        {
+            get { return Planet.ControlRating; }
+            set { Planet.ControlRating = value; MemberUpdated(); }
+        }
+        public string ControlRatingString
+        {
+            get
+            {
+                return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[ControlRating] + ")";
+            }
+        }
 
     }
 }

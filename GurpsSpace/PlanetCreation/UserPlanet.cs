@@ -455,5 +455,10 @@ namespace GurpsSpace.PlanetCreation
 
             return p.SocietyType;
         }
+
+        public int SetControlRating(ViewModelPlanet p)
+        {
+            return 0;
+        }
     }
 }
