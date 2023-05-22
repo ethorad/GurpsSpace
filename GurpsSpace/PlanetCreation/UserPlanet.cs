@@ -221,7 +221,7 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalTechLevel;
         }
 
-        public ulong SetPopulation(ViewModelPlanet p)
+        public double SetPopulation(ViewModelPlanet p)
         {
             switch (p.SettlementType)
             {
@@ -236,7 +236,7 @@ namespace GurpsSpace.PlanetCreation
                     return p.Population;
             }
         }
-        private ulong SetPopulationHomeworld(ViewModelPlanet p)
+        private double SetPopulationHomeworld(ViewModelPlanet p)
         {
             string question;
             if (p.LocalTechLevel <= 4)
@@ -256,14 +256,14 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 double perc = double.Parse(inDiag.Answer) / 100;
-                ulong pop = (ulong)((double)p.CarryingCapacity * perc);
+                double pop = p.CarryingCapacity * perc;
                 pop = RuleBook.RoundToSignificantFigures(pop, 2);
                 p.Population = pop;
             }
 
             return p.Population;
         }
-        private ulong SetPopulationColony(ViewModelPlanet p)
+        private double SetPopulationColony(ViewModelPlanet p)
         {
             // calculate the suggested colony size using the same approach as the random one
             // but assuming a roll of 10
@@ -281,7 +281,7 @@ namespace GurpsSpace.PlanetCreation
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
             // then calculate the population
-            ulong population = (ulong)(s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10));
+            double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
             if (population > s.CarryingCapacity(p.Planet))
                 population = s.CarryingCapacity(p.Planet);
@@ -294,18 +294,18 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
-                    p.Population = ulong.Parse(inDiag.Answer);
+                    p.Population = double.Parse(inDiag.Answer);
             }
 
             return p.Population;
         }
-        private ulong SetPopulationOutpost(ViewModelPlanet p)
+        private double SetPopulationOutpost(ViewModelPlanet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
             InputString inDiag = new InputString(question, "", true);
             if(inDiag.ShowDialog()==true)
             {
-                p.Population = ulong.Parse(inDiag.Answer);
+                p.Population = double.Parse(inDiag.Answer);
             }
             return p.Population;
         }

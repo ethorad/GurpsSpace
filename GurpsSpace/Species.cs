@@ -13,14 +13,14 @@ namespace GurpsSpace
         protected int increasedConsumption; public int IncreasedConsumption { get { return increasedConsumption; } }
         protected int reducedConsumption; public int ReducedConsumption { get { return reducedConsumption; } }
         protected bool doesNotEatOrDrink; public bool DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
-        protected ulong startingColonyPopulation; public ulong StartingColonyPopulation { get { return startingColonyPopulation; } }
+        protected long startingColonyPopulation; public long StartingColonyPopulation { get { return startingColonyPopulation; } }
         protected double annualGrowthRate; public double AnnualGrowthRate { get { return annualGrowthRate; } }
         protected double affinityMultiplier; public double AffinityMultiplier { get { return affinityMultiplier; } }
 
 
         public Species(Setting setting, string name, string description,
             eSpeciesDiet diet, int increasedConsumption, int reducedConsumption, bool doesNotEatOrDrink,
-            ulong startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
+            long startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
         {
             this.setting = setting;
             this.name = name;
@@ -116,14 +116,14 @@ namespace GurpsSpace
         }
 
 
-        public virtual ulong CarryingCapacity(Planet p)
+        public virtual double CarryingCapacity(Planet p)
         {
             if (p.Habitability <= 3 && p.LocalTechLevel <= 7)
                 return 0;
             else
                 return DefaultCarryingCapacity(p);
         }
-        protected ulong DefaultCarryingCapacity(Planet p)
+        protected long DefaultCarryingCapacity(Planet p)
         {
             double defaultCarryCap = CarryingCapacityBase(p)
                 * CarryingCapacityMultiplier(p)
@@ -133,9 +133,11 @@ namespace GurpsSpace
                 * CarryingCapacityReducedConsumptionModifier()
                 * CarryingCapacityDoesNotEatOrDrinkModifier();
 
-            defaultCarryCap = RuleBook.RoundToSignificantFigures(defaultCarryCap,2);
+            long carryCap = (long)defaultCarryCap;
 
-            return (ulong)defaultCarryCap;
+            carryCap = RuleBook.RoundToSignificantFigures(carryCap,2);
+
+            return carryCap;
         }
         protected double CarryingCapacityBase(Planet p)
         {

@@ -346,12 +346,12 @@ namespace GurpsSpace
             }
         }
 
-        public ulong CarryingCapacity
+        public double CarryingCapacity
         {
             get { return LocalSpecies.CarryingCapacity(this); }
         }
-        private ulong population;
-        public ulong Population
+        private double population;
+        public double Population
         {
             get { return population; }
             set { population = value; }
@@ -385,7 +385,7 @@ namespace GurpsSpace
             set { controlRating = value; }
         }
 
-        public double IncomePerCapita 
+        public int IncomePerCapita 
         { 
             get 
             {
@@ -416,7 +416,7 @@ namespace GurpsSpace
                 if (CarryingCapacity < Population)
                     multiplier *= ((double)CarryingCapacity / (double)Population);
                 
-                return baseIncome * multiplier; 
+                return (int)(baseIncome * multiplier); 
             } 
         }
         public eWealthLevel WealthLevel
@@ -438,6 +438,10 @@ namespace GurpsSpace
                         return eWealthLevel.Comfortable;
                 }
             }
+        }
+        public long EconomicValue
+        {
+            get { return (long)(IncomePerCapita * Population); }
         }
 
         public Planet(Setting setting)

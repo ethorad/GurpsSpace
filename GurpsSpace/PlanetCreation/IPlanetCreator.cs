@@ -24,7 +24,7 @@ namespace GurpsSpace.PlanetCreation
 
         int SetLocalTechLevel(ViewModelPlanet p);
 
-        ulong SetPopulation(ViewModelPlanet p);
+        double SetPopulation(ViewModelPlanet p);
 
         (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p);
 

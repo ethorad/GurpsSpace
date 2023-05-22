@@ -312,7 +312,7 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalTechLevel;
         }
 
-        public ulong SetPopulation(ViewModelPlanet p)
+        public double SetPopulation(ViewModelPlanet p)
         {
             switch (p.SettlementType)
             {
@@ -327,18 +327,18 @@ namespace GurpsSpace.PlanetCreation
                     return p.Population;
             }
         }
-        private ulong SetPopulationHomeworld(ViewModelPlanet p)
+        private double SetPopulationHomeworld(ViewModelPlanet p)
         {
             double proportion;
             if (p.LocalTechLevel <= 4)
                 proportion = ((double)DiceBag.Roll(2) + 3) / 10;
             else
                 proportion = 10 / (double)DiceBag.Roll(2);
-            ulong pop = (ulong)(proportion * (double)p.CarryingCapacity);
+            double pop = proportion * p.CarryingCapacity;
             p.Population = RuleBook.RoundToSignificantFigures(pop, 2);
             return p.Population;
         }
-        private ulong SetPopulationColony(ViewModelPlanet p)
+        private double SetPopulationColony(ViewModelPlanet p)
         { 
             // rather than using the table directly, instead calculating based on the box on page 93
             // each race has a starting colony size, a growth rate, and an affinity multiplier
@@ -361,7 +361,7 @@ namespace GurpsSpace.PlanetCreation
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
             // then calculate the population
-            ulong population = (ulong)(s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10));
+            double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
             if (population > s.CarryingCapacity(p.Planet))
                 population = s.CarryingCapacity(p.Planet);
@@ -369,12 +369,12 @@ namespace GurpsSpace.PlanetCreation
             p.Population = population;
             return p.Population;
         }
-        private ulong SetPopulationOutpost(ViewModelPlanet p)
+        private double SetPopulationOutpost(ViewModelPlanet p)
         {
             int roll = DiceBag.Roll(3);
-            ulong population = RuleBook.OutpostPopulation[roll];
+            double population = RuleBook.OutpostPopulation[roll];
             double adj = 1 + (double)(DiceBag.Roll(2) - 7) * 0.1;
-            population = (ulong)((double)population * adj);
+            population = population * adj;
             population = RuleBook.RoundToSignificantFigures(population, 2);
             p.Population = population;
             return p.Population;

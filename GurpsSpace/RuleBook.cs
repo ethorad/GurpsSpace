@@ -205,8 +205,8 @@ namespace GurpsSpace
         static public IndexedTable1D<double> CarryingCapacityMultiplierByAffinity = new IndexedTable1D<double>(
             new double[] { 0.03, 0.06, 0.13, 0.25, 0.5, 1, 2, 4, 8, 15, 30, 60, 130, 250, 500, 1000 }, -5);
 
-        static public IndexedTable1D<ulong> OutpostPopulation = new IndexedTable1D<ulong>(
-            new ulong[] { 100, 150, 250, 400, 600, 1000, 1500, 2500, 4000, 6000, 10000, 15000, 25000, 40000, 60000, 100000 }, 3);
+        static public IndexedTable1D<double> OutpostPopulation = new IndexedTable1D<double>(
+            new double[] { 100, 150, 250, 400, 600, 1000, 1500, 2500, 4000, 6000, 10000, 15000, 25000, 40000, 60000, 100000 }, 3);
 
         static public IndexedTable1D<(eWorldUnityLevel, bool)> WorldUnityLevel = new IndexedTable1D<(eWorldUnityLevel,bool)>(new (eWorldUnityLevel,bool)[]
         {
