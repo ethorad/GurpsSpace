@@ -488,6 +488,36 @@ namespace GurpsSpace.PlanetCreation
 
         public double SetTradeVolume(ViewModelPlanet p)
         {
+            if (!p.Interstellar)
+            {
+                // no interstellar trade if uncontacted
+                p.TradeVolume = 0;
+            }
+            else
+            {
+                string question = "Enter the trade volume as a percentage of the total economic volume (" + p.EconomicVolumeString + "). ";
+                switch (p.SettlementType)
+                {
+                    case eSettlementType.Homeworld:
+                        question += "As a homeworld it is likely to be fairly self-sufficient so trade will likely form a small part of the overall economic volume.  Say up to 40%.";
+                        break;
+                    case eSettlementType.Colony:
+                        question += "As a colony, it is likely to be semi-reliant on its connections to the parent civilisation, so trade will be a large portion of economic volume.  Say 30-70%.";
+                        break;
+                    case eSettlementType.Outpost:
+                        question += "As an outpost, it is likely to be very reliant on supplies from the parent civilisation and shipping production back, so trade will be almost all of the economic volume.  Say 80-100%.";
+                        break;
+                }
+
+                InputString inDiag = new InputString(question, "", true);
+                if (inDiag.ShowDialog() == true)
+                {
+                    double prop = double.Parse(inDiag.Answer) / 100;
+                    double trade = prop * p.EconomicVolume;
+                    trade = RuleBook.RoundToSignificantFigures(trade, 2);
+                    p.TradeVolume = trade;
+                }
+            }
             return p.TradeVolume;
         }
     }
