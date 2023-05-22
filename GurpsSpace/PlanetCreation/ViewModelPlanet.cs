@@ -372,6 +372,13 @@ namespace GurpsSpace.PlanetCreation
         { 
             get { return "$" + IncomePerCapita.ToString("N0") + " (" + WealthLevel + ")"; }
         }
+        public string EconomicVolumeString
+        {
+            get
+            {
+                return "$" + Planet.EconomicVolume.ToString("N0");
+            }
+        }
 
     }
 }

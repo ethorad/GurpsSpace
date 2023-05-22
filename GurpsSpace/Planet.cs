@@ -439,9 +439,9 @@ namespace GurpsSpace
                 }
             }
         }
-        public long EconomicValue
+        public double EconomicVolume
         {
-            get { return (long)(IncomePerCapita * Population); }
+            get { return RuleBook.RoundToSignificantFigures((double)IncomePerCapita * Population, 2); }
         }
 
         public Planet(Setting setting)

@@ -312,6 +312,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -322,9 +323,13 @@
 
                             <Label Grid.Row="0" Grid.Column="0">Income Per Capita</Label>
                             <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=IncomePerCapitaString, Mode=OneWay}"/>
+
+
+                            <Label Grid.Row="1" Grid.Column="0">Economic Volume</Label>
+                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=EconomicVolumeString, Mode=OneWay}"/>
                             
-                            <Button Grid.Row="1" Grid.Column="2" Tag="ControlRating" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="1" Grid.Column="3" Tag="ControlRating" Click="btnRandom_Click">Rand</Button>
+                            <Button Grid.Row="2" Grid.Column="2" Tag="ControlRating" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="2" Grid.Column="3" Tag="ControlRating" Click="btnRandom_Click">Rand</Button>
                             
                         </Grid>
                     </GroupBox>
