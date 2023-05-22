@@ -9,6 +9,9 @@ namespace GurpsSpace
     static internal class RuleBook
     {
         static public readonly int EarthDiameterInMiles = 7930;
+        static public readonly double TradeForSpaceportV = 20000000000000; // $20Tn
+        static public readonly double TradeForSpaceportIV = 1000000000000; // $1Tn
+        static public readonly double TradeForSpaceportIII = 50000000000; // $50Bn
 
         static public Dictionary<(eSize, eSubtype), PlanetParameters> PlanetParams;
         static public Dictionary<int, TechLevelParameters> TechLevelParams;
