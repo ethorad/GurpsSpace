@@ -443,6 +443,12 @@ namespace GurpsSpace
         {
             get { return RuleBook.RoundToSignificantFigures((double)IncomePerCapita * Population, 2); }
         }
+        private double tradeVolume;
+        public double TradeVolume
+        {
+            get { return tradeVolume; }
+            set { tradeVolume = value; }
+        }
 
         public Planet(Setting setting)
         {

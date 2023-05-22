@@ -470,5 +470,40 @@ namespace GurpsSpace.PlanetCreation
 
             return p.ControlRating;
         }
+
+        public double SetTradeVolume(ViewModelPlanet p)
+        { 
+            // For trade volume between worlds use:
+            // T = K * V1 * V2 / D
+            // where:
+            // T = Trade volume in $tn
+            // K = constant in setting, determine by trial and error
+            // V1, V2 = economic volumes of the two worlds
+            // D = distance between worlds (say in parsecs)
+
+            // However, without a trade route map, I'm just going to generate some random percentages of GDP
+            // Assume:
+            // If uncontacted, then trade volume = 0
+            // If homeworld, then low trade volume say 10-40%
+            // If colony, then higher trade volume, say 30%-70%
+            // If outpost then virtually all trade volume, say 80%-100%
+
+            double tradeProp = 0;
+
+            if (!p.Interstellar)
+                tradeProp = 0;
+            else if (p.SettlementType == eSettlementType.Homeworld)
+                tradeProp = ((double)DiceBag.Rand(1, 4)) * 0.1;
+            else if (p.SettlementType == eSettlementType.Colony)
+                tradeProp = ((double)DiceBag.Rand(3, 7)) * 0.1;
+            else if (p.SettlementType == eSettlementType.Outpost)
+                tradeProp = ((double)DiceBag.Rand(8, 10)) * 0.1;
+
+            double trade = tradeProp * p.EconomicVolume;
+            trade = RuleBook.RoundToSignificantFigures(trade, 2);
+            p.TradeVolume = trade;
+
+            return p.TradeVolume;
+        }
     }
 }
