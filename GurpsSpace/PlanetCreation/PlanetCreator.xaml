@@ -262,7 +262,7 @@
                             <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=CarryingCapacity, Mode=OneWay}" ContentStringFormat="N0"/>
 
                             <Label Grid.Row="4" Grid.Column="0">Population</Label>
-                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding Path=Population, Mode=OneWay}" ContentStringFormat="N0"/>
+                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding Path=PopulationString, Mode=OneWay}" ContentStringFormat="N0"/>
                             <Button Grid.Row="4" Grid.Column="2" Tag="Population" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="4" Grid.Column="3" Tag="Population" Click="btnRandom_Click">Rand</Button>
                         </Grid>

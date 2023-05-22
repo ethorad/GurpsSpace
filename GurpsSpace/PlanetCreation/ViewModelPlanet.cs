@@ -313,6 +313,13 @@ namespace GurpsSpace.PlanetCreation
             }
         }
         public int PopulationRating { get { return Planet.PopulationRating; } }
+        public string PopulationString
+        {
+            get
+            {
+                return Planet.Population.ToString("N0") + " (PR " + Planet.PopulationRating.ToString("N0") + ")";
+            }
+        }
 
         // governance
         public eWorldUnityLevel WorldUnityLevel 
