@@ -458,7 +458,32 @@ namespace GurpsSpace.PlanetCreation
 
         public int SetControlRating(ViewModelPlanet p)
         {
-            return 0;
+            int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
+
+            if (maxCR == minCR)
+            {
+                // no option
+                p.ControlRating = minCR;
+            }
+            else
+            {
+                string question = "Select the control rating from the range below:";
+                List<(string, string)> options = new List<(string, string)>();
+                for (int i=minCR; i<=maxCR; i++)
+                {
+                    options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
+                }
+                
+                InputRadio inDiag = new InputRadio(question, options);
+                if (inDiag.ShowDialog()==true)
+                {
+                    p.ControlRating = inDiag.Selected + minCR;
+                }
+                
+            }
+
+            return p.ControlRating;
         }
     }
 }
