@@ -485,5 +485,10 @@ namespace GurpsSpace.PlanetCreation
 
             return p.ControlRating;
         }
+
+        public double SetTradeVolume(ViewModelPlanet p)
+        {
+            return p.TradeVolume;
+        }
     }
 }

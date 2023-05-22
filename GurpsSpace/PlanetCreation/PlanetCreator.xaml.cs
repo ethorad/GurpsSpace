@@ -89,6 +89,9 @@ namespace GurpsSpace.PlanetCreation
                 case "ControlRating":
                     pc.SetControlRating(vmPlanet);
                     break;
+                case "TradeVolume":
+                    pc.SetTradeVolume(vmPlanet);
+                    break;
             }
         }
 

@@ -327,9 +327,11 @@
 
                             <Label Grid.Row="1" Grid.Column="0">Economic Volume</Label>
                             <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=EconomicVolumeString, Mode=OneWay}"/>
-                            
-                            <Button Grid.Row="2" Grid.Column="2" Tag="ControlRating" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="2" Grid.Column="3" Tag="ControlRating" Click="btnRandom_Click">Rand</Button>
+
+                            <Label Grid.Row="2" Grid.Column="0">Trade Volume</Label>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=TradeVolumeString, Mode=OneWay}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Tag="TradeVolume" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="2" Grid.Column="3" Tag="TradeVolume" Click="btnRandom_Click">Rand</Button>
                             
                         </Grid>
                     </GroupBox>

@@ -379,6 +379,15 @@ namespace GurpsSpace.PlanetCreation
                 return "$" + Planet.EconomicVolume.ToString("N0");
             }
         }
+        public double TradeVolume
+        {
+            get { return Planet.TradeVolume; }
+            set { Planet.TradeVolume = value; MemberUpdated(); }
+        }
+        public string TradeVolumeString
+        {
+            get { return "$" + TradeVolume.ToString("N0"); }
+        }
 
     }
 }
