@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Windows;
+using System.Collections.Generic;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -536,6 +538,13 @@ namespace GurpsSpace.PlanetCreation
                 p.SpaceportClass = 0;
 
             return p.SpaceportClass;
+        }
+
+        public List<Installation> SetInstallations(ViewModelPlanet p)
+        {
+            MessageBox.Show("random installations");
+
+            return p.Installations;
         }
     }
 }

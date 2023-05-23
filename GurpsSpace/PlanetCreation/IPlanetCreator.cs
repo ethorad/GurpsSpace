@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace GurpsSpace.PlanetCreation
 {
     internal interface IPlanetCreator
@@ -35,5 +37,7 @@ namespace GurpsSpace.PlanetCreation
         double SetTradeVolume(ViewModelPlanet p);
 
         int SetSpaceportClass(ViewModelPlanet p);
+
+        List<Installation> SetInstallations(ViewModelPlanet p);
     }
 }

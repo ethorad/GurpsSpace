@@ -95,6 +95,9 @@ namespace GurpsSpace.PlanetCreation
                 case "SpaceportClass":
                     pc.SetSpaceportClass(vmPlanet);
                     break;
+                case "Installations":
+                    pc.SetInstallations(vmPlanet);
+                    break;
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace GurpsSpace.PlanetCreation
 {
     public class ViewModelPlanet : ViewModel
@@ -430,6 +432,14 @@ namespace GurpsSpace.PlanetCreation
 
                 return "Class " + classNum + " (" + RuleBook.SpaceportName[Planet.SpaceportClass] + ")";
 
+            }
+        }
+        internal List<Installation> Installations { get { return Planet.Installations; } }
+        public string InstallationsSummaryString
+        {
+            get
+            {
+                return Installations.Count.ToString("N0") + " installations present";
             }
         }
     }
