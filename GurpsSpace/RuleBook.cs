@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using GurpsSpace.PlanetCreation;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -17,6 +18,7 @@ namespace GurpsSpace
         static public Dictionary<(eSize, eSubtype), PlanetParameters> PlanetParams;
         static public Dictionary<int, TechLevelParameters> TechLevelParams;
         static public Dictionary<eSocietyType, SocietyTypeParameters> SocietyTypeParams;
+        static public List<InstallationParameters> InstallationParams;
 
         static public IndexedTable1D<eOverallType> OverallType = new IndexedTable1D<eOverallType>(new eOverallType[]
         {
@@ -476,6 +478,8 @@ namespace GurpsSpace
             SetUpTechLevelParameters();
             SocietyTypeParams = new Dictionary<eSocietyType, SocietyTypeParameters>();
             SetUpSocietyTypeParameters();
+            InstallationParams = new List<InstallationParameters>();
+            SetUpInstallationParameters();
 
         }
 
@@ -783,6 +787,71 @@ namespace GurpsSpace
 
             stp = new SocietyTypeParameters(eSocietyType.Theocracy, 3, 6);
             SocietyTypeParams.Add(stp.SocietyType, stp);
+        }
+
+        static private void SetUpInstallationParameters()
+        {
+            InstallationParams.Clear();
+
+            InstallationParams.Add(InstallationParameters.Create("Alien enclave", 6, 0, 0));
+            InstallationParams.Add(InstallationParameters.Create("Black market", 9, 0, -1));
+            InstallationParams.Add(InstallationParameters.Create("Colonial office", 4, 1, 0)
+                .SetMinPR(3));
+            InstallationParams.Add(InstallationParameters.Create("Nature preserve", 12, -1, 0));
+            InstallationParams.Add(InstallationParameters.Create("Corporate headquarters", 3, 1, 0)
+                .SetMinPR(6).SetMinTL(7)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("Criminal base", 3, 1, 0)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("Mercenary base", 3, 1, 0)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("Rebel or terrorist base", 9, 0, 0)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("Refugee camp", -3, 1, 0)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("Religious centre", -3, 1, 0)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("Pirate base", 8, 0, -1)
+                .SetPopDice(1, -3));
+            InstallationParams.Add(InstallationParameters.Create("University", -6, 1, 0)
+                .SetPopRange(3, 5));
+            InstallationParams.Add(InstallationParameters.Create("Naval base", 3, 1, 0)
+                .SetPopDice(1, -1)
+                .SetWithSpaceportLevel(5));
+            InstallationParams.Add(InstallationParameters.Create("Patrol base", 4, 1, 0)
+                .SetPopDice(1, -2)
+                .SetWithSpaceportLevel(4));
+            InstallationParams.Add(InstallationParameters.Create("Survey base", 3, 1, 0)
+                .SetPopDice(1, -3)
+                .SetWithSpaceportLevel(4));
+            InstallationParams.Add(InstallationParameters.Create("Espionage facility", 6, 1, 0)
+                .SetPopDice(1, -4)
+                .HasOptions()
+                .AddOption(4, "Espionage facility (Civilian)", -4)
+                .AddOption(1, "Espionage facility (Friendly military)", -2)
+                .AddOption(1, "Espionage facility (Enemy military)", -2)
+                .SetMultipleTargetAdj(100, -1));
+            InstallationParams.Add(InstallationParameters.Create("Special Justice Group", 0, 1, 0)
+                .SetPopDice(1, -4)
+                .HasOptions()
+                .AddOption(2, "Special Justice Group (covert)", -4)
+                .AddOption(4, "Special Justice Group", -4));
+            InstallationParams.Add(InstallationParameters.Create("Private research centre", 4, 1, 0)
+                .SetPopDice(1, -4)
+                .SetMultipleTargetAdj(3, 0));
+            InstallationParams.Add(InstallationParameters.Create("Government research station", 12, 0, 0)
+                .SetPopDice(1, -4)
+                .HasOptions()
+                .AddOption(2, "Government research station (Secret)", -4)
+                .AddOption(4, "Government research station", -4)
+                .SetSecondInstallation(InstallationParameters.Create("Government research station", 0, 1, 0)
+                    .SetPopDice(1, -4)
+                    .HasOptions()
+                .AddOption(2, "Government research station (Secret)", -4)
+                .AddOption(4, "Government research station", -4))
+                );
+            InstallationParams.Add(InstallationParameters.Create("Prison", 10, -1, 0)
+                .SetPopDice(1, -3));
         }
 
     }
