@@ -520,5 +520,30 @@ namespace GurpsSpace.PlanetCreation
             }
             return p.TradeVolume;
         }
+
+        public int SetSpaceportClass(ViewModelPlanet p)
+        {
+            int recommendedSpaceportClass = 0;
+            if (p.TradeVolume > RuleBook.TradeForSpaceportV && p.PopulationRating >= 6)
+                recommendedSpaceportClass = 5;
+            else if (p.TradeVolume > RuleBook.TradeForSpaceportIV && p.PopulationRating >= 6)
+                recommendedSpaceportClass = 4;
+            else if (p.TradeVolume > RuleBook.TradeForSpaceportIII)
+                recommendedSpaceportClass = 3;
+
+            string question = "Select spaceport class.  ";
+            if (recommendedSpaceportClass > 0)
+                question += "The suggested class given the population and trade volume is Class " + RuleBook.ToRoman(recommendedSpaceportClass) + ". ";
+
+            List<(string, string)> options = new List<(string, string)>();
+            for (int i=5;i>=0;i--)
+                options.Add(("Class " + ((i==0)?"0":RuleBook.ToRoman(i)), RuleBook.SpaceportName[i]));
+
+            InputRadio inDiag = new InputRadio(question, options);
+            if (inDiag.ShowDialog() == true)
+                p.SpaceportClass = 5 - inDiag.Selected;
+
+            return p.SpaceportClass;
+        }
     }
 }

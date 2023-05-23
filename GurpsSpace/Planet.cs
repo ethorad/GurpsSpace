@@ -449,6 +449,12 @@ namespace GurpsSpace
             get { return tradeVolume; }
             set { tradeVolume = value; }
         }
+        private int spaceportClass;
+        public int SpaceportClass
+        {
+            get { return spaceportClass; }
+            set { spaceportClass = value; }
+        }
 
         public Planet(Setting setting)
         {

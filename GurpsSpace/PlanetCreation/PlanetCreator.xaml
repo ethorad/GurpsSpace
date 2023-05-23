@@ -336,6 +336,27 @@
                         </Grid>
                     </GroupBox>
 
+                    <GroupBox Header="Infrastructure" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Row="0" Grid.Column="0">Spaceport</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=SpaceportClassString, Mode=OneWay}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Tag="SpaceportClass" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="SpaceportClass" Click="btnRandom_Click">Rand</Button>
+
+
+                        </Grid>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>

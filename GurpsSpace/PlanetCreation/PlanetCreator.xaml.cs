@@ -92,6 +92,9 @@ namespace GurpsSpace.PlanetCreation
                 case "TradeVolume":
                     pc.SetTradeVolume(vmPlanet);
                     break;
+                case "SpaceportClass":
+                    pc.SetSpaceportClass(vmPlanet);
+                    break;
             }
         }
 

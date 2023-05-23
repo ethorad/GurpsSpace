@@ -3,12 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Windows.Controls;
 
 namespace GurpsSpace
 {
     static internal class RuleBook
     {
         static public readonly int EarthDiameterInMiles = 7930;
+        static public readonly double TradeForSpaceportV = 20000000000000; // $20Tn
+        static public readonly double TradeForSpaceportIV = 1000000000000; // $1Tn
+        static public readonly double TradeForSpaceportIII = 50000000000; // $50Bn
 
         static public Dictionary<(eSize, eSubtype), PlanetParameters> PlanetParams;
         static public Dictionary<int, TechLevelParameters> TechLevelParams;
@@ -351,6 +355,16 @@ namespace GurpsSpace
             "Total control" // CR 6
         }, 0);
 
+        static public IndexedTable1D<string> SpaceportName = new IndexedTable1D<string>(new string[]
+        {
+            "No facilities",        // 0
+            "Emergency facilities", // 1
+            "Frontier facilities",  // 2
+            "Local facilities",     // 3
+            "Standard facilities",  // 4
+            "Full facilities"       // 5
+        }, 0);
+
         static public ePressureCategory PressureCategory(double pressure)
         {
             switch (pressure)
@@ -417,6 +431,41 @@ namespace GurpsSpace
             value = (ulong)(Math.Round((double)value, sigFig));
             value *= magnitude;
             return value;
+        }
+        public static string ToRoman(int value)
+        {
+            if (value < 0 || value > 3999)
+                return "ERR";
+            if (value == 0)
+                return "";
+            if (value >= 1000)
+                return "M" + ToRoman(value - 1000);
+            if (value >= 900)
+                return "CM" + ToRoman(value - 900);
+            if (value >= 500)
+                return "D" + ToRoman(value - 500);
+            if (value >= 400)
+                return "CD" + ToRoman(value - 400);
+            if (value >= 100)
+                return "C" + ToRoman(value - 100);
+            if (value >= 90)
+                return "XC" + ToRoman(value - 90);
+            if (value >= 50)
+                return "L" + ToRoman(value - 50);
+            if (value >= 40)
+                return "XL" + ToRoman(value - 40);
+            if (value >= 10)
+                return "X" + ToRoman(value - 10);
+            if (value >= 9)
+                return "IX" + ToRoman(value - 9);
+            if (value >= 5)
+                return "V" + ToRoman(value - 5);
+            if (value >= 4)
+                return "IV" + ToRoman(value - 4);
+            if (value >= 1)
+                return "I" + ToRoman(value - 1);
+            else
+                return "ERR";
         }
 
         static RuleBook()
