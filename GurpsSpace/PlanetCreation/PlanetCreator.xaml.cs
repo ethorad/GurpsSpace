@@ -111,5 +111,10 @@ namespace GurpsSpace.PlanetCreation
             MessageBox.Show(vmPlanet.PopulationRating.ToString());
         }
 
+        private void btnViewInstallation_Click(object sender, RoutedEventArgs e)
+        {
+            InstallationsList instWindow = new InstallationsList(vmPlanet);
+            instWindow.ShowDialog();
+        }
     }
 }

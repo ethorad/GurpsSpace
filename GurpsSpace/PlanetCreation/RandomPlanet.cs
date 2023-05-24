@@ -2,6 +2,8 @@
 using System;
 using System.Windows;
 using System.Collections.Generic;
+using System.Threading;
+using System.Linq;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -542,9 +544,69 @@ namespace GurpsSpace.PlanetCreation
 
         public List<Installation> SetInstallations(ViewModelPlanet p)
         {
-            MessageBox.Show("random installations");
+            List<Installation> lst = new List<Installation>();
 
+            foreach (InstallationParameters instParam in RuleBook.InstallationParams)
+            {
+                CheckInstallation(p.Planet, lst, instParam);
+            }
+
+            // prison only if the only other installations are naval and patrol bases
+            // first check if there is a prison, and if there are installations other than naval/patrol bases
+            // then if so, delete the prison
+            int prisonIndex = -1;
+            bool hasNonMilitaryInstallation = false;
+            for (int i = 0; i < lst.Count(); i++)
+            {
+                if (lst[i].Name == "Prison")
+                    prisonIndex = i;
+                else if (lst[i].Name != "Naval base" &&
+                    lst[i].Name != "Patrol base")
+                    hasNonMilitaryInstallation = true;
+            }
+            if (hasNonMilitaryInstallation && prisonIndex >= 0)
+                lst.RemoveAt(prisonIndex);
+
+            // sort to alphabetical and return
+            lst = lst.OrderBy(x => x.Name).ToList();
+
+            p.Installations = lst;
             return p.Installations;
+
+        }
+        private bool CheckInstallation(Planet p, List<Installation> lst, InstallationParameters instParam)
+        {
+            if (!instParam.IsValidInstallation(p))
+                return false;
+
+            int startCount = lst.Count(); // used to check if any were added
+
+            int count = 0;
+            bool added;
+            do
+            {
+                added = false;
+                int roll = DiceBag.Roll(3);
+                if (roll <= instParam.TargetNumber(p, count))
+                {
+                    instParam.SetWeight(DiceBag.Rand(0, instParam.MaxWeight)); // in case there's multiple options
+                    string name = instParam.Name;
+                    int pop = 
+                        DiceBag.Roll(instParam.PopulationDice) + instParam.PopulationAdj
+                        + DiceBag.Rand(instParam.PopulationRangeMin, instParam.PopulationRangeMax);
+                    if (pop < 1 && instParam.PopulationDice > 0)
+                        pop = 1; // min PR 1 if you're rolling dice
+                    lst.Add(new Installation(name, pop));
+                    count++;
+                    added = true;
+                }
+            } while (added && count < instParam.MaxCount);
+
+            if (instParam.HasSecond && instParam.SecondInstallation != null)
+                CheckInstallation(p, lst, instParam.SecondInstallation);
+
+            return (lst.Count() > startCount);
+
         }
     }
 }

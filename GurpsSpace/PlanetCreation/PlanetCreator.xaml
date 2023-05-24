@@ -348,17 +348,19 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">Spaceport</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=SpaceportClassString, Mode=OneWay}"/>
-                            <Button Grid.Row="0" Grid.Column="2" Tag="SpaceportClass" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="0" Grid.Column="3" Tag="SpaceportClass" Click="btnRandom_Click">Rand</Button>
+                            <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Content="{Binding Path=SpaceportClassString, Mode=OneWay}"/>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="SpaceportClass" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="0" Grid.Column="4" Tag="SpaceportClass" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Installations</Label>
                             <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=InstallationsSummaryString, Mode=OneWay}"/>
-                            <Button Grid.Row="1" Grid.Column="2" Tag="Installations" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="1" Grid.Column="3" Tag="Installations" Click="btnRandom_Click">Rand</Button>
+                            <Button Grid.Row="1" Grid.Column="2" Click="btnViewInstallation_Click">View</Button>
+                            <Button Grid.Row="1" Grid.Column="3" Tag="Installations" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="1" Grid.Column="4" Tag="Installations" Click="btnRandom_Click">Rand</Button>
 
 
                         </Grid>

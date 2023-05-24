@@ -434,7 +434,15 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
-        internal List<Installation> Installations { get { return Planet.Installations; } }
+        internal List<Installation> Installations
+        { 
+            get { return Planet.Installations; }
+            set
+            {
+                Planet.Installations = value;
+                MemberUpdated();
+            }
+        }
         public string InstallationsSummaryString
         {
             get
