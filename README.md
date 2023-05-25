@@ -27,3 +27,7 @@ Strictly the trade volume for a planet should be calculated by reference to its 
 - Contacted homeworld: 10-40% trade volume, fairly low as expect to be reasonably sufficient so most economic activity is internal
 - Colony: 30-70% trade volume, higher volume as will generally have smaller economies and be more tightly linked back to other planets of the same civilisation
 - Outpost: 80-100% trade volume, very high as likely most goods will need to be brought in - and any stuff produced is likely for shipping back out
+
+### Chance of an espionage facility
+The rules state that an espionage facility is present on a roll of (PR+6) or less on 3d.  If one is present, keep rolling to generate more until a roll fails.  The problem with this is for large settlements with say PR 8 there is an espionage facility on a roll of 14 or less.  This can result in dozens of espionage facilities until one fails.
+I've therefore changed this so that subsequent facilities have a cumulative -1 to the target number, making them successively less likely.  This puts a cap on the number of possible espionage facilities, and gives a more reasonable number overall.
