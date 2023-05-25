@@ -19,11 +19,11 @@ namespace GurpsSpace.PlanetCreation
     /// </summary>
     public partial class InstallationsList : Window
     {
-        public InstallationsList(ViewModelPlanet p)
+        public InstallationsList(ViewModelInstallationList lst)
         {
+            this.DataContext = lst;
             InitializeComponent();
 
-            this.DataContext = p;
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)

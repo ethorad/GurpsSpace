@@ -113,7 +113,7 @@ namespace GurpsSpace.PlanetCreation
 
         private void btnViewInstallation_Click(object sender, RoutedEventArgs e)
         {
-            InstallationsList instWindow = new InstallationsList(vmPlanet);
+            InstallationsList instWindow = new InstallationsList(new ViewModelInstallationList(Planet.Installations));
             instWindow.ShowDialog();
         }
     }

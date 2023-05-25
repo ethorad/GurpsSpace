@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GurpsSpace.PlanetCreation"
         mc:Ignorable="d"
-        Title="InstallationsList" SizeToContent="Height" Width="500">
+        Title="InstallationsList" SizeToContent="WidthAndHeight">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -14,16 +14,16 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0">The installations present are shown below:</Label>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Source=Installations}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=Installations}">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Installation Name"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=PR}" Header="Population Rating"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Installation Type"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=PRstring}" Header="Population Rating"/>
                 </GridView>
             </ListView.View>
         </ListView>
