@@ -17,7 +17,7 @@
 
         <TabControl Grid.Row="0" Grid.Column="0">
 
-            <TabItem Header="Physical" HorizontalAlignment="Left" Width="54">
+            <TabItem Header="Physical">
 
                 <StackPanel Orientation="Vertical">
 
@@ -192,12 +192,12 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Social" HorizontalAlignment="Right" Width="43">
+            <TabItem Header="Social">
+                
                 <StackPanel Orientation="Vertical">
 
                     <GroupBox Header="Basic Information">
                         <Grid>
-
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -336,7 +336,32 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Infrastructure" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Infrastructure">
+                <StackPanel Orientation="Vertical">
+
+                    <GroupBox Header="Spaceport" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Row="0" Grid.Column="0">Spaceport</Label>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=SpaceportClassString, Mode=OneWay}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Tag="SpaceportClass" Click="btnSelect_Click">Select</Button>
+                            <Button Grid.Row="0" Grid.Column="3" Tag="SpaceportClass" Click="btnRandom_Click">Rand</Button>
+                        </Grid>
+                        
+                    </GroupBox>
+                    <GroupBox Header="Temporary" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
                         <Grid>
 
                             <Grid.RowDefinitions>
@@ -351,10 +376,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0">Spaceport</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Content="{Binding Path=SpaceportClassString, Mode=OneWay}"/>
-                            <Button Grid.Row="0" Grid.Column="3" Tag="SpaceportClass" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="0" Grid.Column="4" Tag="SpaceportClass" Click="btnRandom_Click">Rand</Button>
+
 
                             <Label Grid.Row="1" Grid.Column="0">Installations</Label>
                             <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=InstallationsSummaryString, Mode=OneWay}"/>
@@ -365,8 +387,66 @@
 
                         </Grid>
                     </GroupBox>
+
+                    <GroupBox Header="Installations" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0">Alien Installation</Label>
+                            <Label Grid.Row="1" Grid.Column="0">Black Market</Label>
+                            <Label Grid.Row="2" Grid.Column="0">Colonial Office</Label>
+                            <Label Grid.Row="3" Grid.Column="0">Corporate Headquarters</Label>
+                            <Label Grid.Row="4" Grid.Column="0">Criminal Base</Label>
+                            <Label Grid.Row="5" Grid.Column="0">Espionage Facility</Label>
+                            <Label Grid.Row="6" Grid.Column="0">Government Research Station</Label>
+                            <Label Grid.Row="7" Grid.Column="0">Mercenary Base</Label>
+                            <Label Grid.Row="8" Grid.Column="0">Nature Preserve</Label>
+                            <Label Grid.Row="9" Grid.Column="0">Naval Base</Label>
+                            <Label Grid.Row="10" Grid.Column="0">Patrol Base</Label>
+                            <Label Grid.Row="11" Grid.Column="0">Pirate Base</Label>
+                            <Label Grid.Row="12" Grid.Column="0">Prison</Label>
+                            <Label Grid.Row="13" Grid.Column="0">Private Research Centre</Label>
+                            <Label Grid.Row="14" Grid.Column="0">Rebel or Terrorist Base</Label>
+                            <Label Grid.Row="15" Grid.Column="0">Refugee Camp</Label>
+                            <Label Grid.Row="16" Grid.Column="0">Religious Centre</Label>
+                            <Label Grid.Row="17" Grid.Column="0">Special Justice Group Office</Label>
+                            <Label Grid.Row="18" Grid.Column="0">Survey Base</Label>
+                            <Label Grid.Row="19" Grid.Column="0">University</Label>
+                            
+                        </Grid>
+                    </GroupBox>
+                    
                 </StackPanel>
             </TabItem>
+
         </TabControl>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
