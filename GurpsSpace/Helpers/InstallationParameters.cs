@@ -9,8 +9,11 @@ namespace GurpsSpace
 {
     internal class InstallationParameters
     {
-        public readonly IndexedList<string> Names;
-        public string Name { get { return Names[offset]; } }
+        private string type;
+        public string Type { get { return type; } }
+        public readonly IndexedList<string> SubTypes;
+        public string SubType { get { return SubTypes[offset]; } }
+        public string Name { get { return Type+" ("+SubType+")";} }
 
         // for target number
         private int targetBase;
@@ -44,7 +47,7 @@ namespace GurpsSpace
         // where there may be multiple options (currently just names and populations)
         private int offset;
         public int Offset { get { return offset; } }
-        public int MaxOffset { get { return Names.Count; } }
+        public int MaxOffset { get { return SubTypes.Count; } }
         private IndexedList<int> weights;
         public int MaxWeight
         {
@@ -67,13 +70,14 @@ namespace GurpsSpace
         public InstallationParameters? SecondInstallation { get { return secondInstallation; } }
         public bool HasSecond { get { return (secondInstallation != null); } }
 
-        private InstallationParameters(string name, int targetBase, int targetPrMult, int targetCrMult)
+        private InstallationParameters(string type, int targetBase, int targetPrMult, int targetCrMult)
         {
-            Names = new IndexedList<string>();
+            SubTypes = new IndexedList<string>();
             PopulationAdjs = new IndexedList<int>();
             weights = new IndexedList<int>();
 
-            Names.Add(name);
+            this.type = type;
+            SubTypes.Add("");
             this.targetBase = targetBase;
             this.targetPrMult = targetPrMult;
             this.targetCrMult = targetCrMult;
@@ -81,9 +85,9 @@ namespace GurpsSpace
             weights.Add(1);
         }
 
-        public static InstallationParameters Create(string name, int targetBase, int targetPrMult, int targetCrMult)
+        public static InstallationParameters Create(string type, int targetBase, int targetPrMult, int targetCrMult)
         {
-            return new InstallationParameters(name, targetBase, targetPrMult, targetCrMult);
+            return new InstallationParameters(type, targetBase, targetPrMult, targetCrMult);
         }
         public InstallationParameters SetMinPR(int minPR)
         {
@@ -115,14 +119,14 @@ namespace GurpsSpace
         }
         public InstallationParameters HasOptions()
         {
-            Names.Clear();
+            SubTypes.Clear();
             PopulationAdjs.Clear();
             weights.Clear();
             return this;
         }
-        public InstallationParameters AddOption(int weight, string name, int popAdj)
+        public InstallationParameters AddOption(int weight, string subtype, int popAdj)
         {
-            Names.Add(name);
+            SubTypes.Add(subtype);
             PopulationAdjs.Add(popAdj);
             weights.Add(weight);
             return this;
@@ -172,8 +176,8 @@ namespace GurpsSpace
         {
             if (i < 0)
                 i = 0;
-            if (i >= Names.Count)
-                i = Names.Count - 1;
+            if (i >= SubTypes.Count)
+                i = SubTypes.Count - 1;
             offset = i;
         }
         public void SetWeight(int w)

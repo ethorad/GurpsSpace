@@ -827,28 +827,28 @@ namespace GurpsSpace
             InstallationParams.Add(InstallationParameters.Create("Espionage facility", 6, 1, 0)
                 .SetPopDice(1, -4)
                 .HasOptions()
-                .AddOption(4, "Espionage facility (Civilian)", -4)
-                .AddOption(1, "Espionage facility (Friendly military)", -2)
-                .AddOption(1, "Espionage facility (Enemy military)", -2)
+                .AddOption(4, "Civilian", -4)
+                .AddOption(1, "Friendly military", -2)
+                .AddOption(1, "Enemy military", -2)
                 .SetMultipleTargetAdj(100, -1));
             InstallationParams.Add(InstallationParameters.Create("Special Justice Group", 0, 1, 0)
                 .SetPopDice(1, -4)
                 .HasOptions()
-                .AddOption(2, "Special Justice Group (covert)", -4)
-                .AddOption(4, "Special Justice Group", -4));
+                .AddOption(2, "Covert", -4)
+                .AddOption(4, "", -4));
             InstallationParams.Add(InstallationParameters.Create("Private research centre", 4, 1, 0)
                 .SetPopDice(1, -4)
                 .SetMultipleTargetAdj(3, 0));
             InstallationParams.Add(InstallationParameters.Create("Government research station", 12, 0, 0)
                 .SetPopDice(1, -4)
                 .HasOptions()
-                .AddOption(2, "Government research station (Secret)", -4)
-                .AddOption(4, "Government research station", -4)
+                .AddOption(2, "Secret", -4)
+                .AddOption(4, "", -4)
                 .SetSecondInstallation(InstallationParameters.Create("Government research station", 0, 1, 0)
                     .SetPopDice(1, -4)
                     .HasOptions()
-                .AddOption(2, "Government research station (Secret)", -4)
-                .AddOption(4, "Government research station", -4))
+                .AddOption(2, "Secret", -4)
+                .AddOption(4, "", -4))
                 );
             InstallationParams.Add(InstallationParameters.Create("Prison", 10, -1, 0)
                 .SetPopDice(1, -3));
