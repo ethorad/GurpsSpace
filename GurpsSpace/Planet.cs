@@ -356,7 +356,7 @@ namespace GurpsSpace
             get { return population; }
             set { population = value; }
         }
-        public int PopulationRating { get { return (int)Math.Log10(Population); } }
+        public int PopulationRating { get { return (Population == 0) ? 0 : (int)Math.Log10(Population); } }
 
         private eWorldUnityLevel worldUnityLevel;
         public eWorldUnityLevel WorldUnityLevel 
