@@ -7,7 +7,6 @@ namespace GurpsSpace.PlanetCreation
         private string subtype; public string Subtype { get { return subtype; } }
         public string Name { get { return type + ((Subtype == "") ? "" : " (" + subtype + ")"); } }
         private int pr; public int PR { get { return pr; } }
-        public string PRstring { get { return (PR == 0) ? "n/a" : PR.ToString("N0"); } }
 
 
         public Installation(string type, string subtype, int pr)

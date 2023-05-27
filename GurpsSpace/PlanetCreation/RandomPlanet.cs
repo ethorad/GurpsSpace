@@ -542,9 +542,9 @@ namespace GurpsSpace.PlanetCreation
             return p.SpaceportClass;
         }
 
-        public List<Installation> SetInstallations(ViewModelPlanet p)
+        public List<ViewModelInstallation> SetInstallations(ViewModelPlanet p)
         {
-            List<Installation> lst = new List<Installation>();
+            List<ViewModelInstallation> lst = new List<ViewModelInstallation>();
 
             foreach (InstallationParameters instParam in RuleBook.InstallationParams)
             {
@@ -558,10 +558,10 @@ namespace GurpsSpace.PlanetCreation
             bool hasNonMilitaryInstallation = false;
             for (int i = 0; i < lst.Count(); i++)
             {
-                if (lst[i].Name == "Prison")
+                if (lst[i].Type == "Prison")
                     prisonIndex = i;
-                else if (lst[i].Name != "Naval base" &&
-                    lst[i].Name != "Patrol base")
+                else if (lst[i].Type != "Naval base" &&
+                    lst[i].Type != "Patrol base")
                     hasNonMilitaryInstallation = true;
             }
             if (hasNonMilitaryInstallation && prisonIndex >= 0)
@@ -574,12 +574,12 @@ namespace GurpsSpace.PlanetCreation
             return p.Installations;
 
         }
-        private bool CheckInstallation(Planet p, List<Installation> lst, InstallationParameters instParam)
+        private bool CheckInstallation(Planet p, List<ViewModelInstallation> lst, InstallationParameters instParam)
         {
             if (!instParam.IsValidInstallation(p))
                 return false;
 
-            int startCount = lst.Count(); // used to check if any were added
+            int startCount = lst.Count; // used to check if any were added
 
             int count = 0;
             bool added;
@@ -595,7 +595,7 @@ namespace GurpsSpace.PlanetCreation
                         + DiceBag.Rand(instParam.PopulationRangeMin, instParam.PopulationRangeMax);
                     if (pop < 1 && instParam.PopulationDice > 0)
                         pop = 1; // min PR 1 if you're rolling dice
-                    lst.Add(new Installation(instParam.Type,instParam.SubType, pop));
+                    lst.Add(new ViewModelInstallation(new Installation(instParam.Type,instParam.SubType, pop)));
                     count++;
                     added = true;
                 }
@@ -604,7 +604,7 @@ namespace GurpsSpace.PlanetCreation
             if (instParam.HasSecond && instParam.SecondInstallation != null)
                 CheckInstallation(p, lst, instParam.SecondInstallation);
 
-            return (lst.Count() > startCount);
+            return (lst.Count > startCount);
 
         }
     }

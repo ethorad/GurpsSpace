@@ -38,6 +38,6 @@ namespace GurpsSpace.PlanetCreation
 
         int SetSpaceportClass(ViewModelPlanet p);
 
-        List<Installation> SetInstallations(ViewModelPlanet p);
+        List<ViewModelInstallation> SetInstallations(ViewModelPlanet p);
     }
 }

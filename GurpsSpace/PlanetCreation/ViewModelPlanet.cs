@@ -19,6 +19,11 @@ namespace GurpsSpace.PlanetCreation
         public ViewModelPlanet(Planet p)
         {
             planet = p;
+            installations = new List<ViewModelInstallation>();
+            foreach (Installation inst in p.Installations)
+            {
+                installations.Add(new ViewModelInstallation(inst));
+            }
         }
 
         // Basic information
@@ -434,12 +439,16 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
-        internal List<Installation> Installations
-        { 
-            get { return Planet.Installations; }
+        private List<ViewModelInstallation> installations;
+        public List<ViewModelInstallation> Installations
+        {
+            get { return installations; }
             set
             {
-                Planet.Installations = value;
+                installations = value;
+                Planet.Installations.Clear();
+                foreach (ViewModelInstallation vmInst in installations)
+                    Planet.Installations.Add(vmInst.Installation);
                 MemberUpdated();
             }
         }

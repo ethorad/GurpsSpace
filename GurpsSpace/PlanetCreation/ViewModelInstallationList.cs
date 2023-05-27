@@ -9,8 +9,8 @@ namespace GurpsSpace.PlanetCreation
 {
     public class ViewModelInstallationList : ViewModel
     {
-        private ObservableCollection<Installation> installations;
-        public ObservableCollection<Installation> Installations
+        private ObservableCollection<ViewModelInstallation> installations;
+        public ObservableCollection<ViewModelInstallation> Installations
         {
             get { return installations; }
             set 
@@ -20,10 +20,17 @@ namespace GurpsSpace.PlanetCreation
             }
         }
 
-        public ViewModelInstallationList(List<Installation> inst)
+        public ViewModelInstallationList(List<ViewModelInstallation> instLst)
         {
-            installations = new ObservableCollection<Installation>(inst);
+            installations = new ObservableCollection<ViewModelInstallation>(instLst);
             MemberUpdated() ;
+        }
+        public ViewModelInstallationList(List<Installation> instLst)
+        {
+            installations = new ObservableCollection<ViewModelInstallation>();
+            foreach (Installation inst in instLst)
+                installations.Add(new ViewModelInstallation(inst));
+            MemberUpdated();
         }
 
     }
