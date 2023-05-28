@@ -19,11 +19,7 @@ namespace GurpsSpace.PlanetCreation
         public ViewModelPlanet(Planet p)
         {
             planet = p;
-            installations = new List<ViewModelInstallation>();
-            foreach (Installation inst in p.Installations)
-            {
-                installations.Add(new ViewModelInstallation(inst));
-            }
+            installations = new ViewModelInstallationList(planet.Installations);
         }
 
         // Basic information
@@ -439,24 +435,37 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
-        private List<ViewModelInstallation> installations;
-        public List<ViewModelInstallation> Installations
+        private ViewModelInstallationList installations;
+        public ViewModelInstallationList Installations
         {
             get { return installations; }
             set
             {
                 installations = value;
                 Planet.Installations.Clear();
-                foreach (ViewModelInstallation vmInst in installations)
+                foreach (ViewModelInstallation vmInst in installations.Installations)
                     Planet.Installations.Add(vmInst.Installation);
                 MemberUpdated();
             }
         }
+        //private List<ViewModelInstallation> installations;
+        //public List<ViewModelInstallation> Installations
+        //{
+        //    get { return installations; }
+        //    set
+        //    {
+        //        installations = value;
+        //        Planet.Installations.Clear();
+        //        foreach (ViewModelInstallation vmInst in installations)
+        //            Planet.Installations.Add(vmInst.Installation);
+        //        MemberUpdated();
+        //    }
+        //}
         public string InstallationsSummaryString
         {
             get
             {
-                return Installations.Count.ToString("N0") + " installations present";
+                return Installations.Installations.Count.ToString("N0") + " installations present";
             }
         }
     }

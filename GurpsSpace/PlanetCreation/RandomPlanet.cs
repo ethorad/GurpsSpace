@@ -542,7 +542,7 @@ namespace GurpsSpace.PlanetCreation
             return p.SpaceportClass;
         }
 
-        public List<ViewModelInstallation> SetInstallations(ViewModelPlanet p)
+        public ViewModelInstallationList SetInstallations(ViewModelPlanet p)
         {
             List<ViewModelInstallation> lst = new List<ViewModelInstallation>();
 
@@ -570,7 +570,7 @@ namespace GurpsSpace.PlanetCreation
             // sort to alphabetical and return
             lst = lst.OrderBy(x => x.Name).ToList();
 
-            p.Installations = lst;
+            p.Installations = new ViewModelInstallationList(lst);
             return p.Installations;
 
         }
