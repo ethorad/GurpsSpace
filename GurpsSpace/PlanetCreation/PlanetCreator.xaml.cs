@@ -1,6 +1,7 @@
 ﻿
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -18,10 +19,10 @@ namespace GurpsSpace.PlanetCreation
         {
             Planet = new(setting);
             vmPlanet = new ViewModelPlanet(Planet);
-            InitializeComponent();
             randomiser = new RandomPlanet();
             userInput = new UserPlanet();
 
+            InitializeComponent();
             SetUpInstallationGrid();
 
             this.DataContext = vmPlanet;
@@ -41,6 +42,7 @@ namespace GurpsSpace.PlanetCreation
 
             Label lbl;
             Button but;
+            Binding bind;
 
             for (int i=0;i<RuleBook.InstallationParams.Count;i++)
             {
@@ -53,7 +55,9 @@ namespace GurpsSpace.PlanetCreation
                 InstallationGrid.Children.Add(lbl);
 
                 lbl = new Label();
-                lbl.Content = "?";
+                bind = new Binding("SpaceportClassString"); // ("InstallSummary" + RuleBook.InstallationParams[i].Type);
+                bind.Mode = BindingMode.OneWay;
+                BindingOperations.SetBinding(lbl, Label.ContentProperty, bind);
                 Grid.SetRow(lbl,i);
                 Grid.SetColumn(lbl, 1);
                 InstallationGrid.Children.Add(lbl);
