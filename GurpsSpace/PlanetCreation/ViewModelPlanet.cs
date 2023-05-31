@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace GurpsSpace.PlanetCreation
 {
     public class ViewModelPlanet : ViewModel
@@ -17,6 +19,7 @@ namespace GurpsSpace.PlanetCreation
         public ViewModelPlanet(Planet p)
         {
             planet = p;
+            installations = new ViewModelInstallationList(planet.Installations);
         }
 
         // Basic information
@@ -432,5 +435,47 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
+        private ViewModelInstallationList installations;
+        public ViewModelInstallationList Installations
+        {
+            get { return installations; }
+            set
+            {
+                installations = value;
+                Planet.Installations.Clear();
+                foreach (ViewModelInstallation vmInst in installations.Installations)
+                    Planet.Installations.Add(vmInst.Installation);
+                MemberUpdated();
+            }
+        }
+        public void AddInstallations(List<Installation> newInst)
+        {
+            foreach (Installation inst in newInst)
+                AddInstallations(inst);
+        }
+        public void AddInstallations(Installation inst)
+        {
+            installations.Add(inst);
+            Planet.Installations.Add(inst);
+            MemberUpdated();
+        }
+        public void ClearInstallations(string instType)
+        {
+            for (int i = Planet.Installations.Count - 1; i >= 0; i--)
+                if (Planet.Installations[i].Type == instType)
+                {
+                    Planet.Installations.RemoveAt(i);
+                    installations.Installations.RemoveAt(i);
+                }
+            MemberUpdated();
+        }
+
+        //public string InstallationsSummaryString
+        //{
+        //    get
+        //    {
+        //        return Installations.Installations.Count.ToString("N0") + " installations present";
+        //    }
+        //}
     }
 }

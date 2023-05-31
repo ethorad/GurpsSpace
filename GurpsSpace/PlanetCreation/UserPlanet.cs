@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Windows;
 using System.Windows.Annotations;
 
 namespace GurpsSpace.PlanetCreation
@@ -544,6 +545,20 @@ namespace GurpsSpace.PlanetCreation
                 p.SpaceportClass = 5 - inDiag.Selected;
 
             return p.SpaceportClass;
+        }
+
+        public List<Installation> GetInstallations(Planet p)
+        {
+            MessageBox.Show("user installations");
+
+            return p.Installations;
+        }
+
+        public List<Installation> GetInstallation(Planet p, string installationType)
+        {
+            MessageBox.Show("user installation for "+installationType);
+
+            return p.Installations;
         }
     }
 }

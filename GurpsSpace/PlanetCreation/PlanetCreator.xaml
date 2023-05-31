@@ -17,7 +17,7 @@
 
         <TabControl Grid.Row="0" Grid.Column="0">
 
-            <TabItem Header="Physical" HorizontalAlignment="Left" Width="54">
+            <TabItem Header="Physical">
 
                 <StackPanel Orientation="Vertical">
 
@@ -192,12 +192,12 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem Header="Social" HorizontalAlignment="Right" Width="43">
+            <TabItem Header="Social">
+                
                 <StackPanel Orientation="Vertical">
 
                     <GroupBox Header="Basic Information">
                         <Grid>
-
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -336,9 +336,14 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Infrastructure" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
-                        <Grid>
+                </StackPanel>
+            </TabItem>
 
+            <TabItem Header="Infrastructure">
+                <StackPanel Orientation="Vertical">
+
+                    <GroupBox Header="Spaceport" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                        <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -353,12 +358,19 @@
                             <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=SpaceportClassString, Mode=OneWay}"/>
                             <Button Grid.Row="0" Grid.Column="2" Tag="SpaceportClass" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="0" Grid.Column="3" Tag="SpaceportClass" Click="btnRandom_Click">Rand</Button>
+                        </Grid>
+                        
+                    </GroupBox>
 
+                    <GroupBox Header="Installations" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
+                        <Grid Name="InstallationGrid">
 
                         </Grid>
                     </GroupBox>
+                    
                 </StackPanel>
             </TabItem>
+
         </TabControl>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">

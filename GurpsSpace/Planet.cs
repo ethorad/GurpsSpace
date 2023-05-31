@@ -1,6 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Windows.Controls;
+﻿using GurpsSpace.PlanetCreation;
+using System;
+using System.Collections.Generic;
 
 namespace GurpsSpace
 {
@@ -455,6 +455,7 @@ namespace GurpsSpace
             get { return spaceportClass; }
             set { spaceportClass = value; }
         }
+        internal List<Installation> Installations;
 
         public Planet(Setting setting)
         {
@@ -464,6 +465,7 @@ namespace GurpsSpace
             description = "";
             atmosphericDescription = "";
             localTechLevel = setting.TechLevel;
+            Installations = new List<Installation>();
             CheckRanges();
         }
 
