@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,12 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
+        public int Count { get { return Installations.Count; } }
+        public void Add(Installation inst)
+        {
+            installations.Add(new ViewModelInstallation(inst));
+        }
+
         public string this[string typeToSummarise]
         {
             get
@@ -46,6 +53,8 @@ namespace GurpsSpace.PlanetCreation
                 installations.Add(new ViewModelInstallation(inst));
             MemberUpdated();
         }
+
+
 
     }
 }

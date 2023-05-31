@@ -4,6 +4,7 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Xaml;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -542,13 +543,13 @@ namespace GurpsSpace.PlanetCreation
             return p.SpaceportClass;
         }
 
-        public ViewModelInstallationList SetInstallations(ViewModelPlanet p)
+        public List<Installation> GetInstallations(Planet p)
         {
-            List<ViewModelInstallation> lst = new List<ViewModelInstallation>();
+            List<Installation> lst = new List<Installation>();
 
             foreach (InstallationParameters instParam in RuleBook.InstallationParams)
             {
-                CheckInstallation(p.Planet, lst, instParam);
+                CheckInstallation(p, lst, instParam);
             }
 
             // prison only if the only other installations are naval and patrol bases
@@ -570,11 +571,10 @@ namespace GurpsSpace.PlanetCreation
             // sort to alphabetical and return
             lst = lst.OrderBy(x => x.Name).ToList();
 
-            p.Installations = new ViewModelInstallationList(lst);
-            return p.Installations;
+            return lst;
 
         }
-        private bool CheckInstallation(Planet p, List<ViewModelInstallation> lst, InstallationParameters instParam)
+        private bool CheckInstallation(Planet p, List<Installation> lst, InstallationParameters instParam)
         {
             if (!instParam.IsValidInstallation(p))
                 return false;
@@ -587,7 +587,8 @@ namespace GurpsSpace.PlanetCreation
             {
                 added = false;
                 int roll = DiceBag.Roll(3);
-                if (roll <= instParam.TargetNumber(p, count))
+                int target = instParam.TargetNumber(p, count);
+                if (roll <= target)
                 {
                     instParam.SetWeight(DiceBag.Rand(0, instParam.MaxWeight)); // in case there's multiple options
                     int pop = 
@@ -595,7 +596,7 @@ namespace GurpsSpace.PlanetCreation
                         + DiceBag.Rand(instParam.PopulationRangeMin, instParam.PopulationRangeMax);
                     if (pop < 1 && instParam.PopulationDice > 0)
                         pop = 1; // min PR 1 if you're rolling dice
-                    lst.Add(new ViewModelInstallation(new Installation(instParam.Type,instParam.SubType, pop)));
+                    lst.Add(new Installation(instParam.Type,instParam.SubType, pop));
                     count++;
                     added = true;
                 }
@@ -606,6 +607,17 @@ namespace GurpsSpace.PlanetCreation
 
             return (lst.Count > startCount);
 
+        }
+
+        public List<Installation> GetInstallation(Planet p, string installationType)
+        {
+            List<Installation> lst = new List<Installation>();
+            InstallationParameters instParam = RuleBook.InstallationParams[0];
+            foreach (InstallationParameters ip in RuleBook.InstallationParams)
+                if (ip.Type== installationType)
+                    instParam = ip;
+            CheckInstallation(p, lst, instParam);
+            return lst;
         }
     }
 }

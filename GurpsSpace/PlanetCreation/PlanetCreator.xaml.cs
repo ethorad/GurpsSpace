@@ -148,7 +148,10 @@ namespace GurpsSpace.PlanetCreation
         private void btnRandInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
-            MessageBox.Show("Rand " + RuleBook.InstallationParams[val].Type);
+            string instType = RuleBook.InstallationParams[val].Type;
+
+            vmPlanet.ClearInstallations(instType);
+            vmPlanet.AddInstallations(randomiser.GetInstallation(vmPlanet.Planet, instType));
         }
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
@@ -156,13 +159,11 @@ namespace GurpsSpace.PlanetCreation
             string val = ((Button)sender).Tag.ToString() ?? "";
             SetParameter(val, randomiser);
         }
-
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
             string val = ((Button)sender).Tag.ToString() ?? "";
             SetParameter(val, userInput);
         }
-
         private void SetParameter(string param, IPlanetCreator pc)
         {
             switch (param)
@@ -222,7 +223,7 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetSpaceportClass(vmPlanet);
                     break;
                 case "Installations":
-                    pc.SetInstallations(vmPlanet);
+                    vmPlanet.Installations = new ViewModelInstallationList(pc.GetInstallations(vmPlanet.Planet));
                     break;
             }
         }

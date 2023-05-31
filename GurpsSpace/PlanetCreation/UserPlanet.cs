@@ -547,9 +547,16 @@ namespace GurpsSpace.PlanetCreation
             return p.SpaceportClass;
         }
 
-        public ViewModelInstallationList SetInstallations(ViewModelPlanet p)
+        public List<Installation> GetInstallations(Planet p)
         {
             MessageBox.Show("user installations");
+
+            return p.Installations;
+        }
+
+        public List<Installation> GetInstallation(Planet p, string installationType)
+        {
+            MessageBox.Show("user installation for "+installationType);
 
             return p.Installations;
         }
