@@ -19,6 +19,20 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
+        public string this[string typeToSummarise]
+        {
+            get
+            {
+                if (typeToSummarise=="all")
+                    return Installations.Count.ToString();
+
+                int count = 0;
+                foreach(ViewModelInstallation inst in Installations)
+                    if (inst.Type==typeToSummarise)
+                        count++;
+                return count.ToString();
+            }
+        }
 
         public ViewModelInstallationList(List<ViewModelInstallation> instLst)
         {

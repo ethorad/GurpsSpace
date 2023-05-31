@@ -29,14 +29,19 @@ namespace GurpsSpace.PlanetCreation
         }
         private void SetUpInstallationGrid()
         {
+            // Type
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            InstallationGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+            InstallationGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
+            // Count
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            InstallationGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+            InstallationGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Auto);
+            // button add
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
             InstallationGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Auto);
+            // button delete
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
             InstallationGrid.ColumnDefinitions[3].Width = new GridLength(1, GridUnitType.Auto);
+            // button rand
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
             InstallationGrid.ColumnDefinitions[4].Width = new GridLength(1, GridUnitType.Auto);
 
@@ -44,37 +49,84 @@ namespace GurpsSpace.PlanetCreation
             Button but;
             Binding bind;
 
+            // header row
+            InstallationGrid.RowDefinitions.Add(new RowDefinition());
+
+            lbl = new Label();
+            lbl.Content = "Type";
+            Grid.SetRow(lbl, 0);
+            Grid.SetColumn(lbl, 0);
+            InstallationGrid.Children.Add(lbl);
+
+            lbl = new Label();
+            lbl.Content = "Count";
+            Grid.SetRow(lbl, 0);
+            Grid.SetColumn(lbl, 1);
+            InstallationGrid.Children.Add(lbl);
+
+            // totals row
+            InstallationGrid.RowDefinitions.Add(new RowDefinition());
+
+            lbl = new Label();
+            lbl.Content = "All installations";
+            Grid.SetRow(lbl, 1);
+            Grid.SetColumn(lbl, 0);
+            InstallationGrid.Children.Add(lbl);
+
+            lbl = new Label();
+            bind = new Binding("Installations[all]");
+            bind.Mode = BindingMode.OneWay;
+            BindingOperations.SetBinding(lbl, Label.ContentProperty, bind);
+            Grid.SetRow(lbl, 1);
+            Grid.SetColumn(lbl, 1);
+            InstallationGrid.Children.Add(lbl);
+
+            but = new Button();
+            but.Content = "View";
+            but.Click += btnViewInstallation_Click;
+            Grid.SetRow(but, 1);
+            Grid.SetColumn(but, 2);
+            InstallationGrid.Children.Add(but);
+
+            but = new Button();
+            but.Content = "Select";
+            but.Tag = "Installations";
+            but.Click += btnSelect_Click;
+            Grid.SetRow(but, 1);
+            Grid.SetColumn(but, 3);
+            InstallationGrid.Children.Add(but);
+
+            but = new Button();
+            but.Content = "Rand";
+            but.Tag = "Installations";
+            but.Click += btnRandom_Click;
+            Grid.SetRow(but, 1);
+            Grid.SetColumn(but, 4);
+            InstallationGrid.Children.Add(but);
+
             for (int i=0;i<RuleBook.InstallationParams.Count;i++)
             {
                 InstallationGrid.RowDefinitions.Add(new RowDefinition());
 
                 lbl = new Label();
                 lbl.Content = RuleBook.InstallationParams[i].Type;
-                Grid.SetRow(lbl,i);
+                Grid.SetRow(lbl, i + 2);
                 Grid.SetColumn(lbl, 0);
                 InstallationGrid.Children.Add(lbl);
 
                 lbl = new Label();
-                bind = new Binding("SpaceportClassString"); // ("InstallSummary" + RuleBook.InstallationParams[i].Type);
+                bind = new Binding("Installations[" + RuleBook.InstallationParams[i].Type+"]");
                 bind.Mode = BindingMode.OneWay;
                 BindingOperations.SetBinding(lbl, Label.ContentProperty, bind);
-                Grid.SetRow(lbl,i);
+                Grid.SetRow(lbl, i + 2);
                 Grid.SetColumn(lbl, 1);
                 InstallationGrid.Children.Add(lbl);
 
                 but = new Button();
-                but.Content = "Add";
+                but.Content = "Select";
                 but.Tag = i;
-                but.Click += btnAddInstallation_Click;
-                Grid.SetRow(but, i);
-                Grid.SetColumn(but, 2);
-                InstallationGrid.Children.Add(but);
-
-                but = new Button();
-                but.Content = "Delete";
-                but.Tag = i;
-                but.Click += btnDeleteInstallation_Click;
-                Grid.SetRow(but, i);
+                but.Click += btnSelectInstallation_Click;
+                Grid.SetRow(but, i + 2);
                 Grid.SetColumn(but, 3);
                 InstallationGrid.Children.Add(but);
 
@@ -82,21 +134,16 @@ namespace GurpsSpace.PlanetCreation
                 but.Content = "Rand";
                 but.Tag = i;
                 but.Click += btnRandInstallation_Click;
-                Grid.SetRow(but, i);
+                Grid.SetRow(but, i + 2);
                 Grid.SetColumn(but, 4);
                 InstallationGrid.Children.Add(but);
             }
         }
 
-        private void btnAddInstallation_Click(object sender, RoutedEventArgs e)
+        private void btnSelectInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
-            MessageBox.Show("Add " + RuleBook.InstallationParams[val].Type);
-        }
-        private void btnDeleteInstallation_Click(object sender, RoutedEventArgs e)
-        {
-            int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
-            MessageBox.Show("Delete " + RuleBook.InstallationParams[val].Type);
+            MessageBox.Show("Select " + RuleBook.InstallationParams[val].Type);
         }
         private void btnRandInstallation_Click(object sender, RoutedEventArgs e)
         {

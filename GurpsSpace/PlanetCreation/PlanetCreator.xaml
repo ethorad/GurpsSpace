@@ -361,32 +361,6 @@
                         </Grid>
                         
                     </GroupBox>
-                    <GroupBox Header="Temporary" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
-                        <Grid>
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-
-
-                            <Label Grid.Row="1" Grid.Column="0">Installations</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=InstallationsSummaryString, Mode=OneWay}"/>
-                            <Button Grid.Row="1" Grid.Column="2" Click="btnViewInstallation_Click">View</Button>
-                            <Button Grid.Row="1" Grid.Column="3" Tag="Installations" Click="btnSelect_Click">Select</Button>
-                            <Button Grid.Row="1" Grid.Column="4" Tag="Installations" Click="btnRandom_Click">Rand</Button>
-
-
-                        </Grid>
-                    </GroupBox>
 
                     <GroupBox Header="Installations" IsEnabled="{Binding Path=HasSettlement, Mode=OneWay}">
                         <Grid Name="InstallationGrid">
