@@ -7,13 +7,28 @@ using System.Windows.Media;
 
 namespace GurpsSpace
 {
-    internal class InstallationParameters
+    public class InstallationParameters
     {
         private string type;
         public string Type { get { return type; } }
         public readonly IndexedList<string> SubTypes;
         public string SubType { get { return SubTypes[offset]; } }
         public string Name { get { return Type+" ("+SubType+")";} }
+        public List<string> Names
+        {
+            get
+            {
+                List<string> lst = new List<string>();
+                for(int i = 0;i<SubTypes.Count;i++)
+                {
+                    if (SubTypes[i] == "")
+                        lst.Add(Type);
+                    else
+                        lst.Add(Type + " (" + SubTypes[i] + ")");
+                }
+                return lst;
+            }
+        }
 
         // for target number
         private int targetBase;

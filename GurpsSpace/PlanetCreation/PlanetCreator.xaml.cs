@@ -143,7 +143,11 @@ namespace GurpsSpace.PlanetCreation
         private void btnSelectInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
-            MessageBox.Show("Select " + RuleBook.InstallationParams[val].Type);
+            SelectInstallation instDialog = new SelectInstallation(RuleBook.InstallationParams[val]);
+            if (instDialog.ShowDialog()==true)
+            {
+                MessageBox.Show("success "+instDialog.Selected.ToString());
+            }
         }
         private void btnRandInstallation_Click(object sender, RoutedEventArgs e)
         {
