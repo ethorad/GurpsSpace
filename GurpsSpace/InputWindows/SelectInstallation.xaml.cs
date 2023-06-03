@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GurpsSpace.PlanetCreation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,25 +21,24 @@ namespace GurpsSpace
     /// </summary>
     public partial class SelectInstallation : Window
     {
-        private InstallationParameters instParams;
-        public InstallationParameters InstParams { get { return instParams; } }
+        //private InstallationParameters instParams;
+        //public InstallationParameters InstParams { get { return vmParameters.InstallationParameters; } }
         private int selected;
         public int Selected { get { return selected; } }
+        public int PopulationRating { get { return vmParameters.PopulationRating; } }
         private List<RadioButton> radioButtons;
 
-        public string TypeQuestion
-        {
-            get
-            {
-                return "Select whether there is an installation of type " + InstParams.Type + ".";
-            }
-        }
+        public ViewModelInstallationParameters vmParameters;
+
 
         public SelectInstallation(InstallationParameters instParams)
         {
-            this.instParams = instParams;
+            vmParameters = new ViewModelInstallationParameters(instParams);
             radioButtons = new List<RadioButton>();
+
             InitializeComponent();
+
+            lblInstallTypeQuestion.Content = "Select whether there is an installation of type " + vmParameters.Type.ToLower() + ", and any subtype options.";
 
             RadioButton rb;
 
@@ -59,8 +59,9 @@ namespace GurpsSpace
                 typeChoice.Children.Add(rb);
 
             }
-            
-            this.DataContext = this;
+
+            this.DataContext = vmParameters;
+            vmParameters.PopulationRating = vmParameters.MinPR;
 
         }
 

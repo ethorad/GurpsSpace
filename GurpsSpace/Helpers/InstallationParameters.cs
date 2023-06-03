@@ -175,20 +175,32 @@ namespace GurpsSpace
         }
         public int MinimumPopulationRating()
         {
+            int minAdj = 0;
             // use the smallest populationAdj
-            int minAdj = int.MaxValue;
-            for (int i = 0; i < PopulationAdjs.Count; i++)
-                if (PopulationAdjs[i] < minAdj)
-                    minAdj = PopulationAdjs[i];
-            return populationDice + minAdj + populationRangeMin;
+            if (PopulationAdjs.Count > 0)
+            {
+                minAdj = int.MaxValue;
+                for (int i = 0; i < PopulationAdjs.Count; i++)
+                    if (PopulationAdjs[i] < minAdj)
+                        minAdj = PopulationAdjs[i];
+            }
+            int minPop = populationDice + minAdj + populationRangeMin;
+            if (populationDice > 0 && minPop < 1)
+                return 1;
+            else
+                return minPop;
         }
         public int MaximumPopulationRating()
         {
-            // use the largest populationAdj
             int maxAdj = 0;
-            for (int i = 0; i < PopulationAdjs.Count; i++)
-                if (PopulationAdjs[i] > maxAdj)
-                    maxAdj = PopulationAdjs[i];
+            // use the largest populationAdj
+            if (PopulationAdjs.Count > 0)
+            {
+                maxAdj = int.MinValue;
+                for (int i = 0; i < PopulationAdjs.Count; i++)
+                    if (PopulationAdjs[i] > maxAdj)
+                        maxAdj = PopulationAdjs[i];
+            }
             return 6 * populationDice + maxAdj + populationRangeMax;
         }
         public void SetOffset(int i)

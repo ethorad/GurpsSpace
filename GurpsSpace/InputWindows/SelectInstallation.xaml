@@ -14,15 +14,26 @@
 
         <GroupBox Header="Installation Type">
             <StackPanel Orientation="Vertical" Name="typeChoice">
-                <Label Name="lblInstallType" Content="{Binding Path=TypeQuestion, Mode=OneWay}"/>
+                <Label Name="lblInstallTypeQuestion"/>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Population Rating">
-            <StackPanel Orientation="Vertical" Name="populationSlider">
-                <Label>Select the size of the installation.  This is generally 1-4.</Label>
-                <Slider Minimum="1" Maximum="4" Value="2"/>
-            </StackPanel>
+        <GroupBox Header="Population Rating" IsEnabled="{Binding Path=HasPopulationRating, Mode=OneWay}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0">Select the population rating</Label>
+                <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=MinPR, Mode=OneWay}" Maximum="{Binding Path=MaxPR, Mode=OneWay}" Value="{Binding Path=PopulationRating, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight"/>
+                <Label Grid.Row="1" Grid.Column="0">Chosen PR</Label>
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=PopulationRating, Mode=OneWay}"/>
+            </Grid>
         </GroupBox>
             
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

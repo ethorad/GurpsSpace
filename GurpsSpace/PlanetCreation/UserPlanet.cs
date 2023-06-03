@@ -573,7 +573,8 @@ namespace GurpsSpace.PlanetCreation
                     // i.e. something was selected, get subtype at index -1 since index 0 was "None"
                     List<Installation> returnList = new List<Installation>();
                     string installationSubType = RuleBook.InstallationParams[installationID].SubTypeAtIndex(instDialog.Selected - 1);
-                    returnList.Add(new Installation(installationType, installationSubType, 0));
+                    int PR = instDialog.PopulationRating;
+                    returnList.Add(new Installation(installationType, installationSubType, PR));
                     return returnList;
                 }
 
