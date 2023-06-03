@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Threading;
 using System.Windows;
 using System.Windows.Annotations;
+using System.Windows.Documents;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -549,16 +551,82 @@ namespace GurpsSpace.PlanetCreation
 
         public List<Installation> GetInstallations(Planet p)
         {
-            MessageBox.Show("user installations");
-
-            return p.Installations;
+            throw new NotImplementedException();
         }
 
         public List<Installation> GetInstallation(Planet p, string installationType)
         {
-            MessageBox.Show("user installation for "+installationType);
 
-            return p.Installations;
+            // and get the relevant parameters
+            InstallationParameters parameters = RuleBook.InstallationParams[0];
+            for (int i = 0; i < RuleBook.InstallationParams.Count; i++)
+                if (RuleBook.InstallationParams[i].Type == installationType)
+                    parameters = RuleBook.InstallationParams[i];
+
+            int count = 0;
+            bool added = false;
+            bool success = false;
+            List<Installation> instLst = new List<Installation>();
+            Installation? inst;
+
+            do
+            {
+                (success, inst) = CheckInstallation(p, parameters);
+
+                if (success)
+                {
+                    if (inst == null)
+                    {
+                        added = false;
+                    }
+                    else
+                    {
+                        instLst.Add(inst);
+                        added = true;
+                        count++;
+                    }
+                }
+            } while (added && count < parameters.MaxCount);
+
+            if (count > 0 && parameters.HasSecond && parameters.SecondInstallation != null)
+            {
+                bool success2 = false;
+                (success2, inst) = CheckInstallation(p, parameters.SecondInstallation);
+                if (success2 && inst != null)
+                {
+                    instLst.Add(inst);
+                }
+            }
+
+            if (!success) // i.e. user clicked cancel on first one
+                return p.GetInstallations(installationType);
+            else
+                return instLst;
+        }
+        private (bool, Installation?) CheckInstallation(Planet p, InstallationParameters parameters)
+        {
+
+            // show the dialog to get user input
+            SelectInstallation instDialog = new SelectInstallation(parameters);
+            if (instDialog.ShowDialog() == true)
+            {
+                if (instDialog.Selected ==0)
+                {
+                    // i.e. None was selected so return an empty list
+                    return (true, null);
+                }
+                else
+                {
+                    // i.e. something was selected, get subtype at index -1 since index 0 was "None"
+                    string installationSubType = parameters.SubTypeAtIndex(instDialog.Selected - 1);
+                    int PR = instDialog.PopulationRating;
+                    Installation retInst = new Installation(parameters.Type, installationSubType, PR);
+                    return (true, retInst);
+                }
+
+            }
+            else // i.e. cancel button was clicked, so return false
+                return (false, null);
         }
     }
 }

@@ -591,18 +591,18 @@ namespace GurpsSpace.PlanetCreation
                 if (roll <= target)
                 {
                     instParam.SetWeight(DiceBag.Rand(0, instParam.MaxWeight)); // in case there's multiple options
-                    int pop = 
+                    int pop =
                         DiceBag.Roll(instParam.PopulationDice) + instParam.PopulationAdj
                         + DiceBag.Rand(instParam.PopulationRangeMin, instParam.PopulationRangeMax);
                     if (pop < 1 && instParam.PopulationDice > 0)
                         pop = 1; // min PR 1 if you're rolling dice
-                    lst.Add(new Installation(instParam.Type,instParam.SubType, pop));
+                    lst.Add(new Installation(instParam.Type, instParam.SubType, pop));
                     count++;
                     added = true;
                 }
             } while (added && count < instParam.MaxCount);
 
-            if (instParam.HasSecond && instParam.SecondInstallation != null)
+            if (count > 0 && instParam.HasSecond && instParam.SecondInstallation != null)
                 CheckInstallation(p, lst, instParam.SecondInstallation);
 
             return (lst.Count > startCount);

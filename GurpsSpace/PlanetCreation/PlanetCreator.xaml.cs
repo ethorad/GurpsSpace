@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Collections.Generic;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -35,15 +36,12 @@ namespace GurpsSpace.PlanetCreation
             // Count
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
             InstallationGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Auto);
-            // button add
+            // button view / select
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
             InstallationGrid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Auto);
-            // button delete
-            InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            InstallationGrid.ColumnDefinitions[3].Width = new GridLength(1, GridUnitType.Auto);
             // button rand
             InstallationGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            InstallationGrid.ColumnDefinitions[4].Width = new GridLength(1, GridUnitType.Auto);
+            InstallationGrid.ColumnDefinitions[3].Width = new GridLength(1, GridUnitType.Auto);
 
             Label lbl;
             Button but;
@@ -89,19 +87,11 @@ namespace GurpsSpace.PlanetCreation
             InstallationGrid.Children.Add(but);
 
             but = new Button();
-            but.Content = "Select";
-            but.Tag = "Installations";
-            but.Click += btnSelect_Click;
-            Grid.SetRow(but, 1);
-            Grid.SetColumn(but, 3);
-            InstallationGrid.Children.Add(but);
-
-            but = new Button();
             but.Content = "Rand";
             but.Tag = "Installations";
             but.Click += btnRandom_Click;
             Grid.SetRow(but, 1);
-            Grid.SetColumn(but, 4);
+            Grid.SetColumn(but, 3);
             InstallationGrid.Children.Add(but);
 
             for (int i=0;i<RuleBook.InstallationParams.Count;i++)
@@ -127,7 +117,7 @@ namespace GurpsSpace.PlanetCreation
                 but.Tag = i;
                 but.Click += btnSelectInstallation_Click;
                 Grid.SetRow(but, i + 2);
-                Grid.SetColumn(but, 3);
+                Grid.SetColumn(but, 2);
                 InstallationGrid.Children.Add(but);
 
                 but = new Button();
@@ -135,7 +125,7 @@ namespace GurpsSpace.PlanetCreation
                 but.Tag = i;
                 but.Click += btnRandInstallation_Click;
                 Grid.SetRow(but, i + 2);
-                Grid.SetColumn(but, 4);
+                Grid.SetColumn(but, 3);
                 InstallationGrid.Children.Add(but);
             }
         }
@@ -143,15 +133,18 @@ namespace GurpsSpace.PlanetCreation
         private void btnSelectInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
-            MessageBox.Show("Select " + RuleBook.InstallationParams[val].Type);
+            string instType = RuleBook.InstallationParams[val].Type;
+            List<Installation> lst = userInput.GetInstallation(vmPlanet.Planet, instType);
+            vmPlanet.ClearInstallations(instType);
+            vmPlanet.AddInstallations(lst);
         }
         private void btnRandInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
             string instType = RuleBook.InstallationParams[val].Type;
-
+            List<Installation> lst = randomiser.GetInstallation(vmPlanet.Planet, instType);
             vmPlanet.ClearInstallations(instType);
-            vmPlanet.AddInstallations(randomiser.GetInstallation(vmPlanet.Planet, instType));
+            vmPlanet.AddInstallations(lst);
         }
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)

@@ -48,8 +48,6 @@ namespace GurpsSpace
 
                 RadioButton rb = new();
                 rb.Content = answerList[i].Item1;
-                rb.Tag = i.ToString();
-                rb.Margin = new Thickness(5, 5, 5, 5);
                 Grid.SetRow(rb, i);
                 Grid.SetColumn(rb, 0);
                 g.Children.Add(rb);
@@ -58,7 +56,7 @@ namespace GurpsSpace
                 TextBlock tb = new();
                 tb.Text = answerList[i].Item2;
                 tb.TextWrapping = TextWrapping.WrapWithOverflow;
-                tb.Margin = new Thickness(5, 5, 5, 5);
+                tb.Margin = new Thickness(5, 5, 5, 5); // to match the margin on the radiobuttons
                 Grid.SetColumn(tb, 1);
                 Grid.SetRow(tb, i);
                 g.Children.Add(tb);
@@ -71,11 +69,11 @@ namespace GurpsSpace
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            foreach (RadioButton rb in radioButtons)
+            for (int i=0; i<radioButtons.Count; i++)
             {
-                if (rb.IsChecked==true)
+                if (radioButtons[i].IsChecked==true)
                 {
-                    selected = int.Parse(rb.Tag.ToString() ?? "0");
+                    selected = i;
                 }
             }
             this.DialogResult = true;

@@ -2,7 +2,7 @@
 
 namespace GurpsSpace
 {
-    internal class IndexedTable1D<T>
+    public class IndexedTable1D<T>
     {
         private readonly T[] table;
         private readonly int startIndex;
@@ -27,7 +27,7 @@ namespace GurpsSpace
         }
     }
 
-    internal class IndexedList<T>
+    public class IndexedList<T>
     {
         private List<T> list;
         private int startIndex;

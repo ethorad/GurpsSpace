@@ -469,13 +469,9 @@ namespace GurpsSpace.PlanetCreation
                 }
             MemberUpdated();
         }
-
-        //public string InstallationsSummaryString
-        //{
-        //    get
-        //    {
-        //        return Installations.Installations.Count.ToString("N0") + " installations present";
-        //    }
-        //}
+        public ViewModelInstallationList GetInstallations(string instType)
+        {
+            return new ViewModelInstallationList(Planet.GetInstallations(instType));
+        }
     }
 }

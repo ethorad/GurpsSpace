@@ -7,13 +7,32 @@ using System.Windows.Media;
 
 namespace GurpsSpace
 {
-    internal class InstallationParameters
+    public class InstallationParameters
     {
         private string type;
         public string Type { get { return type; } }
         public readonly IndexedList<string> SubTypes;
         public string SubType { get { return SubTypes[offset]; } }
+        public string SubTypeAtIndex(int index)
+        {
+            return SubTypes[index];
+        }
         public string Name { get { return Type+" ("+SubType+")";} }
+        public List<string> Names
+        {
+            get
+            {
+                List<string> lst = new List<string>();
+                for(int i = 0;i<SubTypes.Count;i++)
+                {
+                    if (SubTypes[i] == "")
+                        lst.Add(Type);
+                    else
+                        lst.Add(Type + " (" + SubTypes[i] + ")");
+                }
+                return lst;
+            }
+        }
 
         // for target number
         private int targetBase;
@@ -156,20 +175,32 @@ namespace GurpsSpace
         }
         public int MinimumPopulationRating()
         {
+            int minAdj = 0;
             // use the smallest populationAdj
-            int minAdj = int.MaxValue;
-            for (int i = 0; i < PopulationAdjs.Count; i++)
-                if (PopulationAdjs[i] < minAdj)
-                    minAdj = PopulationAdjs[i];
-            return populationDice + minAdj + populationRangeMin;
+            if (PopulationAdjs.Count > 0)
+            {
+                minAdj = int.MaxValue;
+                for (int i = 0; i < PopulationAdjs.Count; i++)
+                    if (PopulationAdjs[i] < minAdj)
+                        minAdj = PopulationAdjs[i];
+            }
+            int minPop = populationDice + minAdj + populationRangeMin;
+            if (populationDice > 0 && minPop < 1)
+                return 1;
+            else
+                return minPop;
         }
         public int MaximumPopulationRating()
         {
-            // use the largest populationAdj
             int maxAdj = 0;
-            for (int i = 0; i < PopulationAdjs.Count; i++)
-                if (PopulationAdjs[i] > maxAdj)
-                    maxAdj = PopulationAdjs[i];
+            // use the largest populationAdj
+            if (PopulationAdjs.Count > 0)
+            {
+                maxAdj = int.MinValue;
+                for (int i = 0; i < PopulationAdjs.Count; i++)
+                    if (PopulationAdjs[i] > maxAdj)
+                        maxAdj = PopulationAdjs[i];
+            }
             return 6 * populationDice + maxAdj + populationRangeMax;
         }
         public void SetOffset(int i)
