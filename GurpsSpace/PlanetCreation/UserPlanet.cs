@@ -549,16 +549,37 @@ namespace GurpsSpace.PlanetCreation
 
         public List<Installation> GetInstallations(Planet p)
         {
-            MessageBox.Show("user installations");
-
-            return p.Installations;
+            throw new NotImplementedException();
         }
 
         public List<Installation> GetInstallation(Planet p, string installationType)
         {
-            MessageBox.Show("user installation for "+installationType);
+            List<Installation> currentInstallations = p.GetInstallations(installationType);
+            int installationID = 0;
+            for (int i = 0; i < RuleBook.InstallationParams.Count; i++)
+                if (RuleBook.InstallationParams[i].Type == installationType)
+                    installationID = i;
 
-            return p.Installations;
+            SelectInstallation instDialog = new SelectInstallation(RuleBook.InstallationParams[installationID]);
+            if (instDialog.ShowDialog() == true)
+            {
+                if (instDialog.Selected ==0)
+                {
+                    // i.e. None was selected so return an empty list
+                    return new List<Installation>();
+                }
+                else
+                {
+                    // i.e. something was selected, get subtype at index -1 since index 0 was "None"
+                    List<Installation> returnList = new List<Installation>();
+                    string installationSubType = RuleBook.InstallationParams[installationID].SubTypeAtIndex(instDialog.Selected - 1);
+                    returnList.Add(new Installation(installationType, installationSubType, 0));
+                    return returnList;
+                }
+
+            }
+            else // i.e. cancel button was clicked, so return existing list
+                return currentInstallations;
         }
     }
 }

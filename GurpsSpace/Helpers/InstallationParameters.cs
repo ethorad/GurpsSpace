@@ -13,6 +13,10 @@ namespace GurpsSpace
         public string Type { get { return type; } }
         public readonly IndexedList<string> SubTypes;
         public string SubType { get { return SubTypes[offset]; } }
+        public string SubTypeAtIndex(int index)
+        {
+            return SubTypes[index];
+        }
         public string Name { get { return Type+" ("+SubType+")";} }
         public List<string> Names
         {

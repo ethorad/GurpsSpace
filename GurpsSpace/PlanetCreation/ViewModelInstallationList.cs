@@ -25,6 +25,10 @@ namespace GurpsSpace.PlanetCreation
         {
             installations.Add(new ViewModelInstallation(inst));
         }
+        public void Add(ViewModelInstallation inst)
+        {
+            installations.Add(inst);
+        }
 
         public string this[string typeToSummarise]
         {
@@ -52,6 +56,11 @@ namespace GurpsSpace.PlanetCreation
             foreach (Installation inst in instLst)
                 installations.Add(new ViewModelInstallation(inst));
             MemberUpdated();
+        }
+        public ViewModelInstallationList()
+        {
+            installations = new ObservableCollection<ViewModelInstallation>();
+            MemberUpdated() ;
         }
 
 

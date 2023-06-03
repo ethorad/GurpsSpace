@@ -499,6 +499,18 @@ namespace GurpsSpace
 
         }
 
+        public List<Installation> GetInstallations(string instType)
+        {
+            List<Installation> lst = new List<Installation>();
+            foreach (Installation inst in Installations)
+            {
+                if (inst.Type == instType)
+                    lst.Add(inst);
+            }
+            return lst;
+        }
+
+
         private void PlanetTypeChanged()
         {
             // refresh various parameters if the planet type has updated
