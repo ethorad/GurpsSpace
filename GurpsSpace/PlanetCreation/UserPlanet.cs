@@ -459,34 +459,28 @@ namespace GurpsSpace.PlanetCreation
             return p.SocietyType;
         }
 
-        public int SetControlRating(ViewModelPlanet p)
+        public int GetControlRating(Planet p)
         {
             int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
             int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
 
             if (maxCR == minCR)
-            {
                 // no option
-                p.ControlRating = minCR;
-            }
-            else
+                return minCR;
+
+            string question = "Select the control rating from the range below:";
+            List<(string, string)> options = new List<(string, string)>();
+            for (int i = minCR; i <= maxCR; i++)
             {
-                string question = "Select the control rating from the range below:";
-                List<(string, string)> options = new List<(string, string)>();
-                for (int i=minCR; i<=maxCR; i++)
-                {
-                    options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
-                }
-                
-                InputRadio inDiag = new InputRadio(question, options);
-                if (inDiag.ShowDialog()==true)
-                {
-                    p.ControlRating = inDiag.Selected + minCR;
-                }
-                
+                options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
             }
 
-            return p.ControlRating;
+            InputRadio inDiag = new InputRadio(question, options);
+            if (inDiag.ShowDialog() == true)
+                return inDiag.Selected + minCR;
+            else
+                return p.ControlRating;
+
         }
 
         public double GetTradeVolume(Planet p)

@@ -207,7 +207,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetSocietyType(vmPlanet);
                     break;
                 case "ControlRating":
-                    pc.SetControlRating(vmPlanet);
+                    int cr = pc.GetControlRating(vmPlanet.Planet);
+                    vmPlanet.ControlRating = cr;
                     break;
                 case "TradeVolume":
                     double trade = pc.GetTradeVolume(vmPlanet.Planet);

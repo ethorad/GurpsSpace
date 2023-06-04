@@ -466,14 +466,12 @@ namespace GurpsSpace.PlanetCreation
             return p.SocietyType;
         }
 
-        public int SetControlRating(ViewModelPlanet p)
+        public int GetControlRating(Planet p)
         {
             int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
             int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
 
-            p.ControlRating = DiceBag.Rand(minCR, maxCR);
-
-            return p.ControlRating;
+            return DiceBag.Rand(minCR, maxCR);
         }
 
         public double GetTradeVolume(Planet p)

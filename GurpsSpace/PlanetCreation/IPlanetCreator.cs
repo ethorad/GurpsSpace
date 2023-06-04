@@ -32,7 +32,7 @@ namespace GurpsSpace.PlanetCreation
 
         eSocietyType SetSocietyType(ViewModelPlanet p);
 
-        int SetControlRating(ViewModelPlanet p);
+        int GetControlRating(Planet p);
 
         double GetTradeVolume(Planet p);
 
