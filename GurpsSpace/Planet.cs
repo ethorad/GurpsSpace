@@ -11,15 +11,7 @@ namespace GurpsSpace
 
         private PlanetParameters? parameters;
         private string name;
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                name = value; 
-                CheckRanges();
-            }
-        }
+        public string Name { get { return name; } set { name = value; } }
         public eOverallType OverallType { get { return (parameters == null) ? eOverallType.None : parameters.OverallType; } }
         private string description;
         public string Description
@@ -28,7 +20,6 @@ namespace GurpsSpace
             set
             {
                 description = value;
-                CheckRanges();
             }
         }
         private eSize size; 

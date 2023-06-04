@@ -42,7 +42,7 @@
         <GroupBox Header="Planet Creation">
             <WrapPanel>
                 <Button Click="btnCreatePlanet">New Planet</Button>
-                <Label Content="{Binding Path=Planets[0].Name, Mode=OneWay}"/>
+                <Label Content="{Binding Path=PlanetList[0].Name, Mode=OneWay}"/>
             </WrapPanel>
         </GroupBox>
         
