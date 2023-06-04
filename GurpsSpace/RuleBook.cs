@@ -808,7 +808,8 @@ namespace GurpsSpace
             InstallationParams.Add(InstallationParameters.Create("Rebel or terrorist base", 9, 0, 0)
                 .SetPopDice(1, -3));
             InstallationParams.Add(InstallationParameters.Create("Refugee camp", -3, 1, 0)
-                .SetPopDice(1, -3));
+                .SetPopDice(1, -3)
+                .SetMultipleTargetAdj(100, -1));
             InstallationParams.Add(InstallationParameters.Create("Religious centre", -3, 1, 0)
                 .SetPopDice(1, -3));
             InstallationParams.Add(InstallationParameters.Create("Pirate base", 8, 0, -1)
