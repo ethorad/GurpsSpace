@@ -72,7 +72,7 @@ namespace GurpsSpace.PlanetCreation
             InstallationGrid.Children.Add(lbl);
 
             lbl = new Label();
-            bind = new Binding("Installations[all]");
+            bind = new Binding("InstallationsList[all]");
             bind.Mode = BindingMode.OneWay;
             BindingOperations.SetBinding(lbl, Label.ContentProperty, bind);
             Grid.SetRow(lbl, 1);
@@ -105,7 +105,7 @@ namespace GurpsSpace.PlanetCreation
                 InstallationGrid.Children.Add(lbl);
 
                 lbl = new Label();
-                bind = new Binding("Installations[" + RuleBook.InstallationParams[i].Type+"]");
+                bind = new Binding("InstallationsList[" + RuleBook.InstallationParams[i].Type+"]");
                 bind.Mode = BindingMode.OneWay;
                 BindingOperations.SetBinding(lbl, Label.ContentProperty, bind);
                 Grid.SetRow(lbl, i + 2);

@@ -809,7 +809,7 @@ namespace GurpsSpace
                 .SetPopDice(1, -3));
             InstallationParams.Add(InstallationParameters.Create("Refugee camp", -3, 1, 0)
                 .SetPopDice(1, -3)
-                .SetMultipleTargetAdj(100, -1));
+                .SetMultipleTargetAdj(10, 0));
             InstallationParams.Add(InstallationParameters.Create("Religious centre", -3, 1, 0)
                 .SetPopDice(1, -3));
             InstallationParams.Add(InstallationParameters.Create("Pirate base", 8, 0, -1)
@@ -831,7 +831,7 @@ namespace GurpsSpace
                 .AddOption(4, "Civilian", -4)
                 .AddOption(1, "Friendly military", -2)
                 .AddOption(1, "Enemy military", -2)
-                .SetMultipleTargetAdj(100, -1));
+                .SetMultipleTargetAdj(10, -1));
             InstallationParams.Add(InstallationParameters.Create("Special Justice Group", 0, 1, 0)
                 .SetPopDice(1, -4)
                 .HasOptions()
