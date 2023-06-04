@@ -30,7 +30,9 @@ Strictly the trade volume for a planet should be calculated by reference to its 
 
 ### Chance of an espionage facility or refugee camp
 The rules state that an espionage facility is present on a roll of (PR+6) or less on 3d.  If one is present, keep rolling to generate more until a roll fails.  The problem with this is for large settlements with say PR 8 there is an espionage facility on a roll of 14 or less.  This can result in dozens of espionage facilities until one fails.
+
 I've therefore changed this so that subsequent facilities have a cumulative -1 to the target number, making them successively less likely.  This puts a cap on the number of possible espionage facilities, and gives a more reasonable number overall.  I've also added a hard cap of 10 facilities.
+
 A similar issue exists for refugee camps, whereby the rules say to keep generating them until the roll fails.  However since the target is (PR-3), even with high PR 8 say facilities, you need a roll of 5 or less which is only 4.6%.  As such you're much less likely to get multiples.  I've therefore not adjusted down the target number with successive camps.  Again I've added a hard cap of 10 facilities.
 
 ## Licencing
