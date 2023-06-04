@@ -10,6 +10,9 @@ namespace GurpsSpace.PlanetCreation
 {
     public class ViewModelInstallationList : ViewModel
     {
+        // this class is needed as a wrapper on the list of vmInstallations
+        // as we need an indexer so that the UI can request summaries by type of installation
+
         private ObservableCollection<ViewModelInstallation> installations;
         public ObservableCollection<ViewModelInstallation> Installations
         {
