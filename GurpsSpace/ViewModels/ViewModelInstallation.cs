@@ -10,7 +10,7 @@ namespace GurpsSpace.PlanetCreation
     {
         private Installation installation;
         public Installation Installation
-        { 
+        {
             get { return installation; }
         }
 
@@ -20,11 +20,11 @@ namespace GurpsSpace.PlanetCreation
             MemberUpdated();
         }
 
-        public string Type { get { return Installation.Type; } }
-        public string Subtype { get { return Installation.Subtype; } }
-        public string Name { get { return  Installation.Name; } }
+        public string Type { get { return installation.Type; } }
+        public string Subtype { get { return installation.Subtype; } }
+        public string Name { get { return installation.Name; } }
 
-        public int PR { get { return Installation.PR; } }
+        public int PR { get { return installation.PR; } }
 
         public string PRstring { get { return (PR == 0) ? "n/a" : PR.ToString("N0"); } }
     }

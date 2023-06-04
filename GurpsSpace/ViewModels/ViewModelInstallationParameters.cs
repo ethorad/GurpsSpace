@@ -11,11 +11,10 @@ namespace GurpsSpace.PlanetCreation
     public class ViewModelInstallationParameters : ViewModel
     {
         private InstallationParameters installationParameters;
-        public InstallationParameters InstallationParameters { get { return installationParameters; } }
         
-        public string Type { get { return InstallationParameters.Type; } }
-        public int MinPR { get { return InstallationParameters.MinimumPopulationRating(); } }
-        public int MaxPR { get { return InstallationParameters.MaximumPopulationRating(); } }
+        public string Type { get { return installationParameters.Type; } }
+        public int MinPR { get { return installationParameters.MinimumPopulationRating(); } }
+        public int MaxPR { get { return installationParameters.MaximumPopulationRating(); } }
 
         private int populationRating;
         public int PopulationRating

@@ -216,7 +216,7 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetSpaceportClass(vmPlanet);
                     break;
                 case "Installations":
-                    vmPlanet.Installations = new ViewModelInstallationList(pc.GetInstallations(vmPlanet.Planet));
+                    vmPlanet.InstallationsList = new ViewModelInstallationList(pc.GetInstallations(vmPlanet.Planet));
                     break;
             }
         }

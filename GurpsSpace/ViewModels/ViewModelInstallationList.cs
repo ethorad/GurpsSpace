@@ -14,13 +14,8 @@ namespace GurpsSpace.PlanetCreation
         public ObservableCollection<ViewModelInstallation> Installations
         {
             get { return installations; }
-            set 
-            { 
-                installations = value;
-                MemberUpdated();
-            }
         }
-        public int Count { get { return Installations.Count; } }
+        public int Count { get { return installations.Count; } }
         public void Add(Installation inst)
         {
             installations.Add(new ViewModelInstallation(inst));

@@ -1,11 +1,13 @@
 ﻿
 using System.Windows;
 using GurpsSpace.PlanetCreation;
+using GurpsSpace.ViewModels;
 
 namespace GurpsSpace
 {
     public partial class MainWindow : Window
     {
+        ViewModelSetting vmSetting;
         Setting s;
 
         public MainWindow()
@@ -15,7 +17,8 @@ namespace GurpsSpace
             s.AddSpecies(new Species(s, "Humans", "Generic humans."));
             s.AddSpecies(new Species(s, "Eldar", "Noble and arrogant."));
             s.AddSpecies(new Species(s, "Orks", "Savage and warlike."));
-            this.DataContext = s;
+            vmSetting = new ViewModelSetting(s);
+            this.DataContext = vmSetting;
         }
 
 
