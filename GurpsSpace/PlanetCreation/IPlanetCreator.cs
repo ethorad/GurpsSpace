@@ -36,7 +36,7 @@ namespace GurpsSpace.PlanetCreation
 
         double SetTradeVolume(ViewModelPlanet p);
 
-        int SetSpaceportClass(ViewModelPlanet p);
+        int GetSpaceportClass(Planet p);
 
         List<Installation> GetInstallations(Planet p);
         List<Installation> GetInstallation(Planet p, string installationType);

@@ -524,7 +524,7 @@ namespace GurpsSpace.PlanetCreation
             return p.TradeVolume;
         }
 
-        public int SetSpaceportClass(ViewModelPlanet p)
+        public int GetSpaceportClass(Planet p)
         {
             int recommendedSpaceportClass = 0;
             if (p.TradeVolume > RuleBook.TradeForSpaceportV && p.PopulationRating >= 6)
@@ -544,9 +544,9 @@ namespace GurpsSpace.PlanetCreation
 
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
-                p.SpaceportClass = 5 - inDiag.Selected;
-
-            return p.SpaceportClass;
+                return 5 - inDiag.Selected;
+            else
+                return p.SpaceportClass;
         }
 
         public List<Installation> GetInstallations(Planet p)

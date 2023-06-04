@@ -511,36 +511,35 @@ namespace GurpsSpace.PlanetCreation
             return p.TradeVolume;
         }
 
-        public int SetSpaceportClass(ViewModelPlanet p)
+        public int GetSpaceportClass(Planet p)
         {
             // check for class V
             if (p.TradeVolume > RuleBook.TradeForSpaceportV ||
                 (p.PopulationRating >= 6 && DiceBag.Roll(3) <= p.PopulationRating + 2))
-                p.SpaceportClass = 5;
+                return 5;
 
             // check for class IV
             else if (p.TradeVolume > RuleBook.TradeForSpaceportIV ||
                 (p.PopulationRating >= 6 && DiceBag.Roll(3) <= p.PopulationRating + 5))
-                p.SpaceportClass = 4;
+                return 4;
 
             // check for class III
             else if (p.TradeVolume > RuleBook.TradeForSpaceportIII ||
                 DiceBag.Roll(3) <= p.PopulationRating + 8)
-                p.SpaceportClass = 3;
+                return 3;
 
             // check for class II
             else if (DiceBag.Roll(3) <= p.Population + 7)
-                p.SpaceportClass = 2;
+                return 2;
 
             // check for class I
             else if (DiceBag.Roll(3) <= 14)
-                p.SpaceportClass = 1;
+                return 1;
 
             // if all the above fail, then no spaceport
             else
-                p.SpaceportClass = 0;
+                return 0;
 
-            return p.SpaceportClass;
         }
 
         public List<Installation> GetInstallations(Planet p)

@@ -213,10 +213,12 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetTradeVolume(vmPlanet);
                     break;
                 case "SpaceportClass":
-                    pc.SetSpaceportClass(vmPlanet);
+                    int spacepostClass = pc.GetSpaceportClass(vmPlanet.Planet);
+                    vmPlanet.SpaceportClass = spacepostClass;
                     break;
                 case "Installations":
-                    vmPlanet.InstallationsList = new ViewModelInstallationList(pc.GetInstallations(vmPlanet.Planet));
+                    List<Installation> newInst = pc.GetInstallations(vmPlanet.Planet);
+                    vmPlanet.InstallationsList = new ViewModelInstallationList(newInst);
                     break;
             }
         }
