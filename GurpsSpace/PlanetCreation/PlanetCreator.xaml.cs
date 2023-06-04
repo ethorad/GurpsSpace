@@ -210,7 +210,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetControlRating(vmPlanet);
                     break;
                 case "TradeVolume":
-                    pc.SetTradeVolume(vmPlanet);
+                    double trade = pc.GetTradeVolume(vmPlanet.Planet);
+                    vmPlanet.TradeVolume = trade;
                     break;
                 case "SpaceportClass":
                     int spacepostClass = pc.GetSpaceportClass(vmPlanet.Planet);

@@ -476,7 +476,7 @@ namespace GurpsSpace.PlanetCreation
             return p.ControlRating;
         }
 
-        public double SetTradeVolume(ViewModelPlanet p)
+        public double GetTradeVolume(Planet p)
         { 
             // For trade volume between worlds use:
             // T = K * V1 * V2 / D
@@ -506,9 +506,7 @@ namespace GurpsSpace.PlanetCreation
 
             double trade = tradeProp * p.EconomicVolume;
             trade = RuleBook.RoundToSignificantFigures(trade, 2);
-            p.TradeVolume = trade;
-
-            return p.TradeVolume;
+            return trade;
         }
 
         public int GetSpaceportClass(Planet p)
