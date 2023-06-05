@@ -227,32 +227,36 @@ namespace GurpsSpace.PlanetCreation
             return p.Gravity;
         }
 
-        public eSettlementType SetSettlementType(ViewModelPlanet p)
+        public (eSettlementType, int, bool) GetSettlementType(Planet p)
         {
+            eSettlementType settType = eSettlementType.None;
+            int colonyAge = 0;
+            bool interstellar = true;
+
             int roll = DiceBag.Roll(1);
             switch(roll)
             {
                 case 1:
-                    p.SettlementType = eSettlementType.None;
+                    settType = eSettlementType.None;
                     break;
                 case 2:
                 case 3:
-                    p.SettlementType = eSettlementType.Outpost;
+                    settType = eSettlementType.Outpost;
                     break;
                 case 4:
                 case 5:
-                    p.SettlementType = eSettlementType.Colony;
+                    settType = eSettlementType.Colony;
                     break;
                 case 6:
-                    p.SettlementType = eSettlementType.Homeworld;
+                    settType = eSettlementType.Homeworld;
                     break;
             }
-            if (p.SettlementType == eSettlementType.Colony)
-                p.ColonyAge = DiceBag.Rand(1, 200);
-            if (p.SettlementType == eSettlementType.Homeworld)
-                p.Interstellar = (DiceBag.Roll(1) <= 5);
+            if (settType == eSettlementType.Colony)
+                colonyAge = DiceBag.Rand(1, 200);
+            if (settType == eSettlementType.Homeworld)
+                interstellar = (DiceBag.Roll(1) <= 5);
 
-            return p.SettlementType;
+            return (settType, colonyAge, interstellar);
         }
 
         public Species GetLocalSpecies(Planet p)

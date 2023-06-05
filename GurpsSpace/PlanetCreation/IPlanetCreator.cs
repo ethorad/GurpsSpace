@@ -20,7 +20,7 @@ namespace GurpsSpace.PlanetCreation
 
         double SetGravity(ViewModelPlanet p);
 
-        eSettlementType SetSettlementType(ViewModelPlanet p);
+        (eSettlementType, int, bool) GetSettlementType(Planet p);
 
         Species GetLocalSpecies(Planet p);
 

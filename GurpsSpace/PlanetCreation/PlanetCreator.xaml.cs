@@ -189,7 +189,13 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetGravity(vmPlanet);
                     break;
                 case "SettlementType":
-                    pc.SetSettlementType(vmPlanet);
+                    eSettlementType settType;
+                    int colonyAge;
+                    bool interstellar;
+                    (settType, colonyAge, interstellar) = pc.GetSettlementType(vmPlanet.Planet);
+                    vmPlanet.SettlementType = settType;
+                    vmPlanet.ColonyAge = colonyAge;
+                    vmPlanet.Interstellar = interstellar;
                     break;
                 case "Species":
                     Species s = pc.GetLocalSpecies(vmPlanet.Planet);

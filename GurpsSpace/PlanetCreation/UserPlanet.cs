@@ -99,8 +99,12 @@ namespace GurpsSpace.PlanetCreation
             throw new NotImplementedException();
         }
 
-        public eSettlementType SetSettlementType(ViewModelPlanet p)
+        public (eSettlementType, int, bool) GetSettlementType(Planet p)
         {
+            eSettlementType settType = eSettlementType.None;
+            int colonyAge = 0;
+            bool interstellar = true;
+
             string question = "Select the settlement type to be present:";
             List<(string, string)> options = new List<(string, string)>();
             options.Add(("None", "No settlement is present."));
@@ -108,63 +112,66 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
             options.Add(("Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
             InputRadio radioDiag = new InputRadio(question, options);
-            if (radioDiag.ShowDialog()==true)
+            if (radioDiag.ShowDialog() == true)
             {
-                switch(radioDiag.Answer.Item1)
+                switch (radioDiag.Answer.Item1)
                 {
                     case "Outpost":
-                        p.SettlementType = eSettlementType.Outpost;
+                        settType = eSettlementType.Outpost;
                         break;
                     case "Colony":
-                        p.SettlementType = eSettlementType.Colony;
+                        settType = eSettlementType.Colony;
                         break;
                     case "Homeworld":
-                        p.SettlementType = eSettlementType.Homeworld;
+                        settType = eSettlementType.Homeworld;
                         break;
                     default:
-                        p.SettlementType = eSettlementType.None;
+                        settType = eSettlementType.None;
                         break;
                 }
-            }
 
-            if(p.SettlementType==eSettlementType.Colony)
-            {
-                // get age
-                InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
-                if (inStr.ShowDialog()==true)
+
+                if (settType == eSettlementType.Colony)
                 {
-                    p.ColonyAge = int.Parse(inStr.Answer);
+                    // get age
+                    InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
+                    if (inStr.ShowDialog() == true)
+                    {
+                        colonyAge = int.Parse(inStr.Answer);
+                    }
                 }
-            }
-            else
-            {
-                // not a colony
-                p.ColonyAge = 0;
-            }
+                else
+                {
+                    // not a colony
+                    colonyAge = 0;
+                }
 
-            if(p.SettlementType == eSettlementType.Homeworld)
-            {
-                // get interstellar or not
-                InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
+                if (settType == eSettlementType.Homeworld)
+                {
+                    // get interstellar or not
+                    InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
                 {
                     ("Interstellar","The homeworld is part of an interstellar civilisation."),
                     ("Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
                 });
-                if (inRadio.ShowDialog()==true)
-                {
-                    if (inRadio.Selected == 0)
-                        p.Interstellar = true;
-                    if (inRadio.Selected==1)
-                        p.Interstellar = false;
+                    if (inRadio.ShowDialog() == true)
+                    {
+                        if (inRadio.Selected == 0)
+                            interstellar = true;
+                        if (inRadio.Selected == 1)
+                            interstellar = false;
+                    }
                 }
-            }
-            else
-            {
-                // not a homeworld - colonies and outposts are assumed to be interstellar
-                p.Interstellar = true;
-            }
+                else
+                {
+                    // not a homeworld - colonies and outposts are assumed to be interstellar
+                    interstellar = true;
+                }
 
-            return p.SettlementType;
+                return (settType, colonyAge, interstellar);
+            }
+            else // clicked cancel
+                return (p.SettlementType, p.ColonyAge, p.Interstellar);
 
         }
 
