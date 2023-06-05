@@ -224,22 +224,21 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalTechLevel;
         }
 
-        public double SetPopulation(ViewModelPlanet p)
+        public double GetPopulation(Planet p)
         {
             switch (p.SettlementType)
             {
                 case eSettlementType.Homeworld:
-                    return SetPopulationHomeworld(p);
+                    return GetPopulationHomeworld(p);
                 case eSettlementType.Colony:
-                    return SetPopulationColony(p);
+                    return GetPopulationColony(p);
                 case eSettlementType.Outpost:
-                    return SetPopulationOutpost(p);
+                    return GetPopulationOutpost(p);
                 default:
-                    p.Population = 0;
-                    return p.Population;
+                    return 0;
             }
         }
-        private double SetPopulationHomeworld(ViewModelPlanet p)
+        private double GetPopulationHomeworld(Planet p)
         {
             string question;
             if (p.LocalTechLevel <= 4)
@@ -261,12 +260,12 @@ namespace GurpsSpace.PlanetCreation
                 double perc = double.Parse(inDiag.Answer) / 100;
                 double pop = p.CarryingCapacity * perc;
                 pop = RuleBook.RoundToSignificantFigures(pop, 2);
-                p.Population = pop;
+                return pop;
             }
 
             return p.Population;
         }
-        private double SetPopulationColony(ViewModelPlanet p)
+        private double GetPopulationColony(Planet p)
         {
             // calculate the suggested colony size using the same approach as the random one
             // but assuming a roll of 10
@@ -286,8 +285,8 @@ namespace GurpsSpace.PlanetCreation
             // then calculate the population
             double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
-            if (population > s.CarryingCapacity(p.Planet))
-                population = s.CarryingCapacity(p.Planet);
+            if (population > s.CarryingCapacity(p))
+                population = s.CarryingCapacity(p);
 
             string question = "Enter the colony population below. ";
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
@@ -297,18 +296,18 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
-                    p.Population = double.Parse(inDiag.Answer);
+                    return double.Parse(inDiag.Answer);
             }
 
             return p.Population;
         }
-        private double SetPopulationOutpost(ViewModelPlanet p)
+        private double GetPopulationOutpost(Planet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
             InputString inDiag = new InputString(question, "", true);
             if(inDiag.ShowDialog()==true)
             {
-                p.Population = double.Parse(inDiag.Answer);
+                return double.Parse(inDiag.Answer);
             }
             return p.Population;
         }

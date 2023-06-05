@@ -317,22 +317,21 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalTechLevel;
         }
 
-        public double SetPopulation(ViewModelPlanet p)
+        public double GetPopulation(Planet p)
         {
             switch (p.SettlementType)
             {
                 case eSettlementType.Homeworld:
-                    return SetPopulationHomeworld(p);
+                    return GetPopulationHomeworld(p);
                 case eSettlementType.Colony:
-                    return SetPopulationColony(p);
+                    return GetPopulationColony(p);
                 case eSettlementType.Outpost:
-                    return SetPopulationOutpost(p);
+                    return GetPopulationOutpost(p);
                 default:
-                    p.Population = 0;
-                    return p.Population;
+                    return 0;
             }
         }
-        private double SetPopulationHomeworld(ViewModelPlanet p)
+        private double GetPopulationHomeworld(Planet p)
         {
             double proportion;
             if (p.LocalTechLevel <= 4)
@@ -340,10 +339,10 @@ namespace GurpsSpace.PlanetCreation
             else
                 proportion = 10 / (double)DiceBag.Roll(2);
             double pop = proportion * p.CarryingCapacity;
-            p.Population = RuleBook.RoundToSignificantFigures(pop, 2);
-            return p.Population;
+            pop = RuleBook.RoundToSignificantFigures(pop, 2);
+            return pop;
         }
-        private double SetPopulationColony(ViewModelPlanet p)
+        private double GetPopulationColony(Planet p)
         { 
             // rather than using the table directly, instead calculating based on the box on page 93
             // each race has a starting colony size, a growth rate, and an affinity multiplier
@@ -368,21 +367,19 @@ namespace GurpsSpace.PlanetCreation
             // then calculate the population
             double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
-            if (population > s.CarryingCapacity(p.Planet))
-                population = s.CarryingCapacity(p.Planet);
+            if (population > s.CarryingCapacity(p))
+                population = s.CarryingCapacity(p);
 
-            p.Population = population;
-            return p.Population;
+            return population;
         }
-        private double SetPopulationOutpost(ViewModelPlanet p)
+        private double GetPopulationOutpost(Planet p)
         {
             int roll = DiceBag.Roll(3);
             double population = RuleBook.OutpostPopulation[roll];
             double adj = 1 + (double)(DiceBag.Roll(2) - 7) * 0.1;
             population = population * adj;
             population = RuleBook.RoundToSignificantFigures(population, 2);
-            p.Population = population;
-            return p.Population;
+            return population;
         }
 
         public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)

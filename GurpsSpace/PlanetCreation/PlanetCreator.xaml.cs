@@ -198,7 +198,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetLocalTechLevel(vmPlanet);
                     break;
                 case "Population":
-                    pc.SetPopulation(vmPlanet);
+                    double pop = pc.GetPopulation(vmPlanet.Planet);
+                    vmPlanet.Population = pop;
                     break;
                 case "WorldGovernance":
                     eWorldUnityLevel unity;
