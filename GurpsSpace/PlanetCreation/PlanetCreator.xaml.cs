@@ -195,7 +195,11 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetLocalSpecies(vmPlanet);
                     break;
                 case "TechLevel":
-                    pc.SetLocalTechLevel(vmPlanet);
+                    int tl;
+                    eTechLevelRelativity adj;
+                    (tl, adj) = pc.GetLocalTechLevel(vmPlanet.Planet);
+                    vmPlanet.LocalTechLevel = tl;
+                    vmPlanet.LocalTechLevelRelativity = adj;
                     break;
                 case "Population":
                     double pop = pc.GetPopulation(vmPlanet.Planet);

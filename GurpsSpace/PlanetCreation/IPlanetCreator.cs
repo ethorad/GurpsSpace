@@ -24,7 +24,7 @@ namespace GurpsSpace.PlanetCreation
 
         Species SetLocalSpecies(ViewModelPlanet p);
 
-        int SetLocalTechLevel(ViewModelPlanet p);
+        (int, eTechLevelRelativity) GetLocalTechLevel(Planet p);
 
         double GetPopulation(Planet p);
 

@@ -263,7 +263,7 @@ namespace GurpsSpace.PlanetCreation
             return p.LocalSpecies;
         }
 
-        public int SetLocalTechLevel(ViewModelPlanet p)
+        public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
         {
             int roll = DiceBag.Roll(3);
 
@@ -287,34 +287,37 @@ namespace GurpsSpace.PlanetCreation
             // could try and read the return strings from that table, however would be complex as a few different formats
             // since there's not many return values, easier just to do a switch on them
 
+            int tl = p.Setting.TechLevel;
+            eTechLevelRelativity adj = eTechLevelRelativity.Normal;
+
             switch (res)
             {
                 case "Primitive":
-                    p.LocalTechLevel = Math.Max(0, DiceBag.Roll(3) - 12);
+                    tl = Math.Max(0, DiceBag.Roll(3) - 12);
                     break;
                 case "Standard -3":
-                    p.LocalTechLevel = p.Setting.TechLevel - 3;
+                    tl = p.Setting.TechLevel - 3;
                     break;
                 case "Standard -2":
-                    p.LocalTechLevel = p.Setting.TechLevel-2;
+                    tl = p.Setting.TechLevel-2;
                     break;
                 case "Standard -1":
-                    p.LocalTechLevel= p.Setting.TechLevel-1;
+                    tl = p.Setting.TechLevel-1;
                     break;
                 case "Standard (Delayed)":
-                    p.LocalTechLevel = p.Setting.TechLevel;
-                    p.LocalTechLevelRelativity = eTechLevelRelativity.Delayed;
+                    tl = p.Setting.TechLevel;
+                    adj = eTechLevelRelativity.Delayed;
                     break;
                 case "Standard":
-                    p.LocalTechLevel = p.Setting.TechLevel;
+                    tl = p.Setting.TechLevel;
                     break;
                 case "Standard (Advanced)":
-                    p.LocalTechLevel = p.Setting.TechLevel;
-                    p.LocalTechLevelRelativity = eTechLevelRelativity.Advanced;
+                    tl = p.Setting.TechLevel;
+                    adj = eTechLevelRelativity.Advanced;
                     break;
             }
 
-            return p.LocalTechLevel;
+            return (tl, adj);
         }
 
         public double GetPopulation(Planet p)

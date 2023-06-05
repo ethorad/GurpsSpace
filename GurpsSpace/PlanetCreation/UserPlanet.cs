@@ -184,8 +184,11 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public int SetLocalTechLevel(ViewModelPlanet p)
+        public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
         {
+            int tl = p.Setting.TechLevel;
+            eTechLevelRelativity adj = eTechLevelRelativity.Normal;
+
             List<(string, string)> options = new List<(string, string)>();
             foreach (TechLevelParameters tlp in RuleBook.TechLevelParams.Values)
             {
@@ -196,32 +199,32 @@ namespace GurpsSpace.PlanetCreation
             InputRadio radioDiag = new InputRadio(question, options);
             if (radioDiag.ShowDialog() == true)
             {
-                p.LocalTechLevel = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
-            }
+                tl = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
 
-
-            question = "Select whether the settlement is delayed or advanced relative to TL" + p.LocalTechLevel.ToString() + ".";
-            options.Clear();
-            options.Add(("Delayed", "Settlement is behind normal for TL" + p.LocalTechLevel.ToString() + "."));
-            options.Add(("Normal", "Settlement has a normal level of development for TL" + p.LocalTechLevel.ToString() + "."));
-            options.Add(("Advanced", "Settlement is ahead of normal for TL" + p.LocalTechLevel.ToString() + "."));
-            radioDiag = new InputRadio(question, options);
-            if (radioDiag.ShowDialog()== true)
-            {
-                switch (radioDiag.Answer.Item1)
+                question = "Select whether the settlement is delayed or advanced relative to TL" + tl.ToString() + ".";
+                options.Clear();
+                options.Add(("Delayed", "Settlement is behind normal for TL" + tl.ToString() + "."));
+                options.Add(("Normal", "Settlement has a normal level of development for TL" + tl.ToString() + "."));
+                options.Add(("Advanced", "Settlement is ahead of normal for TL" + tl.ToString() + "."));
+                radioDiag = new InputRadio(question, options);
+                if (radioDiag.ShowDialog() == true)
                 {
-                    case "Delayed":
-                        p.LocalTechLevelRelativity = eTechLevelRelativity.Delayed;
-                        break;
-                    case "Normal":
-                        p.LocalTechLevelRelativity = eTechLevelRelativity.Normal;
-                        break;
-                    case "Advanced":
-                        p.LocalTechLevelRelativity = eTechLevelRelativity.Advanced;
-                        break;
+                    switch (radioDiag.Answer.Item1)
+                    {
+                        case "Delayed":
+                            adj = eTechLevelRelativity.Delayed;
+                            break;
+                        case "Normal":
+                            adj = eTechLevelRelativity.Normal;
+                            break;
+                        case "Advanced":
+                            adj = eTechLevelRelativity.Advanced;
+                            break;
+                    }
                 }
+                return (tl, adj);
             }
-            return p.LocalTechLevel;
+            return (p.LocalTechLevel, p.LocalTechLevelRelativity);
         }
 
         public double GetPopulation(Planet p)
