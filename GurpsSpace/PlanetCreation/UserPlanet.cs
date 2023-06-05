@@ -201,11 +201,11 @@ namespace GurpsSpace.PlanetCreation
             {
                 tl = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
 
-                question = "Select whether the settlement is delayed or advanced relative to TL" + tl.ToString() + ".";
+                question = "Select whether the settlement is delayed or advanced relative to TL " + tl.ToString() + ".";
                 options.Clear();
-                options.Add(("Delayed", "Settlement is behind normal for TL" + tl.ToString() + "."));
-                options.Add(("Normal", "Settlement has a normal level of development for TL" + tl.ToString() + "."));
-                options.Add(("Advanced", "Settlement is ahead of normal for TL" + tl.ToString() + "."));
+                options.Add(("Delayed", "Settlement is behind normal for TL " + tl.ToString() + "."));
+                options.Add(("Normal", "Settlement has a normal level of development for TL " + tl.ToString() + "."));
+                options.Add(("Advanced", "Settlement is ahead of normal for TL " + tl.ToString() + "."));
                 radioDiag = new InputRadio(question, options);
                 if (radioDiag.ShowDialog() == true)
                 {
