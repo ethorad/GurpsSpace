@@ -22,7 +22,7 @@ namespace GurpsSpace.PlanetCreation
 
         eSettlementType SetSettlementType(ViewModelPlanet p);
 
-        Species SetLocalSpecies(ViewModelPlanet p);
+        Species GetLocalSpecies(Planet p);
 
         (int, eTechLevelRelativity) GetLocalTechLevel(Planet p);
 

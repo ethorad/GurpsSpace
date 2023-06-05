@@ -255,12 +255,11 @@ namespace GurpsSpace.PlanetCreation
             return p.SettlementType;
         }
 
-        public Species SetLocalSpecies(ViewModelPlanet p)
+        public Species GetLocalSpecies(Planet p)
         {
             int numSpecies = p.Setting.Species.Count;
             int randNum = DiceBag.Rand(0, numSpecies - 1);
-            p.LocalSpecies = p.Setting.Species[randNum];
-            return p.LocalSpecies;
+            return p.Setting.Species[randNum];
         }
 
         public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)

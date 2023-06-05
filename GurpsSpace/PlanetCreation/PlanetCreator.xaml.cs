@@ -192,7 +192,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetSettlementType(vmPlanet);
                     break;
                 case "Species":
-                    pc.SetLocalSpecies(vmPlanet);
+                    Species s = pc.GetLocalSpecies(vmPlanet.Planet);
+                    vmPlanet.LocalSpecies = s;
                     break;
                 case "TechLevel":
                     int tl;

@@ -168,20 +168,21 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public Species SetLocalSpecies(ViewModelPlanet p)
+        public Species GetLocalSpecies(Planet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             foreach (Species s in p.Setting.Species)
             {
                 options.Add((s.Name, s.Description));
             }
-            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
-            if (radioDiag.ShowDialog()==true)
-            {
-                p.LocalSpecies = p.Setting.Species[radioDiag.Selected];
-            }
-            return p.LocalSpecies;
 
+            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
+            if (radioDiag.ShowDialog() == true)
+            {
+                return p.Setting.Species[radioDiag.Selected];
+            }
+            else
+                return p.LocalSpecies;
         }
 
         public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
