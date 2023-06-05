@@ -385,10 +385,14 @@ namespace GurpsSpace.PlanetCreation
             return p.Population;
         }
 
-        public (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p)
+        public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
         {
             int roll;
+            eWorldUnityLevel unity;
             bool hasSpecial;
+            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
+            fGovernmentSpecialConditions secondCond = fGovernmentSpecialConditions.None;
+
             if (p.LocalTechLevel<=7)
                 roll = DiceBag.Roll(1);
             else
@@ -409,7 +413,7 @@ namespace GurpsSpace.PlanetCreation
                     roll += 1;
                     break; ;
             }
-            (p.WorldUnityLevel, hasSpecial) = RuleBook.WorldUnityLevel[roll];
+            (unity, hasSpecial) = RuleBook.WorldUnityLevel[roll];
 
             if (hasSpecial)
             {
@@ -417,24 +421,20 @@ namespace GurpsSpace.PlanetCreation
                 do
                 {
                     roll = DiceBag.Roll(3);
-                    (p.GovernmentSpecialConditions, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
-                } while (p.LocalTechLevel <= 7 && p.GovernmentSpecialConditions == fGovernmentSpecialConditions.Cyberocracy);
+                    (specCond, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
+                } while (p.LocalTechLevel <= 7 && specCond == fGovernmentSpecialConditions.Cyberocracy);
 
                 if (hasSecond && DiceBag.Roll(1) <= 3)
                 {
-                    fGovernmentSpecialConditions secondCond;
                     do
                     {
                         roll = DiceBag.Roll(3);
                         (secondCond, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
                     } while (p.LocalTechLevel <= 7 && secondCond == fGovernmentSpecialConditions.Cyberocracy);
-                    p.GovernmentSpecialConditions |= secondCond;
                 }
             }
-            else
-                p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
 
-            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
+            return (unity, specCond | secondCond);
         }
 
         public eSocietyType GetSocietyType(Planet p)

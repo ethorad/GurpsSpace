@@ -313,8 +313,11 @@ namespace GurpsSpace.PlanetCreation
             return p.Population;
         }
 
-        public (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p)
+        public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
         {
+            eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
+            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
+
             string question = "Select the degree to which the settlement is socially unified. " +
                 "Higher technology levels, and smaller populations, tend to be more unified.";
 
@@ -330,28 +333,30 @@ namespace GurpsSpace.PlanetCreation
                 switch(inDiag.Answer.Item1)
                 {
                     case "Diffuse":
-                        p.WorldUnityLevel = eWorldUnityLevel.Diffuse;
-                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        unity = eWorldUnityLevel.Diffuse;
+                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Factionalised":
-                        p.WorldUnityLevel = eWorldUnityLevel.Factionalised;
-                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        unity = eWorldUnityLevel.Factionalised;
+                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Coalition":
-                        p.WorldUnityLevel = eWorldUnityLevel.Coalition;
-                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        unity = eWorldUnityLevel.Coalition;
+                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "World Government":
-                        p.WorldUnityLevel = eWorldUnityLevel.WorldGovernment;
-                        p.GovernmentSpecialConditions = GetGovernmentSpecialConditions(p);
+                        unity = eWorldUnityLevel.WorldGovernment;
+                        specCond = GetGovernmentSpecialConditions(p);
                         break;
                 }
             }
 
-            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
+            return (unity, specCond);
         }
-        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(ViewModelPlanet p)
+        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(Planet p)
         {
+            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
+
             string question = "Select a special condition, or none. ";
             List<(string, string)> options = new List<(string, string)>();
             List<(fGovernmentSpecialConditions, bool)> answers = new List<(fGovernmentSpecialConditions, bool)>();
@@ -388,7 +393,7 @@ namespace GurpsSpace.PlanetCreation
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
-                p.GovernmentSpecialConditions = answers[inDiag.Selected].Item1;
+                specCond = answers[inDiag.Selected].Item1;
             }
 
             if (answers[inDiag.Selected].Item2)
@@ -397,10 +402,10 @@ namespace GurpsSpace.PlanetCreation
                 // can't seem to reopen the same dialog box, so refreshing it with new
                 inDiag = new InputRadio(question, options);
                 if (inDiag.ShowDialog() == true)
-                    p.GovernmentSpecialConditions |= answers[inDiag.Selected].Item1;
+                    specCond |= answers[inDiag.Selected].Item1;
             }
 
-            return p.GovernmentSpecialConditions;
+            return specCond;
         }
 
         public eSocietyType GetSocietyType(Planet p)

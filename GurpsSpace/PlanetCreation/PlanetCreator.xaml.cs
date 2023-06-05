@@ -201,7 +201,11 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetPopulation(vmPlanet);
                     break;
                 case "WorldGovernance":
-                    pc.SetWorldGovernance(vmPlanet);
+                    eWorldUnityLevel unity;
+                    fGovernmentSpecialConditions specCond;
+                    (unity,specCond) = pc.GetWorldGovernance(vmPlanet.Planet);
+                    vmPlanet.WorldUnityLevel = unity;
+                    vmPlanet.GovernmentSpecialConditions = specCond;
                     break;
                 case "SocietyType":
                     eSocietyType soc = pc.GetSocietyType(vmPlanet.Planet);

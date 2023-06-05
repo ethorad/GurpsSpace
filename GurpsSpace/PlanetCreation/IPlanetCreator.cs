@@ -28,7 +28,7 @@ namespace GurpsSpace.PlanetCreation
 
         double SetPopulation(ViewModelPlanet p);
 
-        (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p);
+        (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p);
 
         eSocietyType GetSocietyType(Planet p);
 
