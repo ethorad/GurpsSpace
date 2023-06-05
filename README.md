@@ -6,6 +6,12 @@ A program to generate planets etc for a GURPS Space campaign, using the system s
 
 Some bits where I've changed the creation process from the rules in the book are noted below.  These are in no particular order.
 
+### Limits
+Some of the planet limits can be breached by user inputs.  For example, on the random table planets can only get resorce values in the range (-2,+2).  The user input screen notes this, but permits entries over the full range (-5,+5).  This could have the limit enforced, but I opted not to.  For things which are more linked to the consistency of the planet (such as density, temperature, etc) I have tended to keep the range limits.
+
+### Chlorine or Fluorine marginal atmospheres
+The table has a single entry for chlorine or fluorine.  Since the rulebook comments that an atmosphere with significant free fluorine would be extremely unusual, I've set it to be chlorine on a roll of 1-5 and fluorine on a roll of 6 on 1d.
+
 ### Random settlement type
 The rules say settlement types should be decided by the GM.  I've added some code so this can be determined randomly.  Roll 1d on the table below:
 - 1: No settlement
@@ -17,9 +23,6 @@ If the settlement is a colony, then an age is determined randomly between 1 and 
 
 ### Colony population
 Rather than using the table in the rulebook, I've used a formula approach from the breakout box on GURPS Space page 93.  This links to attributes of the populating species.
-
-### Limits
-Some of the planet limits can be breached by user inputs.  For example, on the random table planets can only get resorce values in the range (-2,+2).  The user input screen notes this, but permits entries over the full range (-5,+5).  This could have the limit enforced, but I opted not to.  For things which are more linked to the consistency of the planet (such as density, temperature, etc) I have tended to keep the range limits.
 
 ### Trade volume
 Strictly the trade volume for a planet should be calculated by reference to its various trade routes to other planets, as set out on GURPS Space page 95.  However, at this stage I haven't coded up the ability to link worlds with trade routes.  As such, user input trade volume just asks for what proportion of the total economic value to use as the trade volume.  For random trade volume I use the below to generate the proportion of total economic value:
