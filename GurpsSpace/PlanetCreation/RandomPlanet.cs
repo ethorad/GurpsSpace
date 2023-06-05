@@ -437,33 +437,31 @@ namespace GurpsSpace.PlanetCreation
             return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
         }
 
-        public eSocietyType SetSocietyType(ViewModelPlanet p)
+        public eSocietyType GetSocietyType(Planet p)
         {
             int roll = DiceBag.Roll(3);
 
             roll += Math.Min(10, p.LocalTechLevel);
+
+            if (!p.Interstellar)
+                return RuleBook.SocietyTypeAnarchy[roll];
+            
             switch (p.Setting.SocietyType)
             {
                 case eSettingSocietyType.Anarchy:
-                    p.SocietyType = RuleBook.SocietyTypeAnarchy[roll];
-                    break;
+                    return RuleBook.SocietyTypeAnarchy[roll];
                 case eSettingSocietyType.Alliance:
-                    p.SocietyType = RuleBook.SocietyTypeAlliance[roll];
-                    break;
+                    return RuleBook.SocietyTypeAlliance[roll];
                 case eSettingSocietyType.Federation:
-                    p.SocietyType = RuleBook.SocietyTypeFederation[roll];
-                    break;
+                    return RuleBook.SocietyTypeFederation[roll];
                 case eSettingSocietyType.CorporateState:
-                    p.SocietyType = RuleBook.SocietyTypeCorporateState[roll];
-                    break;
+                    return RuleBook.SocietyTypeCorporateState[roll];
                 case eSettingSocietyType.Empire:
-                    p.SocietyType = RuleBook.SocietyTypeEmpire[roll];
-                    break;
+                    return RuleBook.SocietyTypeEmpire[roll];
+                default:
+                    return RuleBook.SocietyTypeAnarchy[roll];
             }
-            if (!p.Interstellar)
-                p.SocietyType = RuleBook.SocietyTypeAnarchy[roll];
 
-            return p.SocietyType;
         }
 
         public int GetControlRating(Planet p)

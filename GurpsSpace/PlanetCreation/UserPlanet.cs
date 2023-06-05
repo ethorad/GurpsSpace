@@ -403,7 +403,7 @@ namespace GurpsSpace.PlanetCreation
             return p.GovernmentSpecialConditions;
         }
 
-        public eSocietyType SetSocietyType(ViewModelPlanet p)
+        public eSocietyType GetSocietyType(Planet p)
         {
             string question = "Select the type of society prevalent in the settlement:";
             List<(string, string)> options = new List<(string, string)>();
@@ -421,41 +421,32 @@ namespace GurpsSpace.PlanetCreation
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
-                switch(inDiag.Answer.Item1)
+                switch (inDiag.Answer.Item1)
                 {
                     case "Anarchy":
-                        p.SocietyType = eSocietyType.Anarchy;
-                        break;
+                        return eSocietyType.Anarchy;
                     case "Clan/Tribal":
-                        p.SocietyType = eSocietyType.ClanTribal;
-                        break;
+                        return eSocietyType.ClanTribal;
                     case "Caste":
-                        p.SocietyType = eSocietyType.Caste;
-                        break;
+                        return eSocietyType.Caste;
                     case "Feudal":
-                        p.SocietyType = eSocietyType.Feudal;
-                        break;
+                        return eSocietyType.Feudal;
                     case "Theocracy":
-                        p.SocietyType = eSocietyType.Theocracy;
-                        break;
+                        return eSocietyType.Theocracy;
                     case "Dictatorship":
-                        p.SocietyType = eSocietyType.Dictatorship;
-                        break;
+                        return eSocietyType.Dictatorship;
                     case "Representative Democracy":
-                        p.SocietyType = eSocietyType.RepresentativeDemocracy;
-                        break;
+                        return eSocietyType.RepresentativeDemocracy;
                     case "Athenian Democracy":
-                        p.SocietyType = eSocietyType.AthenianDemocracy;
-                        break;
+                        return eSocietyType.AthenianDemocracy;
                     case "Corporate State":
-                        p.SocietyType = eSocietyType.Corporate;
-                        break;
+                        return eSocietyType.Corporate;
                     case "Technocracy":
-                        p.SocietyType = eSocietyType.Technocracy;
-                        break;
+                        return eSocietyType.Technocracy;
                 }
             }
 
+            // cancel was clicked
             return p.SocietyType;
         }
 

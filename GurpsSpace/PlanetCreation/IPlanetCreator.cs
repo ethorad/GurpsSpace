@@ -30,7 +30,7 @@ namespace GurpsSpace.PlanetCreation
 
         (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p);
 
-        eSocietyType SetSocietyType(ViewModelPlanet p);
+        eSocietyType GetSocietyType(Planet p);
 
         int GetControlRating(Planet p);
 

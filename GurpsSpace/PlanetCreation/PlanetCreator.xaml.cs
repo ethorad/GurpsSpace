@@ -204,7 +204,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetWorldGovernance(vmPlanet);
                     break;
                 case "SocietyType":
-                    pc.SetSocietyType(vmPlanet);
+                    eSocietyType soc = pc.GetSocietyType(vmPlanet.Planet);
+                    vmPlanet.SocietyType = soc;
                     break;
                 case "ControlRating":
                     int cr = pc.GetControlRating(vmPlanet.Planet);
