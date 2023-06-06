@@ -14,7 +14,7 @@ namespace GurpsSpace.PlanetCreation
 
         double SetHydrographicCoverage(ViewModelPlanet p);
 
-        int SetAverageSurfaceTempK(ViewModelPlanet p);
+        int GetAverageSurfaceTempK(Planet p);
 
         double GetDensity(Planet p);
 

@@ -185,12 +185,12 @@ namespace GurpsSpace.PlanetCreation
             return p.HydrographicCoverage;
         }
 
-        public int SetAverageSurfaceTempK(ViewModelPlanet p)
+        public int GetAverageSurfaceTempK(Planet p)
         {
-            int tempMin = p.TempMin;
-            int tempStep = p.TempStep;
-            p.AverageSurfaceTempK = tempMin + (DiceBag.Roll(3) - 3) * tempStep;
-            return p.AverageSurfaceTempK;
+            int tempMin = p.MinSurfaceTemperatureK;
+            int tempStep = p.StepSurfaceTemperatureK;
+            int tempK = tempMin + (DiceBag.Roll(3) - 3) * tempStep;
+            return tempK;
         }
 
         public double GetDensity(Planet p)

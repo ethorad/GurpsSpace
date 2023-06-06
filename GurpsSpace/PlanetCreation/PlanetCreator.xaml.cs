@@ -180,7 +180,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetHydrographicCoverage(vmPlanet);
                     break;
                 case "AverageSurfaceTempK":
-                    pc.SetAverageSurfaceTempK(vmPlanet);
+                    int tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);
+                    vmPlanet.AverageSurfaceTempK = tempK;
                     break;
                 case "Density":
                     double density = pc.GetDensity(vmPlanet.Planet);

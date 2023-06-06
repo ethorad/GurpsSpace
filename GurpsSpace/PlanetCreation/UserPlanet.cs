@@ -84,7 +84,7 @@ namespace GurpsSpace.PlanetCreation
             throw new NotImplementedException();
         }
 
-        public int SetAverageSurfaceTempK(ViewModelPlanet p)
+        public int GetAverageSurfaceTempK(Planet p)
         { 
             throw new NotImplementedException(); 
         }
