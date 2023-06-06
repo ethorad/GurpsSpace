@@ -186,7 +186,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetDensity(vmPlanet);
                     break;
                 case "Gravity":
-                    pc.SetGravity(vmPlanet);
+                    double grav = pc.GetGravity(vmPlanet.Planet);
+                    vmPlanet.Gravity = grav;
                     break;
                 case "SettlementType":
                     eSettlementType settType;

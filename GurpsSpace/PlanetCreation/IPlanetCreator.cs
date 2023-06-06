@@ -18,7 +18,7 @@ namespace GurpsSpace.PlanetCreation
 
         double SetDensity(ViewModelPlanet p);
 
-        double SetGravity(ViewModelPlanet p);
+        double GetGravity(Planet p);
 
         (eSettlementType, int, bool) GetSettlementType(Planet p);
 

@@ -94,7 +94,7 @@ namespace GurpsSpace.PlanetCreation
             throw new NotImplementedException();
         }
 
-        public double SetGravity(ViewModelPlanet p)
+        public double GetGravity(Planet p)
         {
             throw new NotImplementedException();
         }

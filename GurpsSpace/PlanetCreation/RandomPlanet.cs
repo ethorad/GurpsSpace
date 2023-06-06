@@ -210,7 +210,7 @@ namespace GurpsSpace.PlanetCreation
             return p.Density;
         }
 
-        public double SetGravity(ViewModelPlanet p)
+        public double GetGravity(Planet p)
         {
             double minG = p.MinGravity;
             double maxG = p.MaxGravity;
@@ -223,8 +223,7 @@ namespace GurpsSpace.PlanetCreation
             if (grav > maxG)
                 grav = maxG;
 
-            p.Gravity = grav;
-            return p.Gravity;
+            return grav;
         }
 
         public (eSettlementType, int, bool) GetSettlementType(Planet p)
