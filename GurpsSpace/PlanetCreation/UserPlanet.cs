@@ -13,28 +13,25 @@ namespace GurpsSpace.PlanetCreation
     {
 
 
-        public string SetName(ViewModelPlanet p)
+        public string GetName(Planet p)
         {
             InputString inStr = new("Enter planet's name:", p.Name);
-            if (inStr.ShowDialog()==true)
-            {
-                p.Name = inStr.Answer;
-            }
-            return p.Name;
+            if (inStr.ShowDialog() == true)
+                return inStr.Answer;
+            else // clicked cancel
+                return p.Name;
         }
 
-        public (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p)
+        public (eSize, eSubtype) GetSizeAndSubtype(Planet p)
         {
             PlanetTypeSelection typeDiag = new();
             if (typeDiag.ShowDialog() == true)
-            {
-                p.Size = typeDiag.Size;
-                p.Subtype = typeDiag.Subtype;
-            }
-            return (p.Size, p.Subtype);
+                return (typeDiag.Size, typeDiag.Subtype);
+            else
+                return (p.Size, p.Subtype);
         }
 
-        public eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p)
+        public eResourceValueCategory GetResourceValueCategory(Planet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
@@ -43,24 +40,30 @@ namespace GurpsSpace.PlanetCreation
             {
                 options.Add((i.ToString(), ((eResourceValueCategory)i).ToString()));
             }
-            InputRadio radioDiag = new InputRadio("Select the resource value for this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
+
+            string question = "Select the resource value for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
+            if (p.IsPlanet)
+                question += "\r\nFor a planet, this is normally between -2 (Very Poor) and +2 (Very Abundant).";
+
+            InputRadio radioDiag = new InputRadio(question, options);
             if (radioDiag.ShowDialog() == true)
             {
-                p.ResourceValueCategory = radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
+                return radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
             }
-            return p.ResourceValueCategory;
+            else // clicked cancel
+                return p.ResourceValueCategory;
         }
 
-        public double SetAtmosphericMass(ViewModelPlanet p)
+        public double GetAtmosphericMass(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p)
+        public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
         {
             if (!p.HasAtmosphericOptions)
             {
-                (p.AtmosphericConditions, p.AtmosphericDescription) = RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
+                return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
             }
             else
             {
@@ -72,35 +75,38 @@ namespace GurpsSpace.PlanetCreation
                 });
                 if (radioDiag.ShowDialog() == true)
                 {
-                    p.AtmosphericConditions = radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>();
-                    p.AtmosphericDescription = radioDiag.Answer.Item2;
+                    return (radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>(), radioDiag.Answer.Item2);
                 }
             }
             return (p.AtmosphericConditions, p.AtmosphericDescription);
         }
 
-        public double SetHydrographicCoverage(ViewModelPlanet p)
+        public double GetHydrographicCoverage(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public int SetAverageSurfaceTempK(ViewModelPlanet p)
+        public int GetAverageSurfaceTempK(Planet p)
         { 
             throw new NotImplementedException(); 
         }
 
-        public double SetDensity(ViewModelPlanet p)
+        public double GetDensity(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public double SetGravity(ViewModelPlanet p)
+        public double GetGravity(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public eSettlementType SetSettlementType(ViewModelPlanet p)
+        public (eSettlementType, int, bool) GetSettlementType(Planet p)
         {
+            eSettlementType settType = eSettlementType.None;
+            int colonyAge = 0;
+            bool interstellar = true;
+
             string question = "Select the settlement type to be present:";
             List<(string, string)> options = new List<(string, string)>();
             options.Add(("None", "No settlement is present."));
@@ -108,84 +114,91 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
             options.Add(("Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
             InputRadio radioDiag = new InputRadio(question, options);
-            if (radioDiag.ShowDialog()==true)
+            if (radioDiag.ShowDialog() == true)
             {
-                switch(radioDiag.Answer.Item1)
+                switch (radioDiag.Answer.Item1)
                 {
                     case "Outpost":
-                        p.SettlementType = eSettlementType.Outpost;
+                        settType = eSettlementType.Outpost;
                         break;
                     case "Colony":
-                        p.SettlementType = eSettlementType.Colony;
+                        settType = eSettlementType.Colony;
                         break;
                     case "Homeworld":
-                        p.SettlementType = eSettlementType.Homeworld;
+                        settType = eSettlementType.Homeworld;
                         break;
                     default:
-                        p.SettlementType = eSettlementType.None;
+                        settType = eSettlementType.None;
                         break;
                 }
-            }
 
-            if(p.SettlementType==eSettlementType.Colony)
-            {
-                // get age
-                InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
-                if (inStr.ShowDialog()==true)
+
+                if (settType == eSettlementType.Colony)
                 {
-                    p.ColonyAge = int.Parse(inStr.Answer);
+                    // get age
+                    InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
+                    if (inStr.ShowDialog() == true)
+                    {
+                        colonyAge = int.Parse(inStr.Answer);
+                    }
                 }
-            }
-            else
-            {
-                // not a colony
-                p.ColonyAge = 0;
-            }
+                else
+                {
+                    // not a colony
+                    colonyAge = 0;
+                }
 
-            if(p.SettlementType == eSettlementType.Homeworld)
-            {
-                // get interstellar or not
-                InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
+                if (settType == eSettlementType.Homeworld)
+                {
+                    // get interstellar or not
+                    InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
                 {
                     ("Interstellar","The homeworld is part of an interstellar civilisation."),
                     ("Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
                 });
-                if (inRadio.ShowDialog()==true)
-                {
-                    if (inRadio.Selected == 0)
-                        p.Interstellar = true;
-                    if (inRadio.Selected==1)
-                        p.Interstellar = false;
+                    if (inRadio.ShowDialog() == true)
+                    {
+                        if (inRadio.Selected == 0)
+                            interstellar = true;
+                        if (inRadio.Selected == 1)
+                            interstellar = false;
+                    }
                 }
-            }
-            else
-            {
-                // not a homeworld - colonies and outposts are assumed to be interstellar
-                p.Interstellar = true;
-            }
+                else
+                {
+                    // not a homeworld - colonies and outposts are assumed to be interstellar
+                    interstellar = true;
+                }
 
-            return p.SettlementType;
+                return (settType, colonyAge, interstellar);
+            }
+            else // clicked cancel
+                return (p.SettlementType, p.ColonyAge, p.Interstellar);
 
         }
 
-        public Species SetLocalSpecies(ViewModelPlanet p)
+        public Species GetLocalSpecies(Planet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             foreach (Species s in p.Setting.Species)
             {
                 options.Add((s.Name, s.Description));
             }
-            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
-            if (radioDiag.ShowDialog()==true)
-            {
-                p.LocalSpecies = p.Setting.Species[radioDiag.Selected];
-            }
-            return p.LocalSpecies;
 
+            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
+            if (radioDiag.ShowDialog() == true)
+            {
+                return p.Setting.Species[radioDiag.Selected];
+            }
+            else
+                return p.LocalSpecies;
         }
 
-        public int SetLocalTechLevel(ViewModelPlanet p)
+        public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
         {
+            int tl = p.Setting.TechLevel;
+            eTechLevelRelativity adj = eTechLevelRelativity.Normal;
+
             List<(string, string)> options = new List<(string, string)>();
             foreach (TechLevelParameters tlp in RuleBook.TechLevelParams.Values)
             {
@@ -196,50 +209,49 @@ namespace GurpsSpace.PlanetCreation
             InputRadio radioDiag = new InputRadio(question, options);
             if (radioDiag.ShowDialog() == true)
             {
-                p.LocalTechLevel = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
-            }
+                tl = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
 
-
-            question = "Select whether the settlement is delayed or advanced relative to TL" + p.LocalTechLevel.ToString() + ".";
-            options.Clear();
-            options.Add(("Delayed", "Settlement is behind normal for TL" + p.LocalTechLevel.ToString() + "."));
-            options.Add(("Normal", "Settlement has a normal level of development for TL" + p.LocalTechLevel.ToString() + "."));
-            options.Add(("Advanced", "Settlement is ahead of normal for TL" + p.LocalTechLevel.ToString() + "."));
-            radioDiag = new InputRadio(question, options);
-            if (radioDiag.ShowDialog()== true)
-            {
-                switch (radioDiag.Answer.Item1)
+                question = "Select whether the settlement is delayed or advanced relative to TL " + tl.ToString() + ".";
+                options.Clear();
+                options.Add(("Delayed", "Settlement is behind normal for TL " + tl.ToString() + "."));
+                options.Add(("Normal", "Settlement has a normal level of development for TL " + tl.ToString() + "."));
+                options.Add(("Advanced", "Settlement is ahead of normal for TL " + tl.ToString() + "."));
+                radioDiag = new InputRadio(question, options);
+                if (radioDiag.ShowDialog() == true)
                 {
-                    case "Delayed":
-                        p.LocalTechLevelRelativity = eTechLevelRelativity.Delayed;
-                        break;
-                    case "Normal":
-                        p.LocalTechLevelRelativity = eTechLevelRelativity.Normal;
-                        break;
-                    case "Advanced":
-                        p.LocalTechLevelRelativity = eTechLevelRelativity.Advanced;
-                        break;
+                    switch (radioDiag.Answer.Item1)
+                    {
+                        case "Delayed":
+                            adj = eTechLevelRelativity.Delayed;
+                            break;
+                        case "Normal":
+                            adj = eTechLevelRelativity.Normal;
+                            break;
+                        case "Advanced":
+                            adj = eTechLevelRelativity.Advanced;
+                            break;
+                    }
                 }
+                return (tl, adj);
             }
-            return p.LocalTechLevel;
+            return (p.LocalTechLevel, p.LocalTechLevelRelativity);
         }
 
-        public double SetPopulation(ViewModelPlanet p)
+        public double GetPopulation(Planet p)
         {
             switch (p.SettlementType)
             {
                 case eSettlementType.Homeworld:
-                    return SetPopulationHomeworld(p);
+                    return GetPopulationHomeworld(p);
                 case eSettlementType.Colony:
-                    return SetPopulationColony(p);
+                    return GetPopulationColony(p);
                 case eSettlementType.Outpost:
-                    return SetPopulationOutpost(p);
+                    return GetPopulationOutpost(p);
                 default:
-                    p.Population = 0;
-                    return p.Population;
+                    return 0;
             }
         }
-        private double SetPopulationHomeworld(ViewModelPlanet p)
+        private double GetPopulationHomeworld(Planet p)
         {
             string question;
             if (p.LocalTechLevel <= 4)
@@ -261,12 +273,12 @@ namespace GurpsSpace.PlanetCreation
                 double perc = double.Parse(inDiag.Answer) / 100;
                 double pop = p.CarryingCapacity * perc;
                 pop = RuleBook.RoundToSignificantFigures(pop, 2);
-                p.Population = pop;
+                return pop;
             }
 
             return p.Population;
         }
-        private double SetPopulationColony(ViewModelPlanet p)
+        private double GetPopulationColony(Planet p)
         {
             // calculate the suggested colony size using the same approach as the random one
             // but assuming a roll of 10
@@ -286,8 +298,8 @@ namespace GurpsSpace.PlanetCreation
             // then calculate the population
             double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
-            if (population > s.CarryingCapacity(p.Planet))
-                population = s.CarryingCapacity(p.Planet);
+            if (population > s.CarryingCapacity(p))
+                population = s.CarryingCapacity(p);
 
             string question = "Enter the colony population below. ";
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
@@ -297,24 +309,27 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
-                    p.Population = double.Parse(inDiag.Answer);
+                    return double.Parse(inDiag.Answer);
             }
 
             return p.Population;
         }
-        private double SetPopulationOutpost(ViewModelPlanet p)
+        private double GetPopulationOutpost(Planet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
             InputString inDiag = new InputString(question, "", true);
             if(inDiag.ShowDialog()==true)
             {
-                p.Population = double.Parse(inDiag.Answer);
+                return double.Parse(inDiag.Answer);
             }
             return p.Population;
         }
 
-        public (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p)
+        public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
         {
+            eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
+            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
+
             string question = "Select the degree to which the settlement is socially unified. " +
                 "Higher technology levels, and smaller populations, tend to be more unified.";
 
@@ -330,28 +345,30 @@ namespace GurpsSpace.PlanetCreation
                 switch(inDiag.Answer.Item1)
                 {
                     case "Diffuse":
-                        p.WorldUnityLevel = eWorldUnityLevel.Diffuse;
-                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        unity = eWorldUnityLevel.Diffuse;
+                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Factionalised":
-                        p.WorldUnityLevel = eWorldUnityLevel.Factionalised;
-                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        unity = eWorldUnityLevel.Factionalised;
+                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Coalition":
-                        p.WorldUnityLevel = eWorldUnityLevel.Coalition;
-                        p.GovernmentSpecialConditions = fGovernmentSpecialConditions.None;
+                        unity = eWorldUnityLevel.Coalition;
+                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "World Government":
-                        p.WorldUnityLevel = eWorldUnityLevel.WorldGovernment;
-                        p.GovernmentSpecialConditions = GetGovernmentSpecialConditions(p);
+                        unity = eWorldUnityLevel.WorldGovernment;
+                        specCond = GetGovernmentSpecialConditions(p);
                         break;
                 }
             }
 
-            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
+            return (unity, specCond);
         }
-        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(ViewModelPlanet p)
+        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(Planet p)
         {
+            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
+
             string question = "Select a special condition, or none. ";
             List<(string, string)> options = new List<(string, string)>();
             List<(fGovernmentSpecialConditions, bool)> answers = new List<(fGovernmentSpecialConditions, bool)>();
@@ -388,7 +405,7 @@ namespace GurpsSpace.PlanetCreation
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
-                p.GovernmentSpecialConditions = answers[inDiag.Selected].Item1;
+                specCond = answers[inDiag.Selected].Item1;
             }
 
             if (answers[inDiag.Selected].Item2)
@@ -397,13 +414,13 @@ namespace GurpsSpace.PlanetCreation
                 // can't seem to reopen the same dialog box, so refreshing it with new
                 inDiag = new InputRadio(question, options);
                 if (inDiag.ShowDialog() == true)
-                    p.GovernmentSpecialConditions |= answers[inDiag.Selected].Item1;
+                    specCond |= answers[inDiag.Selected].Item1;
             }
 
-            return p.GovernmentSpecialConditions;
+            return specCond;
         }
 
-        public eSocietyType SetSocietyType(ViewModelPlanet p)
+        public eSocietyType GetSocietyType(Planet p)
         {
             string question = "Select the type of society prevalent in the settlement:";
             List<(string, string)> options = new List<(string, string)>();
@@ -421,110 +438,92 @@ namespace GurpsSpace.PlanetCreation
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
-                switch(inDiag.Answer.Item1)
+                switch (inDiag.Answer.Item1)
                 {
                     case "Anarchy":
-                        p.SocietyType = eSocietyType.Anarchy;
-                        break;
+                        return eSocietyType.Anarchy;
                     case "Clan/Tribal":
-                        p.SocietyType = eSocietyType.ClanTribal;
-                        break;
+                        return eSocietyType.ClanTribal;
                     case "Caste":
-                        p.SocietyType = eSocietyType.Caste;
-                        break;
+                        return eSocietyType.Caste;
                     case "Feudal":
-                        p.SocietyType = eSocietyType.Feudal;
-                        break;
+                        return eSocietyType.Feudal;
                     case "Theocracy":
-                        p.SocietyType = eSocietyType.Theocracy;
-                        break;
+                        return eSocietyType.Theocracy;
                     case "Dictatorship":
-                        p.SocietyType = eSocietyType.Dictatorship;
-                        break;
+                        return eSocietyType.Dictatorship;
                     case "Representative Democracy":
-                        p.SocietyType = eSocietyType.RepresentativeDemocracy;
-                        break;
+                        return eSocietyType.RepresentativeDemocracy;
                     case "Athenian Democracy":
-                        p.SocietyType = eSocietyType.AthenianDemocracy;
-                        break;
+                        return eSocietyType.AthenianDemocracy;
                     case "Corporate State":
-                        p.SocietyType = eSocietyType.Corporate;
-                        break;
+                        return eSocietyType.Corporate;
                     case "Technocracy":
-                        p.SocietyType = eSocietyType.Technocracy;
-                        break;
+                        return eSocietyType.Technocracy;
                 }
             }
 
+            // cancel was clicked
             return p.SocietyType;
         }
 
-        public int SetControlRating(ViewModelPlanet p)
+        public int GetControlRating(Planet p)
         {
             int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
             int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
 
             if (maxCR == minCR)
-            {
                 // no option
-                p.ControlRating = minCR;
-            }
-            else
+                return minCR;
+
+            string question = "Select the control rating from the range below:";
+            List<(string, string)> options = new List<(string, string)>();
+            for (int i = minCR; i <= maxCR; i++)
             {
-                string question = "Select the control rating from the range below:";
-                List<(string, string)> options = new List<(string, string)>();
-                for (int i=minCR; i<=maxCR; i++)
-                {
-                    options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
-                }
-                
-                InputRadio inDiag = new InputRadio(question, options);
-                if (inDiag.ShowDialog()==true)
-                {
-                    p.ControlRating = inDiag.Selected + minCR;
-                }
-                
+                options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
             }
 
-            return p.ControlRating;
+            InputRadio inDiag = new InputRadio(question, options);
+            if (inDiag.ShowDialog() == true)
+                return inDiag.Selected + minCR;
+            else
+                return p.ControlRating;
+
         }
 
-        public double SetTradeVolume(ViewModelPlanet p)
+        public double GetTradeVolume(Planet p)
         {
             if (!p.Interstellar)
-            {
                 // no interstellar trade if uncontacted
-                p.TradeVolume = 0;
+                return 0;
+
+            string question = "Enter the trade volume as a percentage of the total economic volume ($" + p.EconomicVolume.ToString("N0") + "). ";
+            switch (p.SettlementType)
+            {
+                case eSettlementType.Homeworld:
+                    question += "As a homeworld it is likely to be fairly self-sufficient so trade will likely form a small part of the overall economic volume.  Say up to 40%.";
+                    break;
+                case eSettlementType.Colony:
+                    question += "As a colony, it is likely to be semi-reliant on its connections to the parent civilisation, so trade will be a large portion of economic volume.  Say 30-70%.";
+                    break;
+                case eSettlementType.Outpost:
+                    question += "As an outpost, it is likely to be very reliant on supplies from the parent civilisation and shipping production back, so trade will be almost all of the economic volume.  Say 80-100%.";
+                    break;
+            }
+
+            InputString inDiag = new InputString(question, "", true);
+            if (inDiag.ShowDialog() == true)
+            {
+                double prop = double.Parse(inDiag.Answer) / 100;
+                double trade = prop * p.EconomicVolume;
+                trade = RuleBook.RoundToSignificantFigures(trade, 2);
+                return trade;
             }
             else
-            {
-                string question = "Enter the trade volume as a percentage of the total economic volume (" + p.EconomicVolumeString + "). ";
-                switch (p.SettlementType)
-                {
-                    case eSettlementType.Homeworld:
-                        question += "As a homeworld it is likely to be fairly self-sufficient so trade will likely form a small part of the overall economic volume.  Say up to 40%.";
-                        break;
-                    case eSettlementType.Colony:
-                        question += "As a colony, it is likely to be semi-reliant on its connections to the parent civilisation, so trade will be a large portion of economic volume.  Say 30-70%.";
-                        break;
-                    case eSettlementType.Outpost:
-                        question += "As an outpost, it is likely to be very reliant on supplies from the parent civilisation and shipping production back, so trade will be almost all of the economic volume.  Say 80-100%.";
-                        break;
-                }
-
-                InputString inDiag = new InputString(question, "", true);
-                if (inDiag.ShowDialog() == true)
-                {
-                    double prop = double.Parse(inDiag.Answer) / 100;
-                    double trade = prop * p.EconomicVolume;
-                    trade = RuleBook.RoundToSignificantFigures(trade, 2);
-                    p.TradeVolume = trade;
-                }
-            }
-            return p.TradeVolume;
+                return p.TradeVolume;
         }
 
-        public int SetSpaceportClass(ViewModelPlanet p)
+        public int GetSpaceportClass(Planet p)
         {
             int recommendedSpaceportClass = 0;
             if (p.TradeVolume > RuleBook.TradeForSpaceportV && p.PopulationRating >= 6)
@@ -544,9 +543,9 @@ namespace GurpsSpace.PlanetCreation
 
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
-                p.SpaceportClass = 5 - inDiag.Selected;
-
-            return p.SpaceportClass;
+                return 5 - inDiag.Selected;
+            else
+                return p.SpaceportClass;
         }
 
         public List<Installation> GetInstallations(Planet p)

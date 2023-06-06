@@ -162,61 +162,97 @@ namespace GurpsSpace.PlanetCreation
             switch (param)
             {
                 case "Name":
-                    pc.SetName(vmPlanet);
+                    string name = pc.GetName(vmPlanet.Planet);
+                    vmPlanet.Name = name;
                     break;
                 case "Type":
-                    pc.SetSizeAndSubtype(vmPlanet);
+                    eSize size;
+                    eSubtype subtype;
+                    (size, subtype) = pc.GetSizeAndSubtype(vmPlanet.Planet);
+                    vmPlanet.Size = size;
+                    vmPlanet.Subtype = subtype;
                     break;
                 case "ResourceValueCategory":
-                    pc.SetResourceValueCategory(vmPlanet);
+                    eResourceValueCategory res = pc.GetResourceValueCategory(vmPlanet.Planet);
+                    vmPlanet.ResourceValueCategory = res;
                     break;
                 case "AtmosphericMass":
-                    pc.SetAtmosphericMass(vmPlanet);
+                    double atmMass = pc.GetAtmosphericMass(vmPlanet.Planet);
+                    vmPlanet.AtmosphericMass = atmMass;
                     break;
                 case "AtmosphericConditions":
-                    pc.SetAtmosphericConditions(vmPlanet);
+                    fAtmosphericConditions cond;
+                    string condDesc;
+                    (cond, condDesc) = pc.GetAtmosphericConditions(vmPlanet.Planet);
+                    vmPlanet.AtmosphericConditions = cond;
+                    vmPlanet.AtmosphericDescription = condDesc;
                     break;
                 case "HydrographicCoverage":
-                    pc.SetHydrographicCoverage(vmPlanet);
+                    double hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);
+                    vmPlanet.HydrographicCoverage = hydro;
                     break;
                 case "AverageSurfaceTempK":
-                    pc.SetAverageSurfaceTempK(vmPlanet);
+                    int tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);
+                    vmPlanet.AverageSurfaceTempK = tempK;
                     break;
                 case "Density":
-                    pc.SetDensity(vmPlanet);
+                    double density = pc.GetDensity(vmPlanet.Planet);
+                    vmPlanet.Density = density;
                     break;
                 case "Gravity":
-                    pc.SetGravity(vmPlanet);
+                    double grav = pc.GetGravity(vmPlanet.Planet);
+                    vmPlanet.Gravity = grav;
                     break;
                 case "SettlementType":
-                    pc.SetSettlementType(vmPlanet);
+                    eSettlementType settType;
+                    int colonyAge;
+                    bool interstellar;
+                    (settType, colonyAge, interstellar) = pc.GetSettlementType(vmPlanet.Planet);
+                    vmPlanet.SettlementType = settType;
+                    vmPlanet.ColonyAge = colonyAge;
+                    vmPlanet.Interstellar = interstellar;
                     break;
                 case "Species":
-                    pc.SetLocalSpecies(vmPlanet);
+                    Species s = pc.GetLocalSpecies(vmPlanet.Planet);
+                    vmPlanet.LocalSpecies = s;
                     break;
                 case "TechLevel":
-                    pc.SetLocalTechLevel(vmPlanet);
+                    int tl;
+                    eTechLevelRelativity adj;
+                    (tl, adj) = pc.GetLocalTechLevel(vmPlanet.Planet);
+                    vmPlanet.LocalTechLevel = tl;
+                    vmPlanet.LocalTechLevelRelativity = adj;
                     break;
                 case "Population":
-                    pc.SetPopulation(vmPlanet);
+                    double pop = pc.GetPopulation(vmPlanet.Planet);
+                    vmPlanet.Population = pop;
                     break;
                 case "WorldGovernance":
-                    pc.SetWorldGovernance(vmPlanet);
+                    eWorldUnityLevel unity;
+                    fGovernmentSpecialConditions specCond;
+                    (unity,specCond) = pc.GetWorldGovernance(vmPlanet.Planet);
+                    vmPlanet.WorldUnityLevel = unity;
+                    vmPlanet.GovernmentSpecialConditions = specCond;
                     break;
                 case "SocietyType":
-                    pc.SetSocietyType(vmPlanet);
+                    eSocietyType soc = pc.GetSocietyType(vmPlanet.Planet);
+                    vmPlanet.SocietyType = soc;
                     break;
                 case "ControlRating":
-                    pc.SetControlRating(vmPlanet);
+                    int cr = pc.GetControlRating(vmPlanet.Planet);
+                    vmPlanet.ControlRating = cr;
                     break;
                 case "TradeVolume":
-                    pc.SetTradeVolume(vmPlanet);
+                    double trade = pc.GetTradeVolume(vmPlanet.Planet);
+                    vmPlanet.TradeVolume = trade;
                     break;
                 case "SpaceportClass":
-                    pc.SetSpaceportClass(vmPlanet);
+                    int spacepostClass = pc.GetSpaceportClass(vmPlanet.Planet);
+                    vmPlanet.SpaceportClass = spacepostClass;
                     break;
                 case "Installations":
-                    vmPlanet.InstallationsList = new ViewModelInstallationList(pc.GetInstallations(vmPlanet.Planet));
+                    List<Installation> newInst = pc.GetInstallations(vmPlanet.Planet);
+                    vmPlanet.InstallationsList = new ViewModelInstallationList(newInst);
                     break;
             }
         }

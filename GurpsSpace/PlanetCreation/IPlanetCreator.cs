@@ -5,38 +5,38 @@ namespace GurpsSpace.PlanetCreation
 {
     internal interface IPlanetCreator
     {
-        string SetName(ViewModelPlanet p);
-        (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p);
-        eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p);
+        string GetName(Planet p);
+        (eSize, eSubtype) GetSizeAndSubtype(Planet p);
+        eResourceValueCategory GetResourceValueCategory(Planet p);
 
-        double SetAtmosphericMass(ViewModelPlanet p);
-        (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p);
+        double GetAtmosphericMass(Planet p);
+        (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p);
 
-        double SetHydrographicCoverage(ViewModelPlanet p);
+        double GetHydrographicCoverage(Planet p);
 
-        int SetAverageSurfaceTempK(ViewModelPlanet p);
+        int GetAverageSurfaceTempK(Planet p);
 
-        double SetDensity(ViewModelPlanet p);
+        double GetDensity(Planet p);
 
-        double SetGravity(ViewModelPlanet p);
+        double GetGravity(Planet p);
 
-        eSettlementType SetSettlementType(ViewModelPlanet p);
+        (eSettlementType, int, bool) GetSettlementType(Planet p);
 
-        Species SetLocalSpecies(ViewModelPlanet p);
+        Species GetLocalSpecies(Planet p);
 
-        int SetLocalTechLevel(ViewModelPlanet p);
+        (int, eTechLevelRelativity) GetLocalTechLevel(Planet p);
 
-        double SetPopulation(ViewModelPlanet p);
+        double GetPopulation(Planet p);
 
-        (eWorldUnityLevel, fGovernmentSpecialConditions) SetWorldGovernance(ViewModelPlanet p);
+        (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p);
 
-        eSocietyType SetSocietyType(ViewModelPlanet p);
+        eSocietyType GetSocietyType(Planet p);
 
-        int SetControlRating(ViewModelPlanet p);
+        int GetControlRating(Planet p);
 
-        double SetTradeVolume(ViewModelPlanet p);
+        double GetTradeVolume(Planet p);
 
-        int SetSpaceportClass(ViewModelPlanet p);
+        int GetSpaceportClass(Planet p);
 
         List<Installation> GetInstallations(Planet p);
         List<Installation> GetInstallation(Planet p, string installationType);
