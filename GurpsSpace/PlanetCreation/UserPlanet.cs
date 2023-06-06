@@ -89,7 +89,7 @@ namespace GurpsSpace.PlanetCreation
             throw new NotImplementedException(); 
         }
 
-        public double SetDensity(ViewModelPlanet p)
+        public double GetDensity(Planet p)
         {
             throw new NotImplementedException();
         }

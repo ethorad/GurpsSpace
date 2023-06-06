@@ -183,7 +183,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetAverageSurfaceTempK(vmPlanet);
                     break;
                 case "Density":
-                    pc.SetDensity(vmPlanet);
+                    double density = pc.GetDensity(vmPlanet.Planet);
+                    vmPlanet.Density = density;
                     break;
                 case "Gravity":
                     double grav = pc.GetGravity(vmPlanet.Planet);

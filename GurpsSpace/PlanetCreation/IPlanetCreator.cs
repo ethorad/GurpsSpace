@@ -16,7 +16,7 @@ namespace GurpsSpace.PlanetCreation
 
         int SetAverageSurfaceTempK(ViewModelPlanet p);
 
-        double SetDensity(ViewModelPlanet p);
+        double GetDensity(Planet p);
 
         double GetGravity(Planet p);
 

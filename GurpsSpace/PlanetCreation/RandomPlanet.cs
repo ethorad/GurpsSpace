@@ -193,19 +193,16 @@ namespace GurpsSpace.PlanetCreation
             return p.AverageSurfaceTempK;
         }
 
-        public double SetDensity(ViewModelPlanet p)
+        public double GetDensity(Planet p)
         {
             switch(p.CoreType)
             {
                 case eCoreType.Icy:
-                    p.Density = RuleBook.DensityIcyCore[DiceBag.Roll(3)];
-                    break;
+                    return RuleBook.DensityIcyCore[DiceBag.Roll(3)];
                 case eCoreType.SmallIron:
-                    p.Density = RuleBook.DensitySmallIronCore[DiceBag.Roll(3)];
-                    break;
+                    return RuleBook.DensitySmallIronCore[DiceBag.Roll(3)];
                 case eCoreType.LargeIron:
-                    p.Density = RuleBook.DensityLargeIronCore[DiceBag.Roll(3)];
-                    break;
+                    return RuleBook.DensityLargeIronCore[DiceBag.Roll(3)];
             }
             return p.Density;
         }
