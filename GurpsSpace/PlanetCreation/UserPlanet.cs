@@ -424,16 +424,16 @@ namespace GurpsSpace.PlanetCreation
         {
             string question = "Select the type of society prevalent in the settlement:";
             List<(string, string)> options = new List<(string, string)>();
-            options.Add(("Anarchy", ""));
-            options.Add(("Clan/Tribal", ""));
-            options.Add(("Caste", ""));
-            options.Add(("Feudal", ""));
-            options.Add(("Theocracy", ""));
-            options.Add(("Dictatorship", ""));
-            options.Add(("Representative Democracy", ""));
-            options.Add(("Athenian Democracy", ""));
-            options.Add(("Corporate State", ""));
-            options.Add(("Technocracy", ""));
+            options.Add(("Anarchy", "No formal laws.  There may be communal expectations, based on what is deemed acceptable practice by other members of the community."));
+            options.Add(("Clan/Tribal", "One large interlocking family of allied clans or tribes.  Customs and traditions will be important to bind the various groups together."));
+            options.Add(("Caste", "Similar to clan/tribal, however each clan has a set role.  Likely to be a hierarchy between the clans.  Those who reject their set role are often outcasts with a social stigma."));
+            options.Add(("Feudal", "A dictatorship or monarchy where subsidiary rulers retain local power.  The overall ruler therefore needs to maintain sufficient support from their subsidiaries.  Laws can vary by locality."));
+            options.Add(("Theocracy", "Rule by a religious group. Restrictions on other religions are likely."));
+            options.Add(("Dictatorship", "Rule by a single individual.  If this is hereditary, it is essentially a monarchy.  To maintain control, there may be customary limitations on the ruler's power."));
+            options.Add(("Representative Democracy", "A group of citizens are elected to run the society.  Will depend on the level of education and involvement of the electorate, and whether this is capturable by special interests."));
+            options.Add(("Athenian Democracy", "Every citizen (however that is defined) votes on every action the society takes.  Below TL 9 this is only practical for groups of up to 10,000."));
+            options.Add(("Corporate State", "Society run by a single large corporation.  Most citizens will be employees.  Society tends to be run smoothly (not necessarily well) for the purpose of high profits."));
+            options.Add(("Technocracy", "Engineers and scientists run society in the name of efficiency.  This can encompass relatively free and open societies to opressive dictatorships."));
 
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
