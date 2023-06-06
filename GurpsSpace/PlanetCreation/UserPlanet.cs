@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Annotations;
@@ -327,8 +328,6 @@ namespace GurpsSpace.PlanetCreation
 
         public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
         {
-            eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
-            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
 
             string question = "Select the degree to which the settlement is socially unified. " +
                 "Higher technology levels, and smaller populations, tend to be more unified.";
@@ -340,32 +339,46 @@ namespace GurpsSpace.PlanetCreation
             answers.Add(("World Government", "A single world government, which may have special conditions."));
 
             InputRadio inDiag = new InputRadio(question, answers);
+
+            eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
+            fGovernmentSpecialConditions? specCond = fGovernmentSpecialConditions.None;
+            bool hasSpecialCond = false;
             if (inDiag.ShowDialog()==true)
             {
                 switch(inDiag.Answer.Item1)
                 {
                     case "Diffuse":
                         unity = eWorldUnityLevel.Diffuse;
-                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Factionalised":
                         unity = eWorldUnityLevel.Factionalised;
-                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Coalition":
                         unity = eWorldUnityLevel.Coalition;
-                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "World Government":
                         unity = eWorldUnityLevel.WorldGovernment;
-                        specCond = GetGovernmentSpecialConditions(p);
+                        hasSpecialCond = true;
                         break;
                 }
+
+                if (hasSpecialCond)
+                    specCond = GetGovernmentSpecialConditions(p);
+
+                if (specCond != null)
+                {
+                    // i.e. we must have clicked OK on the unity and any special conditions windows
+                    return (unity, specCond ?? fGovernmentSpecialConditions.None);
+                    // need the ?? as we don't want to return the nullable version
+                    // since we've checked it is not null, shouldn't ever be an issue
+                }
+
             }
 
-            return (unity, specCond);
+            // if here then must have clicked cancel on one of the windows
+            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
         }
-        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(Planet p)
+        private fGovernmentSpecialConditions? GetGovernmentSpecialConditions(Planet p)
         {
             fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
 
@@ -404,18 +417,23 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 specCond = answers[inDiag.Selected].Item1;
+
+                if (answers[inDiag.Selected].Item2)
+                {
+                    // give option for a second condition
+                    // can't seem to reopen the same dialog box, so refreshing it with new
+                    inDiag = new InputRadio(question, options);
+                    if (inDiag.ShowDialog() == true)
+                    {
+                        specCond |= answers[inDiag.Selected].Item1;
+                        return specCond;
+                    }
+                }
             }
 
-            if (answers[inDiag.Selected].Item2)
-            {
-                // give option for a second condition
-                // can't seem to reopen the same dialog box, so refreshing it with new
-                inDiag = new InputRadio(question, options);
-                if (inDiag.ShowDialog() == true)
-                    specCond |= answers[inDiag.Selected].Item1;
-            }
+            // only get here if we clicked cancel on one of the windows
+            return null;
 
-            return specCond;
         }
 
         public eSocietyType GetSocietyType(Planet p)
