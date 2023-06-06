@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Annotations;
@@ -103,9 +104,6 @@ namespace GurpsSpace.PlanetCreation
 
         public (eSettlementType, int, bool) GetSettlementType(Planet p)
         {
-            eSettlementType settType = eSettlementType.None;
-            int colonyAge = 0;
-            bool interstellar = true;
 
             string question = "Select the settlement type to be present:";
             List<(string, string)> options = new List<(string, string)>();
@@ -114,63 +112,48 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
             options.Add(("Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
             InputRadio radioDiag = new InputRadio(question, options);
+
             if (radioDiag.ShowDialog() == true)
             {
                 switch (radioDiag.Answer.Item1)
                 {
                     case "Outpost":
-                        settType = eSettlementType.Outpost;
-                        break;
+                        return (eSettlementType.Outpost, 0, true);
+
                     case "Colony":
-                        settType = eSettlementType.Colony;
-                        break;
+                        // get age
+                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
+                        if (inStr.ShowDialog() == true)
+                        {
+                            int colonyAge = int.Parse(inStr.Answer);
+                            return (eSettlementType.Colony, colonyAge, true);
+                        }
+                        else
+                            return (p.SettlementType, p.ColonyAge, p.Interstellar);
+
                     case "Homeworld":
-                        settType = eSettlementType.Homeworld;
-                        break;
-                    default:
-                        settType = eSettlementType.None;
-                        break;
-                }
-
-
-                if (settType == eSettlementType.Colony)
-                {
-                    // get age
-                    InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
-                    if (inStr.ShowDialog() == true)
-                    {
-                        colonyAge = int.Parse(inStr.Answer);
-                    }
-                }
-                else
-                {
-                    // not a colony
-                    colonyAge = 0;
-                }
-
-                if (settType == eSettlementType.Homeworld)
-                {
-                    // get interstellar or not
-                    InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
+                        // get interstellar or not
+                        InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
                 {
                     ("Interstellar","The homeworld is part of an interstellar civilisation."),
                     ("Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
                 });
-                    if (inRadio.ShowDialog() == true)
-                    {
-                        if (inRadio.Selected == 0)
-                            interstellar = true;
-                        if (inRadio.Selected == 1)
-                            interstellar = false;
-                    }
-                }
-                else
-                {
-                    // not a homeworld - colonies and outposts are assumed to be interstellar
-                    interstellar = true;
-                }
+                        bool interstellar = true;
+                        if (inRadio.ShowDialog() == true)
+                        {
+                            if (inRadio.Selected == 0)
+                                interstellar = true;
+                            if (inRadio.Selected == 1)
+                                interstellar = false;
+                            return (eSettlementType.Homeworld, 0, interstellar);
+                        }
+                        else
+                            return (p.SettlementType, p.ColonyAge, p.Interstellar);
 
-                return (settType, colonyAge, interstellar);
+                    default:
+                        // shouldn't ever get here, but needed to ensure all paths return a value
+                        return (p.SettlementType, p.ColonyAge, p.Interstellar);
+                }
             }
             else // clicked cancel
                 return (p.SettlementType, p.ColonyAge, p.Interstellar);
@@ -231,8 +214,10 @@ namespace GurpsSpace.PlanetCreation
                             adj = eTechLevelRelativity.Advanced;
                             break;
                     }
+
+
+                    return (tl, adj);
                 }
-                return (tl, adj);
             }
             return (p.LocalTechLevel, p.LocalTechLevelRelativity);
         }
@@ -327,8 +312,6 @@ namespace GurpsSpace.PlanetCreation
 
         public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
         {
-            eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
-            fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
 
             string question = "Select the degree to which the settlement is socially unified. " +
                 "Higher technology levels, and smaller populations, tend to be more unified.";
@@ -340,32 +323,46 @@ namespace GurpsSpace.PlanetCreation
             answers.Add(("World Government", "A single world government, which may have special conditions."));
 
             InputRadio inDiag = new InputRadio(question, answers);
+
+            eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
+            fGovernmentSpecialConditions? specCond = fGovernmentSpecialConditions.None;
+            bool hasSpecialCond = false;
             if (inDiag.ShowDialog()==true)
             {
                 switch(inDiag.Answer.Item1)
                 {
                     case "Diffuse":
                         unity = eWorldUnityLevel.Diffuse;
-                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Factionalised":
                         unity = eWorldUnityLevel.Factionalised;
-                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "Coalition":
                         unity = eWorldUnityLevel.Coalition;
-                        specCond = fGovernmentSpecialConditions.None;
                         break;
                     case "World Government":
                         unity = eWorldUnityLevel.WorldGovernment;
-                        specCond = GetGovernmentSpecialConditions(p);
+                        hasSpecialCond = true;
                         break;
                 }
+
+                if (hasSpecialCond)
+                    specCond = GetGovernmentSpecialConditions(p);
+
+                if (specCond != null)
+                {
+                    // i.e. we must have clicked OK on the unity and any special conditions windows
+                    return (unity, specCond ?? fGovernmentSpecialConditions.None);
+                    // need the ?? as we don't want to return the nullable version
+                    // since we've checked it is not null, shouldn't ever be an issue
+                }
+
             }
 
-            return (unity, specCond);
+            // if here then must have clicked cancel on one of the windows
+            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
         }
-        private fGovernmentSpecialConditions GetGovernmentSpecialConditions(Planet p)
+        private fGovernmentSpecialConditions? GetGovernmentSpecialConditions(Planet p)
         {
             fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
 
@@ -404,18 +401,23 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 specCond = answers[inDiag.Selected].Item1;
+
+                if (answers[inDiag.Selected].Item2)
+                {
+                    // give option for a second condition
+                    // can't seem to reopen the same dialog box, so refreshing it with new
+                    inDiag = new InputRadio(question, options);
+                    if (inDiag.ShowDialog() == true)
+                    {
+                        specCond |= answers[inDiag.Selected].Item1;
+                        return specCond;
+                    }
+                }
             }
 
-            if (answers[inDiag.Selected].Item2)
-            {
-                // give option for a second condition
-                // can't seem to reopen the same dialog box, so refreshing it with new
-                inDiag = new InputRadio(question, options);
-                if (inDiag.ShowDialog() == true)
-                    specCond |= answers[inDiag.Selected].Item1;
-            }
+            // only get here if we clicked cancel on one of the windows
+            return null;
 
-            return specCond;
         }
 
         public eSocietyType GetSocietyType(Planet p)
