@@ -235,9 +235,9 @@ namespace GurpsSpace
             (fGovernmentSpecialConditions.Oligarchy, true),           // 13
             (fGovernmentSpecialConditions.Oligarchy, true),           // 14
             (fGovernmentSpecialConditions.Meritocracy, true),         // 15
-            (fGovernmentSpecialConditions.Patriarchy, false),         // 16 (or Matriarchy)
+            (fGovernmentSpecialConditions.Genderarchy, false),        // 16 (Patriarchy or Matriarchy)
             (fGovernmentSpecialConditions.Utopia, false),             // 17
-            (fGovernmentSpecialConditions.Cyberocracy, false)          // 18 (but reroll if TL<=7)
+            (fGovernmentSpecialConditions.Cyberocracy, false)         // 18 (but reroll if TL<=7)
         }, 5);
 
         static public IndexedTable1D<eSocietyType> SocietyTypeAnarchy = new IndexedTable1D<eSocietyType>(new eSocietyType[]

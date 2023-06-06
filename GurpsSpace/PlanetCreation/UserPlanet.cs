@@ -390,10 +390,8 @@ namespace GurpsSpace.PlanetCreation
             answers.Add((fGovernmentSpecialConditions.Oligarchy, true));
             options.Add(("Meritocracy", "Ruled according to merit, defined in some manner. Second condition is possible."));
             answers.Add((fGovernmentSpecialConditions.Meritocracy, true));
-            options.Add(("Matriarchy", "Ruled by women (or equivalent alien gender)."));
-            answers.Add((fGovernmentSpecialConditions.Matriarchy, false));
-            options.Add(("Patriarchy", "Ruled by men (or equivalent alien gender)."));
-            answers.Add((fGovernmentSpecialConditions.Patriarchy, false));
+            options.Add(("Genderarchy", "Ruled by a single gender (in Earth terms, a Patriarchy or Matriarchy)."));
+            answers.Add((fGovernmentSpecialConditions.Genderarchy, false));
             options.Add(("Utopia", "Egalitarian society which aims to be perfect."));
             answers.Add((fGovernmentSpecialConditions.Utopia, false));
             if (p.LocalTechLevel > 7)
