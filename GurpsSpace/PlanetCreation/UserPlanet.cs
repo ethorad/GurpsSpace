@@ -214,8 +214,10 @@ namespace GurpsSpace.PlanetCreation
                             adj = eTechLevelRelativity.Advanced;
                             break;
                     }
+
+
+                    return (tl, adj);
                 }
-                return (tl, adj);
             }
             return (p.LocalTechLevel, p.LocalTechLevelRelativity);
         }
