@@ -13,28 +13,25 @@ namespace GurpsSpace.PlanetCreation
     {
 
 
-        public string SetName(ViewModelPlanet p)
+        public string GetName(Planet p)
         {
             InputString inStr = new("Enter planet's name:", p.Name);
-            if (inStr.ShowDialog()==true)
-            {
-                p.Name = inStr.Answer;
-            }
-            return p.Name;
+            if (inStr.ShowDialog() == true)
+                return inStr.Answer;
+            else // clicked cancel
+                return p.Name;
         }
 
-        public (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p)
+        public (eSize, eSubtype) GetSizeAndSubtype(Planet p)
         {
             PlanetTypeSelection typeDiag = new();
             if (typeDiag.ShowDialog() == true)
-            {
-                p.Size = typeDiag.Size;
-                p.Subtype = typeDiag.Subtype;
-            }
-            return (p.Size, p.Subtype);
+                return (typeDiag.Size, typeDiag.Subtype);
+            else
+                return (p.Size, p.Subtype);
         }
 
-        public eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p)
+        public eResourceValueCategory GetResourceValueCategory(Planet p)
         {
             List<(string, string)> options = new List<(string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
@@ -43,12 +40,18 @@ namespace GurpsSpace.PlanetCreation
             {
                 options.Add((i.ToString(), ((eResourceValueCategory)i).ToString()));
             }
-            InputRadio radioDiag = new InputRadio("Select the resource value for this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
+
+            string question = "Select the resource value for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
+            if (p.IsPlanet)
+                question += "\r\nFor a planet, this is normally between -2 (Very Poor) and +2 (Very Abundant).";
+
+            InputRadio radioDiag = new InputRadio(question, options);
             if (radioDiag.ShowDialog() == true)
             {
-                p.ResourceValueCategory = radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
+                return radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
             }
-            return p.ResourceValueCategory;
+            else // clicked cancel
+                return p.ResourceValueCategory;
         }
 
         public double GetAtmosphericMass(Planet p)

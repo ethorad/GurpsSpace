@@ -5,9 +5,9 @@ namespace GurpsSpace.PlanetCreation
 {
     internal interface IPlanetCreator
     {
-        string SetName(ViewModelPlanet p);
-        (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p);
-        eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p);
+        string GetName(Planet p);
+        (eSize, eSubtype) GetSizeAndSubtype(Planet p);
+        eResourceValueCategory GetResourceValueCategory(Planet p);
 
         double GetAtmosphericMass(Planet p);
         (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p);

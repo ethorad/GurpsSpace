@@ -10,14 +10,13 @@ namespace GurpsSpace.PlanetCreation
 {
     internal class RandomPlanet : IPlanetCreator
     {
-        public string SetName(ViewModelPlanet p)
+        public string GetName(Planet p)
         {
             string name = "Randomia-" + DiceBag.Rand(1, 100);
-            p.Name = name;
-            return p.Name;
+            return name;
         }
 
-        public (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p)
+        public (eSize, eSubtype) GetSizeAndSubtype(Planet p)
         {
             eSize size;
             eSubtype subtype;
@@ -34,25 +33,20 @@ namespace GurpsSpace.PlanetCreation
                 case eOverallType.Garden:
                     (size, subtype) = RuleBook.GardenWorlds[DiceBag.Roll(3)];
                     break;
-                case eOverallType.None:
-                    (size, subtype) = (eSize.None, eSubtype.None);
-                    break;
                 default:
                     (size, subtype) = (eSize.None, eSubtype.None);
                     break;
             }
-            (p.Size, p.Subtype) = (size, subtype);
-            return (p.Size, p.Subtype);
+            return (size, subtype);
         }
 
-        public eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p)
+        public eResourceValueCategory GetResourceValueCategory(Planet p)
         {
             int roll = DiceBag.Roll(3);
             if (p.IsPlanet)
-                p.ResourceValueCategory = RuleBook.ResourceValueCategoryPlanet[roll];
+                return RuleBook.ResourceValueCategoryPlanet[roll];
             else
-                p.ResourceValueCategory = RuleBook.ResourceValueCategoryAsteroidBelt[roll];
-            return p.ResourceValueCategory;
+                return RuleBook.ResourceValueCategoryAsteroidBelt[roll];
         }
 
         public double GetAtmosphericMass(Planet p)
