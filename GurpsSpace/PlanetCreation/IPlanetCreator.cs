@@ -9,8 +9,8 @@ namespace GurpsSpace.PlanetCreation
         (eSize, eSubtype) SetSizeAndSubtype(ViewModelPlanet p);
         eResourceValueCategory SetResourceValueCategory(ViewModelPlanet p);
 
-        double SetAtmosphericMass(ViewModelPlanet p);
-        (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p);
+        double GetAtmosphericMass(Planet p);
+        (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p);
 
         double GetHydrographicCoverage(Planet p);
 

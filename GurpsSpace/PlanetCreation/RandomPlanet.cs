@@ -55,11 +55,11 @@ namespace GurpsSpace.PlanetCreation
             return p.ResourceValueCategory;
         }
 
-        public double SetAtmosphericMass(ViewModelPlanet p)
+        public double GetAtmosphericMass(Planet p)
         {
 
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
-                p.AtmosphericMass = 0;
+                return 0;
 
             else
             {
@@ -69,19 +69,17 @@ namespace GurpsSpace.PlanetCreation
                 // adjust by +/-5%
                 double adj = (double)DiceBag.Rand(-5, 5) / 100;
 
-                p.AtmosphericMass = mass + adj;
+                return mass + adj;
             }
 
-            return p.AtmosphericMass;
         }
 
-        public (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p)
+        public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
         {
 
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
             {
-                p.AtmosphericConditions = fAtmosphericConditions.None;
-                p.AtmosphericDescription = "None. ";
+                return (fAtmosphericConditions.None, "None. ");
             }
             else
             {
@@ -94,13 +92,11 @@ namespace GurpsSpace.PlanetCreation
                 if ((baseCon & fAtmosphericConditions.Marginal) == fAtmosphericConditions.Marginal)
                     (margCon, margDesc) = GetMarginalAtmosphericConditions(p);
 
-                p.AtmosphericConditions = baseCon | margCon;
-                p.AtmosphericDescription = baseDesc + margDesc;
+                return (baseCon | margCon, baseDesc + margDesc);
             }
 
-            return (p.AtmosphericConditions, p.AtmosphericDescription);
         }
-        private (fAtmosphericConditions, string) GetBaseAtmosphericConditions(ViewModelPlanet p)
+        private (fAtmosphericConditions, string) GetBaseAtmosphericConditions(Planet p)
         {
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
                 return (fAtmosphericConditions.None, "None");
@@ -112,7 +108,7 @@ namespace GurpsSpace.PlanetCreation
                 return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereB;
 
         }
-        private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(ViewModelPlanet p)
+        private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(Planet p)
         {
             int roll = DiceBag.Roll(3);
 

@@ -171,10 +171,15 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetResourceValueCategory(vmPlanet);
                     break;
                 case "AtmosphericMass":
-                    pc.SetAtmosphericMass(vmPlanet);
+                    double atmMass = pc.GetAtmosphericMass(vmPlanet.Planet);
+                    vmPlanet.AtmosphericMass = atmMass;
                     break;
                 case "AtmosphericConditions":
-                    pc.SetAtmosphericConditions(vmPlanet);
+                    fAtmosphericConditions cond;
+                    string condDesc;
+                    (cond, condDesc) = pc.GetAtmosphericConditions(vmPlanet.Planet);
+                    vmPlanet.AtmosphericConditions = cond;
+                    vmPlanet.AtmosphericDescription = condDesc;
                     break;
                 case "HydrographicCoverage":
                     double hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);

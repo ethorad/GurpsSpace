@@ -51,16 +51,16 @@ namespace GurpsSpace.PlanetCreation
             return p.ResourceValueCategory;
         }
 
-        public double SetAtmosphericMass(ViewModelPlanet p)
+        public double GetAtmosphericMass(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p)
+        public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
         {
             if (!p.HasAtmosphericOptions)
             {
-                (p.AtmosphericConditions, p.AtmosphericDescription) = RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
+                return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
             }
             else
             {
@@ -72,8 +72,7 @@ namespace GurpsSpace.PlanetCreation
                 });
                 if (radioDiag.ShowDialog() == true)
                 {
-                    p.AtmosphericConditions = radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>();
-                    p.AtmosphericDescription = radioDiag.Answer.Item2;
+                    return (radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>(), radioDiag.Answer.Item2);
                 }
             }
             return (p.AtmosphericConditions, p.AtmosphericDescription);
