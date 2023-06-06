@@ -177,7 +177,8 @@ namespace GurpsSpace.PlanetCreation
                     pc.SetAtmosphericConditions(vmPlanet);
                     break;
                 case "HydrographicCoverage":
-                    pc.SetHydrographicCoverage(vmPlanet);
+                    double hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);
+                    vmPlanet.HydrographicCoverage = hydro;
                     break;
                 case "AverageSurfaceTempK":
                     int tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);

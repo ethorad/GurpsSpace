@@ -12,7 +12,7 @@ namespace GurpsSpace.PlanetCreation
         double SetAtmosphericMass(ViewModelPlanet p);
         (fAtmosphericConditions, string) SetAtmosphericConditions(ViewModelPlanet p);
 
-        double SetHydrographicCoverage(ViewModelPlanet p);
+        double GetHydrographicCoverage(Planet p);
 
         int GetAverageSurfaceTempK(Planet p);
 

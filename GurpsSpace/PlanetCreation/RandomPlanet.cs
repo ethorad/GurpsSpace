@@ -166,7 +166,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public double SetHydrographicCoverage(ViewModelPlanet p)
+        public double GetHydrographicCoverage(Planet p)
         {
             PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
             double cover = 0;
@@ -181,8 +181,7 @@ namespace GurpsSpace.PlanetCreation
             if (cover > 1) cover = 1;
             if (cover < 0) cover = 0;
 
-            p.HydrographicCoverage = cover;
-            return p.HydrographicCoverage;
+            return cover;
         }
 
         public int GetAverageSurfaceTempK(Planet p)

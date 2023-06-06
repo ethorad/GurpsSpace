@@ -79,7 +79,7 @@ namespace GurpsSpace.PlanetCreation
             return (p.AtmosphericConditions, p.AtmosphericDescription);
         }
 
-        public double SetHydrographicCoverage(ViewModelPlanet p)
+        public double GetHydrographicCoverage(Planet p)
         {
             throw new NotImplementedException();
         }
