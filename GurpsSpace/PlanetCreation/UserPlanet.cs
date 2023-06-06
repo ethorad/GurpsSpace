@@ -36,17 +36,21 @@ namespace GurpsSpace.PlanetCreation
         {
             List<(string, string)> options = new List<(string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
+            int? startVal = null;
             vals.Sort();
             foreach (int i in vals)
             {
                 options.Add((i.ToString(), ((eResourceValueCategory)i).ToString()));
             }
+            for (int i = 0; i < options.Count; i++)
+                if (options[i].Item2 == p.ResourceValueCategory.ToString())
+                    startVal = i;
 
             string question = "Select the resource value for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
             if (p.IsPlanet)
                 question += "\r\nFor a planet, this is normally between -2 (Very Poor) and +2 (Very Abundant).";
 
-            InputRadio radioDiag = new InputRadio(question, options);
+            InputRadio radioDiag = new InputRadio(question, options, startVal);
             if (radioDiag.ShowDialog() == true)
             {
                 return radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
@@ -69,11 +73,20 @@ namespace GurpsSpace.PlanetCreation
             else
             {
                 PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
-                InputRadio radioDiag = new("Select atmospheric options:", new List<(string, string)>()
+                int? initial = null;
+                if (p.AtmosphericDescription == pp.AtmosphereA.Item2)
+                    initial = 0;
+                if (p.AtmosphericDescription == pp.AtmosphereB.Item2)
+                    initial = 1;
+                List<(string, string)> options = new List<(string, string)>()
                 {
                     (pp.AtmosphereA.Item1.ToString(), pp.AtmosphereA.Item2),
-                    (pp.AtmosphereB.Item1.ToString(), pp.AtmosphereB.Item2),
-                });
+                    (pp.AtmosphereB.Item1.ToString(), pp.AtmosphereB.Item2)
+                };
+
+                InputRadio radioDiag = new("Select atmospheric options:", options, initial);
+
+
                 if (radioDiag.ShowDialog() == true)
                 {
                     return (radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>(), radioDiag.Answer.Item2);
@@ -111,7 +124,17 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Outpost", "A minor outpost is present.  For example, a military base or research station."));
             options.Add(("Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
             options.Add(("Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
-            InputRadio radioDiag = new InputRadio(question, options);
+
+            int? initial = null;
+            switch (p.SettlementType)
+            {
+                case eSettlementType.None: initial = 0;break;
+                case eSettlementType.Outpost: initial = 1; break;
+                case eSettlementType.Colony: initial = 2; break;
+                case eSettlementType.Homeworld: initial = 3; break;
+            }
+
+            InputRadio radioDiag = new InputRadio(question, options, initial);
 
             if (radioDiag.ShowDialog() == true)
             {
@@ -122,7 +145,7 @@ namespace GurpsSpace.PlanetCreation
 
                     case "Colony":
                         // get age
-                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
+                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", p.ColonyAge.ToString(), true);
                         if (inStr.ShowDialog() == true)
                         {
                             int colonyAge = int.Parse(inStr.Answer);
@@ -133,11 +156,17 @@ namespace GurpsSpace.PlanetCreation
 
                     case "Homeworld":
                         // get interstellar or not
-                        InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
-                {
+                        options = new List<(string, string)>()
+                        {
                     ("Interstellar","The homeworld is part of an interstellar civilisation."),
                     ("Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
-                });
+                        };
+                        initial = null;
+                        if (p.Interstellar)
+                            initial = 0;
+                        else
+                            initial = 1;
+                        InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", options, initial);
                         bool interstellar = true;
                         if (inRadio.ShowDialog() == true)
                         {
@@ -163,12 +192,16 @@ namespace GurpsSpace.PlanetCreation
         public Species GetLocalSpecies(Planet p)
         {
             List<(string, string)> options = new List<(string, string)>();
-            foreach (Species s in p.Setting.Species)
+            int? initial = null;
+            for (int i=0;i<p.Setting.Species.Count;i++)
             {
-                options.Add((s.Name, s.Description));
+                options.Add((p.Setting.Species[i].Name, p.Setting.Species[i].Description));
+                if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
+                    initial = i;
             }
 
-            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
+
+            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options, initial);
             if (radioDiag.ShowDialog() == true)
             {
                 return p.Setting.Species[radioDiag.Selected];
