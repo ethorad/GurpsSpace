@@ -24,6 +24,9 @@ If the settlement is a colony, then an age is determined randomly between 1 and 
 ### Colony population
 Rather than using the table in the rulebook, I've used a formula approach from the breakout box on GURPS Space page 93.  This links to attributes of the populating species.
 
+### Patriarchy and Matriarchy
+In the government special conditions, the rulebook has a single entry for "Patriarchy or Matriarchy".  This would normally entail a second level of randomisation - the first level uses the rulebook and generates that entry, and then a second level would be needed for selecting which type.  The other problem is it assumes that aliens have two genders which may not be the case (leaving aside human gender discussions).  I've therefore replaced this with an entry of "Genderarchy" representing rule by a single gender.
+
 ### Trade volume
 Strictly the trade volume for a planet should be calculated by reference to its various trade routes to other planets, as set out on GURPS Space page 95.  However, at this stage I haven't coded up the ability to link worlds with trade routes.  As such, user input trade volume just asks for what proportion of the total economic value to use as the trade volume.  For random trade volume I use the below to generate the proportion of total economic value:
 - Uncontacted homeworld: 0% trade volume, as no contact with other planets

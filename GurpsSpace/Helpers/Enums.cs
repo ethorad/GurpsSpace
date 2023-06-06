@@ -138,15 +138,14 @@ namespace GurpsSpace
         Bureaucracy = 1,
         Colony = 2,
         Cyberocracy = 4,
-        Matriarchy = 8,
+        Genderarchy = 8,
         Meritocracy = 16,
         MilitaryGovernment = 32,
         Oligarchy = 64,
-        Patriarchy = 128,
-        Sanctuary = 256,
-        Socialist = 512,
-        Subjugated = 1024,
-        Utopia = 2048
+        Sanctuary = 128,
+        Socialist = 256,
+        Subjugated = 512,
+        Utopia = 1024
     }
 
     public enum eSettingSocietyType
