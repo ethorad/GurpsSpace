@@ -222,7 +222,7 @@ namespace GurpsSpace.PlanetCreation
             }
             string question = "Select the main Tech Level for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
             question += "The setting's TL is " + p.Setting.TechLevel.ToString() + " so anything at " + (p.Setting.TechLevel - 4).ToString() + " or below would be considered primitive.";
-            InputRadio radioDiag = new InputRadio(question, options);
+            InputRadio radioDiag = new InputRadio(question, options, p.LocalTechLevel);
             if (radioDiag.ShowDialog() == true)
             {
                 tl = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
@@ -232,7 +232,14 @@ namespace GurpsSpace.PlanetCreation
                 options.Add(("Delayed", "Settlement is behind normal for TL " + tl.ToString() + "."));
                 options.Add(("Normal", "Settlement has a normal level of development for TL " + tl.ToString() + "."));
                 options.Add(("Advanced", "Settlement is ahead of normal for TL " + tl.ToString() + "."));
-                radioDiag = new InputRadio(question, options);
+                int? initial = 0;
+                switch (p.LocalTechLevelRelativity)
+                {
+                    case eTechLevelRelativity.Delayed: initial = 0; break;
+                    case eTechLevelRelativity.Normal: initial = 1; break;
+                    case eTechLevelRelativity.Advanced: initial = 2; break;
+                }
+                radioDiag = new InputRadio(question, options, initial);
                 if (radioDiag.ShowDialog() == true)
                 {
                     switch (radioDiag.Answer.Item1)
@@ -284,7 +291,8 @@ namespace GurpsSpace.PlanetCreation
                     "At TL 5 and higher, advances in medical care and resource extraction mean the population can vary widely, from " +
                     "80-500%.  Enter the percentage below:";
             }
-            InputString inDiag = new InputString(question, "", true);
+            int currPerc = (int)(p.Population / p.CarryingCapacity * 100);
+            InputString inDiag = new InputString(question, currPerc.ToString(), true);
 
             if (inDiag.ShowDialog() == true)
             {
@@ -323,7 +331,7 @@ namespace GurpsSpace.PlanetCreation
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
             question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
-            InputString inDiag = new InputString(question, "", true);
+            InputString inDiag = new InputString(question, p.Population.ToString(), true);
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
@@ -335,7 +343,7 @@ namespace GurpsSpace.PlanetCreation
         private double GetPopulationOutpost(Planet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
-            InputString inDiag = new InputString(question, "", true);
+            InputString inDiag = new InputString(question, p.Population.ToString(), true);
             if(inDiag.ShowDialog()==true)
             {
                 return double.Parse(inDiag.Answer);
@@ -354,8 +362,16 @@ namespace GurpsSpace.PlanetCreation
             answers.Add(("Factionalised", "A few competing social structures."));
             answers.Add(("Coalition", "A few cooperating social structures."));
             answers.Add(("World Government", "A single world government, which may have special conditions."));
+            int? initial = null;
+            switch (p.WorldUnityLevel)
+            {
+                case eWorldUnityLevel.Diffuse: initial = 0; break;
+                case eWorldUnityLevel.Factionalised: initial = 1; break;
+                case eWorldUnityLevel.Coalition: initial = 2; break;
+                case eWorldUnityLevel.WorldGovernment: initial = 3; break;
+            }
 
-            InputRadio inDiag = new InputRadio(question, answers);
+            InputRadio inDiag = new InputRadio(question, answers, initial);
 
             eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
             fGovernmentSpecialConditions? specCond = fGovernmentSpecialConditions.None;
@@ -430,6 +446,7 @@ namespace GurpsSpace.PlanetCreation
                 answers.Add((fGovernmentSpecialConditions.Cyberocracy, false));
             }
 
+            // not showing a default value here, since can be two things selected and can only show one
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
