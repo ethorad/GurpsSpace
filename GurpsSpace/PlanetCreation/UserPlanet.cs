@@ -485,7 +485,22 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Corporate State", "Society run by a single large corporation.  Most citizens will be employees.  Society tends to be run smoothly (not necessarily well) for the purpose of high profits."));
             options.Add(("Technocracy", "Engineers and scientists run society in the name of efficiency.  This can encompass relatively free and open societies to opressive dictatorships."));
 
-            InputRadio inDiag = new InputRadio(question, options);
+            int? initial = null;
+            switch (p.SocietyType)
+            {
+                case eSocietyType.Anarchy: initial = 0; break;
+                case eSocietyType.ClanTribal: initial = 1; break;
+                case eSocietyType.Caste: initial = 2; break;
+                case eSocietyType.Feudal: initial = 3; break;
+                case eSocietyType.Theocracy: initial = 4; break;
+                case eSocietyType.Dictatorship: initial = 5; break;
+                case eSocietyType.RepresentativeDemocracy: initial = 6; break;
+                case eSocietyType.AthenianDemocracy: initial = 7; break;
+                case eSocietyType.Corporate: initial = 8; break;
+                case eSocietyType.Technocracy: initial = 9; break;
+            }
+
+            InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
             {
                 switch (inDiag.Answer.Item1)
@@ -532,8 +547,10 @@ namespace GurpsSpace.PlanetCreation
             {
                 options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
             }
+            int? initial = null;
+            initial = p.ControlRating - minCR;
 
-            InputRadio inDiag = new InputRadio(question, options);
+            InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
                 return inDiag.Selected + minCR;
             else
@@ -561,7 +578,7 @@ namespace GurpsSpace.PlanetCreation
                     break;
             }
 
-            InputString inDiag = new InputString(question, "", true);
+            InputString inDiag = new InputString(question, (p.TradeVolume/p.EconomicVolume*100).ToString("N0"), true);
             if (inDiag.ShowDialog() == true)
             {
                 double prop = double.Parse(inDiag.Answer) / 100;
@@ -591,7 +608,8 @@ namespace GurpsSpace.PlanetCreation
             for (int i=5;i>=0;i--)
                 options.Add(("Class " + ((i==0)?"0":RuleBook.ToRoman(i)), RuleBook.SpaceportName[i]));
 
-            InputRadio inDiag = new InputRadio(question, options);
+            int? initial = 5 - p.SpaceportClass;
+            InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
                 return 5 - inDiag.Selected;
             else
