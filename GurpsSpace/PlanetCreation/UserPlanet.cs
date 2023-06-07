@@ -36,17 +36,21 @@ namespace GurpsSpace.PlanetCreation
         {
             List<(string, string)> options = new List<(string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
+            int? startVal = null;
             vals.Sort();
             foreach (int i in vals)
             {
                 options.Add((i.ToString(), ((eResourceValueCategory)i).ToString()));
             }
+            for (int i = 0; i < options.Count; i++)
+                if (options[i].Item2 == p.ResourceValueCategory.ToString())
+                    startVal = i;
 
             string question = "Select the resource value for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
             if (p.IsPlanet)
                 question += "\r\nFor a planet, this is normally between -2 (Very Poor) and +2 (Very Abundant).";
 
-            InputRadio radioDiag = new InputRadio(question, options);
+            InputRadio radioDiag = new InputRadio(question, options, startVal);
             if (radioDiag.ShowDialog() == true)
             {
                 return radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
@@ -69,11 +73,20 @@ namespace GurpsSpace.PlanetCreation
             else
             {
                 PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
-                InputRadio radioDiag = new("Select atmospheric options:", new List<(string, string)>()
+                int? initial = null;
+                if (p.AtmosphericDescription == pp.AtmosphereA.Item2)
+                    initial = 0;
+                if (p.AtmosphericDescription == pp.AtmosphereB.Item2)
+                    initial = 1;
+                List<(string, string)> options = new List<(string, string)>()
                 {
                     (pp.AtmosphereA.Item1.ToString(), pp.AtmosphereA.Item2),
-                    (pp.AtmosphereB.Item1.ToString(), pp.AtmosphereB.Item2),
-                });
+                    (pp.AtmosphereB.Item1.ToString(), pp.AtmosphereB.Item2)
+                };
+
+                InputRadio radioDiag = new("Select atmospheric options:", options, initial);
+
+
                 if (radioDiag.ShowDialog() == true)
                 {
                     return (radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>(), radioDiag.Answer.Item2);
@@ -111,7 +124,17 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Outpost", "A minor outpost is present.  For example, a military base or research station."));
             options.Add(("Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
             options.Add(("Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
-            InputRadio radioDiag = new InputRadio(question, options);
+
+            int? initial = null;
+            switch (p.SettlementType)
+            {
+                case eSettlementType.None: initial = 0;break;
+                case eSettlementType.Outpost: initial = 1; break;
+                case eSettlementType.Colony: initial = 2; break;
+                case eSettlementType.Homeworld: initial = 3; break;
+            }
+
+            InputRadio radioDiag = new InputRadio(question, options, initial);
 
             if (radioDiag.ShowDialog() == true)
             {
@@ -122,7 +145,7 @@ namespace GurpsSpace.PlanetCreation
 
                     case "Colony":
                         // get age
-                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", "", true);
+                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", p.ColonyAge.ToString(), true);
                         if (inStr.ShowDialog() == true)
                         {
                             int colonyAge = int.Parse(inStr.Answer);
@@ -133,11 +156,17 @@ namespace GurpsSpace.PlanetCreation
 
                     case "Homeworld":
                         // get interstellar or not
-                        InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", new List<(string, string)>
-                {
+                        options = new List<(string, string)>()
+                        {
                     ("Interstellar","The homeworld is part of an interstellar civilisation."),
                     ("Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
-                });
+                        };
+                        initial = null;
+                        if (p.Interstellar)
+                            initial = 0;
+                        else
+                            initial = 1;
+                        InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", options, initial);
                         bool interstellar = true;
                         if (inRadio.ShowDialog() == true)
                         {
@@ -163,12 +192,16 @@ namespace GurpsSpace.PlanetCreation
         public Species GetLocalSpecies(Planet p)
         {
             List<(string, string)> options = new List<(string, string)>();
-            foreach (Species s in p.Setting.Species)
+            int? initial = null;
+            for (int i=0;i<p.Setting.Species.Count;i++)
             {
-                options.Add((s.Name, s.Description));
+                options.Add((p.Setting.Species[i].Name, p.Setting.Species[i].Description));
+                if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
+                    initial = i;
             }
 
-            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options);
+
+            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options, initial);
             if (radioDiag.ShowDialog() == true)
             {
                 return p.Setting.Species[radioDiag.Selected];
@@ -189,7 +222,7 @@ namespace GurpsSpace.PlanetCreation
             }
             string question = "Select the main Tech Level for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
             question += "The setting's TL is " + p.Setting.TechLevel.ToString() + " so anything at " + (p.Setting.TechLevel - 4).ToString() + " or below would be considered primitive.";
-            InputRadio radioDiag = new InputRadio(question, options);
+            InputRadio radioDiag = new InputRadio(question, options, p.LocalTechLevel);
             if (radioDiag.ShowDialog() == true)
             {
                 tl = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
@@ -199,7 +232,14 @@ namespace GurpsSpace.PlanetCreation
                 options.Add(("Delayed", "Settlement is behind normal for TL " + tl.ToString() + "."));
                 options.Add(("Normal", "Settlement has a normal level of development for TL " + tl.ToString() + "."));
                 options.Add(("Advanced", "Settlement is ahead of normal for TL " + tl.ToString() + "."));
-                radioDiag = new InputRadio(question, options);
+                int? initial = 0;
+                switch (p.LocalTechLevelRelativity)
+                {
+                    case eTechLevelRelativity.Delayed: initial = 0; break;
+                    case eTechLevelRelativity.Normal: initial = 1; break;
+                    case eTechLevelRelativity.Advanced: initial = 2; break;
+                }
+                radioDiag = new InputRadio(question, options, initial);
                 if (radioDiag.ShowDialog() == true)
                 {
                     switch (radioDiag.Answer.Item1)
@@ -251,7 +291,8 @@ namespace GurpsSpace.PlanetCreation
                     "At TL 5 and higher, advances in medical care and resource extraction mean the population can vary widely, from " +
                     "80-500%.  Enter the percentage below:";
             }
-            InputString inDiag = new InputString(question, "", true);
+            int currPerc = (int)(p.Population / p.CarryingCapacity * 100);
+            InputString inDiag = new InputString(question, currPerc.ToString(), true);
 
             if (inDiag.ShowDialog() == true)
             {
@@ -290,7 +331,7 @@ namespace GurpsSpace.PlanetCreation
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
             question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
-            InputString inDiag = new InputString(question, "", true);
+            InputString inDiag = new InputString(question, p.Population.ToString(), true);
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
@@ -302,7 +343,7 @@ namespace GurpsSpace.PlanetCreation
         private double GetPopulationOutpost(Planet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
-            InputString inDiag = new InputString(question, "", true);
+            InputString inDiag = new InputString(question, p.Population.ToString(), true);
             if(inDiag.ShowDialog()==true)
             {
                 return double.Parse(inDiag.Answer);
@@ -321,8 +362,16 @@ namespace GurpsSpace.PlanetCreation
             answers.Add(("Factionalised", "A few competing social structures."));
             answers.Add(("Coalition", "A few cooperating social structures."));
             answers.Add(("World Government", "A single world government, which may have special conditions."));
+            int? initial = null;
+            switch (p.WorldUnityLevel)
+            {
+                case eWorldUnityLevel.Diffuse: initial = 0; break;
+                case eWorldUnityLevel.Factionalised: initial = 1; break;
+                case eWorldUnityLevel.Coalition: initial = 2; break;
+                case eWorldUnityLevel.WorldGovernment: initial = 3; break;
+            }
 
-            InputRadio inDiag = new InputRadio(question, answers);
+            InputRadio inDiag = new InputRadio(question, answers, initial);
 
             eWorldUnityLevel unity = eWorldUnityLevel.Diffuse;
             fGovernmentSpecialConditions? specCond = fGovernmentSpecialConditions.None;
@@ -397,6 +446,7 @@ namespace GurpsSpace.PlanetCreation
                 answers.Add((fGovernmentSpecialConditions.Cyberocracy, false));
             }
 
+            // not showing a default value here, since can be two things selected and can only show one
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
@@ -435,7 +485,22 @@ namespace GurpsSpace.PlanetCreation
             options.Add(("Corporate State", "Society run by a single large corporation.  Most citizens will be employees.  Society tends to be run smoothly (not necessarily well) for the purpose of high profits."));
             options.Add(("Technocracy", "Engineers and scientists run society in the name of efficiency.  This can encompass relatively free and open societies to opressive dictatorships."));
 
-            InputRadio inDiag = new InputRadio(question, options);
+            int? initial = null;
+            switch (p.SocietyType)
+            {
+                case eSocietyType.Anarchy: initial = 0; break;
+                case eSocietyType.ClanTribal: initial = 1; break;
+                case eSocietyType.Caste: initial = 2; break;
+                case eSocietyType.Feudal: initial = 3; break;
+                case eSocietyType.Theocracy: initial = 4; break;
+                case eSocietyType.Dictatorship: initial = 5; break;
+                case eSocietyType.RepresentativeDemocracy: initial = 6; break;
+                case eSocietyType.AthenianDemocracy: initial = 7; break;
+                case eSocietyType.Corporate: initial = 8; break;
+                case eSocietyType.Technocracy: initial = 9; break;
+            }
+
+            InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
             {
                 switch (inDiag.Answer.Item1)
@@ -482,8 +547,10 @@ namespace GurpsSpace.PlanetCreation
             {
                 options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
             }
+            int? initial = null;
+            initial = p.ControlRating - minCR;
 
-            InputRadio inDiag = new InputRadio(question, options);
+            InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
                 return inDiag.Selected + minCR;
             else
@@ -511,7 +578,7 @@ namespace GurpsSpace.PlanetCreation
                     break;
             }
 
-            InputString inDiag = new InputString(question, "", true);
+            InputString inDiag = new InputString(question, (p.TradeVolume/p.EconomicVolume*100).ToString("N0"), true);
             if (inDiag.ShowDialog() == true)
             {
                 double prop = double.Parse(inDiag.Answer) / 100;
@@ -541,7 +608,8 @@ namespace GurpsSpace.PlanetCreation
             for (int i=5;i>=0;i--)
                 options.Add(("Class " + ((i==0)?"0":RuleBook.ToRoman(i)), RuleBook.SpaceportName[i]));
 
-            InputRadio inDiag = new InputRadio(question, options);
+            int? initial = 5 - p.SpaceportClass;
+            InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
                 return 5 - inDiag.Selected;
             else

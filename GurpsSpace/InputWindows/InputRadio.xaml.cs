@@ -13,11 +13,11 @@ namespace GurpsSpace
         public (string, string) Answer { get { return answerList[selected]; } }
         private List<RadioButton> radioButtons;
 
-        public InputRadio(string question, List<(string, string)> answers)
+        public InputRadio(string question, List<(string, string)> answers, int? initial = null)
         {
             InitializeComponent();
             lblQuestion.Text = question;
-            selected = 0;
+            
             answerList = answers;
             radioButtons = new List<RadioButton>();
 
@@ -48,6 +48,8 @@ namespace GurpsSpace
 
                 RadioButton rb = new();
                 rb.Content = answerList[i].Item1;
+                if (i==initial)
+                    rb.IsChecked = true;
                 Grid.SetRow(rb, i);
                 Grid.SetColumn(rb, 0);
                 g.Children.Add(rb);
