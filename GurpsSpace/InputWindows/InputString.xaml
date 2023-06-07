@@ -24,7 +24,7 @@
         <TextBox Grid.Row="1" Grid.Column="1" Name="txtAnswer" MinWidth="250" PreviewTextInput="textboxNumbersOnly" >Answer here</TextBox>
 
         <WrapPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button IsDefault="true" Click="btnOK_Click">_Ok</Button>
+            <Button IsDefault="true" Click="btnOK_Click">_OK</Button>
             <Button IsCancel="true" MinWidth="60">_Cancel</Button>
         </WrapPanel>
 

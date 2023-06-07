@@ -31,7 +31,7 @@ namespace GurpsSpace
 
         private void textboxNumbersOnly(object sender, TextCompositionEventArgs e)
         {
-            Regex reg = new Regex("[^0-9]");
+            Regex reg = new Regex("[^0-9,]");
             if (onlyNumbers)
                 e.Handled = reg.IsMatch(e.Text);
             else

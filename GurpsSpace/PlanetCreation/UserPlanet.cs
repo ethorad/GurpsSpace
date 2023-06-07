@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading;
-using System.Windows;
-using System.Windows.Annotations;
-using System.Windows.Documents;
+using System.Globalization;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -292,11 +287,11 @@ namespace GurpsSpace.PlanetCreation
                     "80-500%.  Enter the percentage below:";
             }
             int currPerc = (int)(p.Population / p.CarryingCapacity * 100);
-            InputString inDiag = new InputString(question, currPerc.ToString(), true);
+            InputString inDiag = new InputString(question, currPerc.ToString("N0"), true);
 
             if (inDiag.ShowDialog() == true)
             {
-                double perc = double.Parse(inDiag.Answer) / 100;
+                double perc = double.Parse(inDiag.Answer, NumberStyles.AllowThousands) / 100;
                 double pop = p.CarryingCapacity * perc;
                 pop = RuleBook.RoundToSignificantFigures(pop, 2);
                 return pop;
@@ -331,11 +326,11 @@ namespace GurpsSpace.PlanetCreation
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
             question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
-            InputString inDiag = new InputString(question, p.Population.ToString(), true);
+            InputString inDiag = new InputString(question, p.Population.ToString("N0"), true);
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
-                    return double.Parse(inDiag.Answer);
+                    return double.Parse(inDiag.Answer, NumberStyles.AllowThousands);
             }
 
             return p.Population;
@@ -343,10 +338,10 @@ namespace GurpsSpace.PlanetCreation
         private double GetPopulationOutpost(Planet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
-            InputString inDiag = new InputString(question, p.Population.ToString(), true);
+            InputString inDiag = new InputString(question, p.Population.ToString("N0"), true);
             if(inDiag.ShowDialog()==true)
             {
-                return double.Parse(inDiag.Answer);
+                return double.Parse(inDiag.Answer, NumberStyles.AllowThousands);
             }
             return p.Population;
         }
@@ -581,7 +576,7 @@ namespace GurpsSpace.PlanetCreation
             InputString inDiag = new InputString(question, (p.TradeVolume/p.EconomicVolume*100).ToString("N0"), true);
             if (inDiag.ShowDialog() == true)
             {
-                double prop = double.Parse(inDiag.Answer) / 100;
+                double prop = double.Parse(inDiag.Answer, NumberStyles.AllowThousands) / 100;
                 double trade = prop * p.EconomicVolume;
                 trade = RuleBook.RoundToSignificantFigures(trade, 2);
                 return trade;
