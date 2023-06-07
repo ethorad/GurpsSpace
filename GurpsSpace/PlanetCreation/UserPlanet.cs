@@ -415,29 +415,29 @@ namespace GurpsSpace.PlanetCreation
             List<(fGovernmentSpecialConditions, bool)> answers = new List<(fGovernmentSpecialConditions, bool)>();
             options.Add(("None", "No special conditions prevail."));
             answers.Add((fGovernmentSpecialConditions.None, false));
-            options.Add(("Subjugated", "Under the control of another civilisation. Second condition is possible."));
+            options.Add(("Subjugated", "Under the control of another civilisation, either militarily, economically or otherwise (e.g. mind control). Second condition is possible."));
             answers.Add((fGovernmentSpecialConditions.Subjugated, true));
-            options.Add(("Sanctuary", "Particularly welcoming of refugees, likely to be an independent settlement."));
+            options.Add(("Sanctuary", "Particularly welcoming of refugees, criminals or terrorists wanted by other states.  Likely to be an independent settlement."));
             answers.Add((fGovernmentSpecialConditions.Sanctuary, false));
-            options.Add(("Military Government", "Run by the military, citizenship likely tied to service."));
+            options.Add(("Military Government", "Run by the military, citizenship likely tied to service.  Can lead to dictatorship or feudalism."));
             answers.Add((fGovernmentSpecialConditions.MilitaryGovernment, false));
-            options.Add(("Socialist", "Significant government support to individuals.  Second condition is possible."));
+            options.Add(("Socialist", "The government directly manages the economy, with citizens receiving education, medical care, housing and a job.  Second condition is possible."));
             answers.Add((fGovernmentSpecialConditions.Socialist, true));
-            options.Add(("Bureaucracy", "Significant rules and regulations governing life."));
+            options.Add(("Bureaucracy", "Self-perpetuating civil service runs the society day to day.  Many laws and lots of red tape likely make the government unresponsive to citizens."));
             answers.Add((fGovernmentSpecialConditions.Bureaucracy, false));
-            options.Add(("Colony", "An offshoot of a larger galactic civilisation."));
+            options.Add(("Colony", "An offshoot of a larger galactic civilisation, ruled by an externally appointed governor.  There may be a locally elected council, however this will have limited power."));
             answers.Add((fGovernmentSpecialConditions.Colony, false));
-            options.Add(("Oligarchy", "Ruled by a small group of individuals, likely very wealthy. Second condition is possible."));
+            options.Add(("Oligarchy", "Ruled by a small group of wealthy powerful individuals, regardless of the nominal form of government. Second condition is possible."));
             answers.Add((fGovernmentSpecialConditions.Oligarchy, true));
-            options.Add(("Meritocracy", "Ruled according to merit, defined in some manner. Second condition is possible."));
+            options.Add(("Meritocracy", "Ruled according to merit, defined in some manner such as a series of tests. Second condition is possible."));
             answers.Add((fGovernmentSpecialConditions.Meritocracy, true));
-            options.Add(("Genderarchy", "Ruled by a single gender (in Earth terms, a Patriarchy or Matriarchy)."));
+            options.Add(("Genderarchy", "Positions of authority are only open to a single gender (in Earth terms, a Patriarchy or Matriarchy)."));
             answers.Add((fGovernmentSpecialConditions.Genderarchy, false));
-            options.Add(("Utopia", "Egalitarian society which aims to be perfect."));
+            options.Add(("Utopia", "Egalitarian society which aims to be perfect.  All citizens are happy and satisfied (or at least they appear to be ...)."));
             answers.Add((fGovernmentSpecialConditions.Utopia, false));
             if (p.LocalTechLevel > 7)
             {
-                options.Add(("Cyberocracy", "Ruled by interconnected computer systems, with lifeforms only used for unusual situations."));
+                options.Add(("Cyberocracy", "A statewide computer system controls society administration, and potentially also legislation.  May be efficient or inhuman."));
                 answers.Add((fGovernmentSpecialConditions.Cyberocracy, false));
             }
 
