@@ -455,9 +455,9 @@ namespace GurpsSpace.PlanetCreation
                     if (inDiag.ShowDialog() == true)
                     {
                         specCond |= answers[inDiag.Selected].Item1;
-                        return specCond;
                     }
                 }
+                return specCond;
             }
 
             // only get here if we clicked cancel on one of the windows
@@ -532,25 +532,78 @@ namespace GurpsSpace.PlanetCreation
             int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
             int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
 
-            if (maxCR == minCR)
-                // no option
-                return minCR;
+            string question = "Select the control rating from the range below.";
+            question += "\r\nFor a " + p.SocietyType.ToString() + " society this is generally CR " + minCR.ToString() + ((minCR == maxCR) ? "." : (" to CR " + maxCR.ToString() + "."));
 
-            string question = "Select the control rating from the range below:";
+            // adjust for any special conditions
+            // see Campaigns p510 for details
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Bureaucracy, minCR, maxCR, question, CRfloor: 4);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Colony, minCR, maxCR, question, CRadj: -1);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Cyberocracy, minCR, maxCR, question, CRfloor: 3);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Meritocracy, minCR, maxCR, question, CRfloor: 3);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.MilitaryGovernment, minCR, maxCR, question, CRfloor: 4);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Oligarchy, minCR, maxCR, question, CRfloor: 3);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Sanctuary, minCR, maxCR, question, CRceiling:4);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Socialist, minCR, maxCR, question, CRfloor: 3);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Subjugated, minCR, maxCR, question, CRfloor: 4);
+            (minCR, maxCR, question) = AdjustForSpecialConditions(p, fGovernmentSpecialConditions.Utopia, minCR, maxCR, question, CRadj: -2);
+
+            if (minCR == maxCR)
+                question += "\r\nOverall, this suggests CR of " + minCR.ToString() + ".";
+            else
+                question += "\r\nOverall, this suggests a CR of " + minCR.ToString() + " to " + maxCR.ToString() + ".";
+            // removed this as showing all options even if not applicable
+            //if (minCR==maxCR)
+            //{
+            //    // i.e. no options
+            //    return minCR;
+            //}
+
             List<(string, string)> options = new List<(string, string)>();
-            for (int i = minCR; i <= maxCR; i++)
+            for (int i = 0; i <= 6; i++) // showing all CR, not just those implied by society types
             {
                 options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
             }
             int? initial = null;
-            initial = p.ControlRating - minCR;
+            initial = p.ControlRating;
 
             InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
-                return inDiag.Selected + minCR;
+                return inDiag.Selected; // no +minCR since we're showing all 0-6
             else
                 return p.ControlRating;
 
+        }
+        private (int, int, string) AdjustForSpecialConditions(Planet p, fGovernmentSpecialConditions specCond, int minCR, int maxCR, string question, int CRceiling = -1, int CRfloor = -1, int CRadj = 0)
+        {
+            // if the special condition is present, then make the relevant adjustment to min/max CR and add to the question
+            if (p.HasGovernmentSpecialCondition(specCond))
+            {
+                if (CRceiling >= 0) // if we want to apply a maximum to the CR
+                {
+                    question += "\r\nA society of type " + specCond.ToString() + " will often have at most CR " + CRceiling.ToString() + ".";
+                    maxCR = CRceiling;
+                    if (minCR >= maxCR) minCR = maxCR;
+                }
+                if (CRfloor >= 0) // if we want to apply a minimum to the CR
+                {
+                    question += "\r\nA society of type " + specCond.ToString() + " will often have at least CR " + CRfloor.ToString() + ".";
+                    minCR = CRfloor;
+                    if (maxCR <= minCR) maxCR = minCR;
+                }
+                if (CRadj != 0) // if we want to adjust existing CRs
+                {
+                    question += "\r\nA society of type " + specCond.ToString() + " will often have the CR " + Math.Abs(CRadj).ToString()+" "+((CRadj>0)?"higher":"lower") + ".";
+                    minCR += CRadj;
+                    maxCR += CRadj;
+                    if (minCR < 0) minCR = 0;
+                    if (minCR > 6) minCR = 6;
+                    if (maxCR < 0) maxCR = 0;
+                    if (maxCR > 6) maxCR = 6;
+                }
+            }
+
+            return (minCR, maxCR, question);
         }
 
         public double GetTradeVolume(Planet p)

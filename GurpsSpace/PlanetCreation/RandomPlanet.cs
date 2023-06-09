@@ -457,6 +457,47 @@ namespace GurpsSpace.PlanetCreation
             int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
             int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
 
+            // adjust for any special conditions
+            // see Campaigns p510 for details
+
+            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Cyberocracy) ||
+                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Meritocracy) ||
+                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Oligarchy) ||
+                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Socialist))
+            {
+                if (minCR < 3) minCR = 3;
+                if (maxCR < minCR) maxCR = minCR;
+            }
+            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Bureaucracy) ||
+                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.MilitaryGovernment) ||
+                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Subjugated))
+            {
+                if (minCR < 4) minCR = 4;
+                if (maxCR < minCR) maxCR = minCR;
+            }
+            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Sanctuary))
+            {
+                if (maxCR > 4) maxCR = 4;
+                if (minCR > maxCR) minCR = maxCR;
+            }
+            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Colony))
+            {
+                // strictly reads like it should be 1 CR below parent
+                // here I'm just reducing min and max by 1
+                minCR--;
+                maxCR--;
+            }
+            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Utopia))
+            {
+                // rulebook says the CR seems low
+                // here I'm just reducing min and max by 2
+                minCR -= 2;
+                maxCR -= 2;
+            }
+
+            if (minCR<0) minCR= 0;
+            if (maxCR>6) maxCR= 6;
+
             return DiceBag.Rand(minCR, maxCR);
         }
 
