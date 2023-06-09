@@ -361,6 +361,10 @@ namespace GurpsSpace
             get { return governmentSpecialConditions; }
             set { governmentSpecialConditions = value; }
         }
+        public bool HasGovernmentSpecialCondition(fGovernmentSpecialConditions flag)
+        {
+            return (GovernmentSpecialConditions & flag) == flag;
+        }
         private eSocietyType societyType;
         public eSocietyType SocietyType
         {
