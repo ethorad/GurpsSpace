@@ -188,9 +188,10 @@ namespace GurpsSpace.PlanetCreation
         {
             List<(string, string)> options = new List<(string, string)>();
             int? initial = null;
-            for (int i=0;i<p.Setting.Species.Count;i++)
+            for (int i = 0; i < p.Setting.Species.Count; i++)
             {
-                options.Add((p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description));
+                Species s = p.Setting.Species[i];
+                options.Add(((s.Name ?? ("Unknown-"+i.ToString())) + "\r\nHabitability: " + s.Habitability(p), (s.Description ?? "tbc")));
                 if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
                     initial = i;
             }

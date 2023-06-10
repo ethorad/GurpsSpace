@@ -1,6 +1,7 @@
 ﻿
 using System.Windows;
 using GurpsSpace.PlanetCreation;
+using GurpsSpace.SpeciesCreation;
 using GurpsSpace.ViewModels;
 
 namespace GurpsSpace
@@ -32,7 +33,11 @@ namespace GurpsSpace
         }
         private void btnCreateSpecies(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Creating a species");
+            SpeciesCreator creator = new(s);
+            if (creator.ShowDialog()==true)
+            {
+                vmSetting.Add(creator.Species);
+            }
         }
 
         private void btnTestClick(object sender, RoutedEventArgs e)

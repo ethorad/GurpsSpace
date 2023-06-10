@@ -57,6 +57,12 @@ namespace GurpsSpace.ViewModels
         {
             setting.Planets.Add(p);
             planetList.Add(p);
+            MemberUpdated();
+        }
+        public void Add(Species s)
+        {
+            setting.Species.Add(s);
+            MemberUpdated();
         }
 
     }
