@@ -5,19 +5,33 @@ namespace GurpsSpace
 {
     public class Species : INotifyPropertyChanged
     {
-        protected string name;
-        public string Name { get { return name; } }
-        private string description; public string Description { get { return description; } }
-        protected Setting setting; public Setting Setting { get { return setting; } }
-        protected eSpeciesDiet diet; public eSpeciesDiet Diet { get { return diet; } }
-        protected int increasedConsumption; public int IncreasedConsumption { get { return increasedConsumption; } }
-        protected int reducedConsumption; public int ReducedConsumption { get { return reducedConsumption; } }
-        protected bool doesNotEatOrDrink; public bool DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
-        protected long startingColonyPopulation; public long StartingColonyPopulation { get { return startingColonyPopulation; } }
-        protected double annualGrowthRate; public double AnnualGrowthRate { get { return annualGrowthRate; } }
-        protected double affinityMultiplier; public double AffinityMultiplier { get { return affinityMultiplier; } }
+        protected Setting setting;
+        public Setting Setting { get { return setting; } }
+
+        protected string? name;
+        public string? Name { get { return name; } set { name = value; } }
+        protected string? description;
+        public string? Description { get { return description; } set { description = value; } }
+        protected eSpeciesDiet? diet;
+        public eSpeciesDiet? Diet { get { return diet; } set { diet = value; } }
+        protected int increasedConsumption;
+        public int IncreasedConsumption { get { return increasedConsumption; } }
+        protected int reducedConsumption;
+        public int ReducedConsumption { get { return reducedConsumption; } }
+        protected bool doesNotEatOrDrink;
+        public bool DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
+        protected long startingColonyPopulation;
+        public long StartingColonyPopulation { get { return startingColonyPopulation; } }
+        protected double annualGrowthRate;
+        public double AnnualGrowthRate { get { return annualGrowthRate; } }
+        protected double affinityMultiplier;
+        public double AffinityMultiplier { get { return affinityMultiplier; } }
 
 
+        public Species(Setting setting)
+        {
+            this.setting = setting;
+        }
         public Species(Setting setting, string name, string description,
             eSpeciesDiet diet, int increasedConsumption, int reducedConsumption, bool doesNotEatOrDrink,
             long startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
@@ -38,15 +52,11 @@ namespace GurpsSpace
         public Species(Setting s, string name) : this(s, name, "A generic species",
             eSpeciesDiet.Omnivore, 0, 0, false,
             10000, 0.023, 2)
-        {
-
-        }
+        { }
         public Species(Setting s, string name, string description) : this(s, name, description,
             eSpeciesDiet.Omnivore, 0, 0, false,
             10000, 0.023, 2)
-        {
-
-        }
+        { }
 
         public virtual int Habitability(Planet p)
         {
@@ -135,7 +145,7 @@ namespace GurpsSpace
 
             long carryCap = (long)defaultCarryCap;
 
-            carryCap = RuleBook.RoundToSignificantFigures(carryCap,2);
+            carryCap = RuleBook.RoundToSignificantFigures(carryCap, 2);
 
             return carryCap;
         }
