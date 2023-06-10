@@ -27,15 +27,12 @@ namespace GurpsSpace
             PlanetCreator creator = new(s);
             if (creator.ShowDialog()==true)
             {
-                s.AddPlanet(creator.Planet);
+                vmSetting.Add(creator.Planet);
             }
         }
-
-        private void btnNameClick(object sender, RoutedEventArgs e)
+        private void btnCreateSpecies(object sender, RoutedEventArgs e)
         {
-            InputString inDialog = new("Enter the planet name", s.Planets[0].Name);
-            if (inDialog.ShowDialog() == true)
-                s.Planets[0].Name = inDialog.Answer;
+            MessageBox.Show("Creating a species");
         }
 
         private void btnTestClick(object sender, RoutedEventArgs e)

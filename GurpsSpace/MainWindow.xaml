@@ -39,17 +39,23 @@
             </Grid>
         </GroupBox>
 
+        <GroupBox Header="Species Creation">
+            <WrapPanel>
+                <Button Click="btnCreateSpecies">New Species</Button>
+                <Label Content="{Binding Path=SpeciesList[0].Name, Mode=OneWay}"/>
+            </WrapPanel>
+        </GroupBox>
+
         <GroupBox Header="Planet Creation">
             <WrapPanel>
                 <Button Click="btnCreatePlanet">New Planet</Button>
-                <Label Content="{Binding Path=PlanetList[0].Name, Mode=OneWay}"/>
+                <Label Content="{Binding Path=PlanetList.Planets[0].Name, Mode=OneWay}"/>
             </WrapPanel>
         </GroupBox>
         
         <GroupBox Header="Testing">
 
             <WrapPanel>
-                <Button Click="btnNameClick">Name</Button>
                 <Button Click="btnTestClick">Test</Button>
             </WrapPanel>
 

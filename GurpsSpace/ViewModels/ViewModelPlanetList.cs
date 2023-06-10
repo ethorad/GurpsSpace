@@ -18,10 +18,12 @@ namespace GurpsSpace.PlanetCreation
         public void Add(Planet planet)
         {
             planets.Add(new ViewModelPlanet(planet));
+            MemberUpdated();
         }
         public void Add(ViewModelPlanet vmPlanet)
         {
             planets.Add(vmPlanet);
+            MemberUpdated();
         }
 
         public ViewModelPlanetList(List<ViewModelPlanet> planetLst)

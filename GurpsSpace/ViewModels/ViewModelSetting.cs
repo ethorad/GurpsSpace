@@ -14,7 +14,7 @@ namespace GurpsSpace.ViewModels
         private ViewModelPlanetList planetList;
         public ViewModelPlanetList PlanetList { get { return planetList; } }
 
-        public List<Species> Species { get { return setting.Species; } }
+        public List<Species> SpeciesList { get { return setting.Species; } }
         public Species MainSpecies { get { return setting.MainSpecies; } }
 
         public string Name
@@ -53,6 +53,11 @@ namespace GurpsSpace.ViewModels
             planetList = new ViewModelPlanetList(setting.Planets);
         }
 
+        public void Add(Planet p)
+        {
+            setting.Planets.Add(p);
+            planetList.Add(p);
+        }
 
     }
 }
