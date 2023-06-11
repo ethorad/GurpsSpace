@@ -8,8 +8,8 @@ namespace GurpsSpace.SpeciesCreation
 {
     internal interface ISpeciesCreator
     {
-        string GetName(Species s);
+        string? GetName(Species s);
 
-        eSpeciesDiet GetDiet(Species s);
+        eSpeciesDiet? GetDiet(Species s);
     }
 }

@@ -52,12 +52,14 @@ namespace GurpsSpace.SpeciesCreation
             switch (param)
             {
                 case "Name":
-                    string name = sc.GetName(vmSpecies.Species);
-                    vmSpecies.Name = name;
+                    string? name = sc.GetName(vmSpecies.Species);
+                    if (name != null)
+                        vmSpecies.Name = name;
                     break;
                 case "Diet":
-                    eSpeciesDiet diet = sc.GetDiet(vmSpecies.Species);
-                    vmSpecies.Diet = diet;
+                    eSpeciesDiet? diet = sc.GetDiet(vmSpecies.Species);
+                    if (diet != null)
+                        vmSpecies.Diet = diet;
                     break;
             }
         }

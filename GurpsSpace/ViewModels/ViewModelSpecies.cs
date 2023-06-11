@@ -10,7 +10,7 @@ namespace GurpsSpace.SpeciesCreation
     {
         private Species species;
         public Species Species { get { return species; } }
-        public string Name
+        public string? Name
         {
             get { return species.Name ?? "tbc"; }
             set
@@ -19,7 +19,7 @@ namespace GurpsSpace.SpeciesCreation
                 MemberUpdated();
             }
         }
-        public string Description
+        public string? Description
         {
             get { return species.Description ?? "tbc"; }
             set
@@ -38,9 +38,9 @@ namespace GurpsSpace.SpeciesCreation
                     return species.Diet.ToString()!;
             }
         }
-        public eSpeciesDiet Diet
+        public eSpeciesDiet? Diet
         {
-            get { return species.Diet ?? eSpeciesDiet.Omnivore; }
+            get { return species.Diet; }
             set
             {
                 species.Diet = value;
