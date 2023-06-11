@@ -8,14 +8,25 @@ namespace GurpsSpace.SpeciesCreation
 {
     internal class RandomSpecies : ISpeciesCreator
     {
-        public string GetName(Species s)
+        public string? GetName(Species s)
         {
             return "Randomish-" + DiceBag.Rand(1, 100);
         }
 
-        public eSpeciesDiet GetDiet(Species s)
+        public eSpeciesDiet? GetDiet(Species s)
         {
-            return eSpeciesDiet.Herbivore;
+            int n = DiceBag.Rand(0, 2);
+            switch (n)
+            {
+                case 0:
+                    return eSpeciesDiet.Herbivore;
+                case 1:
+                    return eSpeciesDiet.Carnivore;
+                case 2:
+                    return eSpeciesDiet.Omnivore;
+            }
+            // shouldn't ever get here
+            return null;
         }
     }
 }
