@@ -16,10 +16,10 @@ namespace GurpsSpace.SpeciesCreation
 
         public eSpeciesDiet? GetDiet(Species s)
         {
-            List<(string, string)> options = new List<(string, string)>();
-            options.Add(("Herbivore", "Eats plants."));
-            options.Add(("Carnivore", "Eats animals"));
-            options.Add(("Omnivore", "Eats plants and animals"));
+            List<(int, string, string)> options = new List<(int, string, string)>();
+            options.Add(((int)eSpeciesDiet.Herbivore, "Herbivore", "Eats plants."));
+            options.Add(((int)eSpeciesDiet.Carnivore, "Carnivore", "Eats animals"));
+            options.Add(((int)eSpeciesDiet.Omnivore, "Omnivore", "Eats plants and animals"));
 
             string question = "Select the species' diet type.";
 
@@ -34,12 +34,7 @@ namespace GurpsSpace.SpeciesCreation
             InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
             {
-                switch (inDiag.Selected)
-                {
-                    case 0: return eSpeciesDiet.Herbivore;
-                    case 1: return eSpeciesDiet.Carnivore;
-                    case 2: return eSpeciesDiet.Omnivore;
-                }
+                return (eSpeciesDiet)inDiag.Answer.Item1;
             }
             return null;
 
