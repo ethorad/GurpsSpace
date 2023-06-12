@@ -390,7 +390,6 @@ namespace GurpsSpace.PlanetCreation
 
             string question = "Select a special condition, or none. ";
             List<(int, string, string)> options = new List<(int, string, string)>();
-            List<(fGovernmentSpecialConditions, bool)> answers = new List<(fGovernmentSpecialConditions, bool)>();
             options.Add(((int)fGovernmentSpecialConditions.None, "None", "No special conditions prevail."));
             options.Add(((int)fGovernmentSpecialConditions.Subjugated, "Subjugated", "Under the control of another civilisation, either militarily, economically or otherwise (e.g. mind control). Second condition is possible."));
             options.Add(((int)fGovernmentSpecialConditions.Sanctuary, "Sanctuary", "Particularly welcoming of refugees, criminals or terrorists wanted by other states.  Likely to be an independent settlement."));
