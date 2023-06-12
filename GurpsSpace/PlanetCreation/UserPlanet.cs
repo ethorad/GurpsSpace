@@ -29,14 +29,13 @@ namespace GurpsSpace.PlanetCreation
 
         public eResourceValueCategory GetResourceValueCategory(Planet p)
         {
-            List<(string, string)> options = new List<(string, string)>();
+            List<(int, string, string)> options = new List<(int, string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
             int? startVal = null;
             vals.Sort();
             foreach (int i in vals)
-            {
-                options.Add((i.ToString(), ((eResourceValueCategory)i).ToString()));
-            }
+                options.Add((i, i.ToString(), ((eResourceValueCategory)i).ToString()));
+
             for (int i = 0; i < options.Count; i++)
                 if (options[i].Item2 == p.ResourceValueCategory.ToString())
                     startVal = i;
@@ -47,9 +46,7 @@ namespace GurpsSpace.PlanetCreation
 
             InputRadio radioDiag = new InputRadio(question, options, startVal);
             if (radioDiag.ShowDialog() == true)
-            {
-                return radioDiag.Answer.Item2.ToEnum<eResourceValueCategory>();
-            }
+                return (eResourceValueCategory)radioDiag.Answer.Item1;
             else // clicked cancel
                 return p.ResourceValueCategory;
         }
@@ -62,30 +59,29 @@ namespace GurpsSpace.PlanetCreation
         public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
         {
             if (!p.HasAtmosphericOptions)
-            {
                 return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
-            }
-            else
-            {
-                PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
-                int? initial = null;
-                if (p.AtmosphericDescription == pp.AtmosphereA.Item2)
-                    initial = 0;
-                if (p.AtmosphericDescription == pp.AtmosphereB.Item2)
-                    initial = 1;
-                List<(string, string)> options = new List<(string, string)>()
+
+            PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
+            int? initial = null;
+            if (p.AtmosphericDescription == pp.AtmosphereA.Item2)
+                initial = 0;
+            if (p.AtmosphericDescription == pp.AtmosphereB.Item2)
+                initial = 1;
+            List<(int, string, string)> options = new List<(int, string, string)>()
                 {
-                    (pp.AtmosphereA.Item1.ToString(), pp.AtmosphereA.Item2),
-                    (pp.AtmosphereB.Item1.ToString(), pp.AtmosphereB.Item2)
+                    (0, pp.AtmosphereA.Item1.ToString(), pp.AtmosphereA.Item2),
+                    (1, pp.AtmosphereB.Item1.ToString(), pp.AtmosphereB.Item2)
                 };
 
-                InputRadio radioDiag = new("Select atmospheric options:", options, initial);
+            InputRadio radioDiag = new("Select atmospheric options:", options, initial);
 
 
-                if (radioDiag.ShowDialog() == true)
-                {
-                    return (radioDiag.Answer.Item1.ToEnum<fAtmosphericConditions>(), radioDiag.Answer.Item2);
-                }
+            if (radioDiag.ShowDialog() == true)
+            {
+                if (radioDiag.Selected == 0)
+                    return pp.AtmosphereA;
+                else if (radioDiag.Selected == 1)
+                    return pp.AtmosphereB;
             }
             return (p.AtmosphericConditions, p.AtmosphericDescription);
         }
@@ -114,11 +110,11 @@ namespace GurpsSpace.PlanetCreation
         {
 
             string question = "Select the settlement type to be present:";
-            List<(string, string)> options = new List<(string, string)>();
-            options.Add(("None", "No settlement is present."));
-            options.Add(("Outpost", "A minor outpost is present.  For example, a military base or research station."));
-            options.Add(("Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
-            options.Add(("Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
+            List<(int, string, string)> options = new List<(int, string, string)>();
+            options.Add(((int)eSettlementType.None, "None", "No settlement is present."));
+            options.Add(((int)eSettlementType.Outpost,"Outpost", "A minor outpost is present.  For example, a military base or research station."));
+            options.Add(((int)eSettlementType.Colony, "Colony", "A full fledged colony is present.  This will be part of a larger interstellar civilisation.  It will usually have at least positive affinity, i.e. either attractive resource level or a good habitability."));
+            options.Add(((int)eSettlementType.Homeworld, "Homeworld", "This is the homeworld for a species.  This may be part of an interstellar civilisation.  This wll generally have high habitability for the selected species, as it will have evolved to live here."));
 
             int? initial = null;
             switch (p.SettlementType)
@@ -133,12 +129,12 @@ namespace GurpsSpace.PlanetCreation
 
             if (radioDiag.ShowDialog() == true)
             {
-                switch (radioDiag.Answer.Item1)
+                switch ((eSettlementType)radioDiag.Answer.Item1)
                 {
-                    case "Outpost":
+                    case eSettlementType.Outpost:
                         return (eSettlementType.Outpost, 0, true);
 
-                    case "Colony":
+                    case eSettlementType.Colony:
                         // get age
                         InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", p.ColonyAge.ToString(), true);
                         if (inStr.ShowDialog() == true)
@@ -149,12 +145,12 @@ namespace GurpsSpace.PlanetCreation
                         else
                             return (p.SettlementType, p.ColonyAge, p.Interstellar);
 
-                    case "Homeworld":
+                    case eSettlementType.Homeworld:
                         // get interstellar or not
-                        options = new List<(string, string)>()
+                        options = new List<(int, string, string)>()
                         {
-                    ("Interstellar","The homeworld is part of an interstellar civilisation."),
-                    ("Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
+                    (0, "Interstellar","The homeworld is part of an interstellar civilisation."),
+                    (1, "Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
                         };
                         initial = null;
                         if (p.Interstellar)
@@ -186,11 +182,11 @@ namespace GurpsSpace.PlanetCreation
 
         public Species GetLocalSpecies(Planet p)
         {
-            List<(string, string)> options = new List<(string, string)>();
+            List<(int, string, string)> options = new List<(int, string, string)>();
             int? initial = null;
             for (int i=0;i<p.Setting.Species.Count;i++)
             {
-                options.Add((p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description));
+                options.Add((i, p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description));
                 if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
                     initial = i;
             }
@@ -198,9 +194,7 @@ namespace GurpsSpace.PlanetCreation
 
             InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options, initial);
             if (radioDiag.ShowDialog() == true)
-            {
                 return p.Setting.Species[radioDiag.Selected];
-            }
             else
                 return p.LocalSpecies;
         }
@@ -210,23 +204,22 @@ namespace GurpsSpace.PlanetCreation
             int tl = p.Setting.TechLevel;
             eTechLevelRelativity adj = eTechLevelRelativity.Normal;
 
-            List<(string, string)> options = new List<(string, string)>();
+            List<(int, string, string)> options = new List<(int, string, string)>();
             foreach (TechLevelParameters tlp in RuleBook.TechLevelParams.Values)
-            {
-                options.Add((tlp.TL.ToString(), tlp.Age));
-            }
+                options.Add((tlp.TL,tlp.TL.ToString(), tlp.Age));
+
             string question = "Select the main Tech Level for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
-            question += "The setting's TL is " + p.Setting.TechLevel.ToString() + " so anything at " + (p.Setting.TechLevel - 4).ToString() + " or below would be considered primitive.";
+            question += "\r\nThe setting's TL is " + p.Setting.TechLevel.ToString() + " so anything at " + (p.Setting.TechLevel - 4).ToString() + " or below would be considered primitive.";
             InputRadio radioDiag = new InputRadio(question, options, p.LocalTechLevel);
             if (radioDiag.ShowDialog() == true)
             {
-                tl = radioDiag.Selected; // since in order of TL starting from zero can just use the selected index
+                tl = radioDiag.Answer.Item1;
 
                 question = "Select whether the settlement is delayed or advanced relative to TL " + tl.ToString() + ".";
                 options.Clear();
-                options.Add(("Delayed", "Settlement is behind normal for TL " + tl.ToString() + "."));
-                options.Add(("Normal", "Settlement has a normal level of development for TL " + tl.ToString() + "."));
-                options.Add(("Advanced", "Settlement is ahead of normal for TL " + tl.ToString() + "."));
+                options.Add((0, "Delayed", "Settlement is behind normal for TL " + tl.ToString() + "."));
+                options.Add((1, "Normal", "Settlement has a normal level of development for TL " + tl.ToString() + "."));
+                options.Add((2, "Advanced", "Settlement is ahead of normal for TL " + tl.ToString() + "."));
                 int? initial = 0;
                 switch (p.LocalTechLevelRelativity)
                 {
@@ -237,7 +230,7 @@ namespace GurpsSpace.PlanetCreation
                 radioDiag = new InputRadio(question, options, initial);
                 if (radioDiag.ShowDialog() == true)
                 {
-                    switch (radioDiag.Answer.Item1)
+                    switch (radioDiag.Answer.Item2)
                     {
                         case "Delayed":
                             adj = eTechLevelRelativity.Delayed;
@@ -249,8 +242,6 @@ namespace GurpsSpace.PlanetCreation
                             adj = eTechLevelRelativity.Advanced;
                             break;
                     }
-
-
                     return (tl, adj);
                 }
             }
@@ -352,11 +343,11 @@ namespace GurpsSpace.PlanetCreation
             string question = "Select the degree to which the settlement is socially unified. " +
                 "Higher technology levels, and smaller populations, tend to be more unified.";
 
-            List<(string, string)> answers = new List<(string, string)>();
-            answers.Add(("Diffuse", "A variety of social structure, none dominating."));
-            answers.Add(("Factionalised", "A few competing social structures."));
-            answers.Add(("Coalition", "A few cooperating social structures."));
-            answers.Add(("World Government", "A single world government, which may have special conditions."));
+            List<(int, string, string)> answers = new List<(int, string, string)>();
+            answers.Add(((int)eWorldUnityLevel.Diffuse, "Diffuse", "A variety of social structure, none dominating."));
+            answers.Add(((int)eWorldUnityLevel.Factionalised, "Factionalised", "A few competing social structures."));
+            answers.Add(((int)eWorldUnityLevel.Coalition, "Coalition", "A few cooperating social structures."));
+            answers.Add(((int)eWorldUnityLevel.WorldGovernment, "World Government", "A single world government, which may have special conditions."));
             int? initial = null;
             switch (p.WorldUnityLevel)
             {
@@ -373,22 +364,9 @@ namespace GurpsSpace.PlanetCreation
             bool hasSpecialCond = false;
             if (inDiag.ShowDialog()==true)
             {
-                switch(inDiag.Answer.Item1)
-                {
-                    case "Diffuse":
-                        unity = eWorldUnityLevel.Diffuse;
-                        break;
-                    case "Factionalised":
-                        unity = eWorldUnityLevel.Factionalised;
-                        break;
-                    case "Coalition":
-                        unity = eWorldUnityLevel.Coalition;
-                        break;
-                    case "World Government":
-                        unity = eWorldUnityLevel.WorldGovernment;
-                        hasSpecialCond = true;
-                        break;
-                }
+                unity = (eWorldUnityLevel)inDiag.Answer.Item1;
+                if (unity==eWorldUnityLevel.WorldGovernment)
+                    hasSpecialCond = true;
 
                 if (hasSpecialCond)
                     specCond = GetGovernmentSpecialConditions(p);
@@ -411,51 +389,38 @@ namespace GurpsSpace.PlanetCreation
             fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
 
             string question = "Select a special condition, or none. ";
-            List<(string, string)> options = new List<(string, string)>();
+            List<(int, string, string)> options = new List<(int, string, string)>();
             List<(fGovernmentSpecialConditions, bool)> answers = new List<(fGovernmentSpecialConditions, bool)>();
-            options.Add(("None", "No special conditions prevail."));
-            answers.Add((fGovernmentSpecialConditions.None, false));
-            options.Add(("Subjugated", "Under the control of another civilisation, either militarily, economically or otherwise (e.g. mind control). Second condition is possible."));
-            answers.Add((fGovernmentSpecialConditions.Subjugated, true));
-            options.Add(("Sanctuary", "Particularly welcoming of refugees, criminals or terrorists wanted by other states.  Likely to be an independent settlement."));
-            answers.Add((fGovernmentSpecialConditions.Sanctuary, false));
-            options.Add(("Military Government", "Run by the military, citizenship likely tied to service.  Can lead to dictatorship or feudalism."));
-            answers.Add((fGovernmentSpecialConditions.MilitaryGovernment, false));
-            options.Add(("Socialist", "The government directly manages the economy, with citizens receiving education, medical care, housing and a job.  Second condition is possible."));
-            answers.Add((fGovernmentSpecialConditions.Socialist, true));
-            options.Add(("Bureaucracy", "Self-perpetuating civil service runs the society day to day.  Many laws and lots of red tape likely make the government unresponsive to citizens."));
-            answers.Add((fGovernmentSpecialConditions.Bureaucracy, false));
-            options.Add(("Colony", "An offshoot of a larger galactic civilisation, ruled by an externally appointed governor.  There may be a locally elected council, however this will have limited power."));
-            answers.Add((fGovernmentSpecialConditions.Colony, false));
-            options.Add(("Oligarchy", "Ruled by a small group of wealthy powerful individuals, regardless of the nominal form of government. Second condition is possible."));
-            answers.Add((fGovernmentSpecialConditions.Oligarchy, true));
-            options.Add(("Meritocracy", "Ruled according to merit, defined in some manner such as a series of tests. Second condition is possible."));
-            answers.Add((fGovernmentSpecialConditions.Meritocracy, true));
-            options.Add(("Genderarchy", "Positions of authority are only open to a single gender (in Earth terms, a Patriarchy or Matriarchy)."));
-            answers.Add((fGovernmentSpecialConditions.Genderarchy, false));
-            options.Add(("Utopia", "Egalitarian society which aims to be perfect.  All citizens are happy and satisfied (or at least they appear to be ...)."));
-            answers.Add((fGovernmentSpecialConditions.Utopia, false));
+            options.Add(((int)fGovernmentSpecialConditions.None, "None", "No special conditions prevail."));
+            options.Add(((int)fGovernmentSpecialConditions.Subjugated, "Subjugated", "Under the control of another civilisation, either militarily, economically or otherwise (e.g. mind control). Second condition is possible."));
+            options.Add(((int)fGovernmentSpecialConditions.Sanctuary, "Sanctuary", "Particularly welcoming of refugees, criminals or terrorists wanted by other states.  Likely to be an independent settlement."));
+            options.Add(((int)fGovernmentSpecialConditions.MilitaryGovernment, "Military Government", "Run by the military, citizenship likely tied to service.  Can lead to dictatorship or feudalism."));
+            options.Add(((int)fGovernmentSpecialConditions.Socialist, "Socialist", "The government directly manages the economy, with citizens receiving education, medical care, housing and a job.  Second condition is possible."));
+            options.Add(((int)fGovernmentSpecialConditions.Bureaucracy, "Bureaucracy", "Self-perpetuating civil service runs the society day to day.  Many laws and lots of red tape likely make the government unresponsive to citizens."));
+            options.Add(((int)fGovernmentSpecialConditions.Colony, "Colony", "An offshoot of a larger galactic civilisation, ruled by an externally appointed governor.  There may be a locally elected council, however this will have limited power."));
+            options.Add(((int)fGovernmentSpecialConditions.Oligarchy, "Oligarchy", "Ruled by a small group of wealthy powerful individuals, regardless of the nominal form of government. Second condition is possible."));
+            options.Add(((int)fGovernmentSpecialConditions.Meritocracy, "Meritocracy", "Ruled according to merit, defined in some manner such as a series of tests. Second condition is possible."));
+            options.Add(((int)fGovernmentSpecialConditions.Genderarchy, "Genderarchy", "Positions of authority are only open to a single gender (in Earth terms, a Patriarchy or Matriarchy)."));
+            options.Add(((int)fGovernmentSpecialConditions.Utopia, "Utopia", "Egalitarian society which aims to be perfect.  All citizens are happy and satisfied (or at least they appear to be ...)."));
             if (p.LocalTechLevel > 7)
-            {
-                options.Add(("Cyberocracy", "A statewide computer system controls society administration, and potentially also legislation.  May be efficient or inhuman."));
-                answers.Add((fGovernmentSpecialConditions.Cyberocracy, false));
-            }
+                options.Add(((int)fGovernmentSpecialConditions.Cyberocracy, "Cyberocracy", "A statewide computer system controls society administration, and potentially also legislation.  May be efficient or inhuman."));
 
             // not showing a default value here, since can be two things selected and can only show one
             InputRadio inDiag = new InputRadio(question, options);
             if (inDiag.ShowDialog() == true)
             {
-                specCond = answers[inDiag.Selected].Item1;
+                specCond = (fGovernmentSpecialConditions)inDiag.Answer.Item1;
 
-                if (answers[inDiag.Selected].Item2)
+                if (specCond == fGovernmentSpecialConditions.Subjugated ||
+                    specCond == fGovernmentSpecialConditions.Socialist ||
+                    specCond == fGovernmentSpecialConditions.Oligarchy ||
+                    specCond == fGovernmentSpecialConditions.Meritocracy)
                 {
                     // give option for a second condition
                     // can't seem to reopen the same dialog box, so refreshing it with new
                     inDiag = new InputRadio(question, options);
                     if (inDiag.ShowDialog() == true)
-                    {
-                        specCond |= answers[inDiag.Selected].Item1;
-                    }
+                        specCond |= (fGovernmentSpecialConditions)inDiag.Answer.Item1;
                 }
                 return specCond;
             }
@@ -468,17 +433,17 @@ namespace GurpsSpace.PlanetCreation
         public eSocietyType GetSocietyType(Planet p)
         {
             string question = "Select the type of society prevalent in the settlement:";
-            List<(string, string)> options = new List<(string, string)>();
-            options.Add(("Anarchy", "No formal laws.  There may be communal expectations, based on what is deemed acceptable practice by other members of the community."));
-            options.Add(("Clan/Tribal", "One large interlocking family of allied clans or tribes.  Customs and traditions will be important to bind the various groups together."));
-            options.Add(("Caste", "Similar to clan/tribal, however each clan has a set role.  Likely to be a hierarchy between the clans.  Those who reject their set role are often outcasts with a social stigma."));
-            options.Add(("Feudal", "A dictatorship or monarchy where subsidiary rulers retain local power.  The overall ruler therefore needs to maintain sufficient support from their subsidiaries.  Laws can vary by locality."));
-            options.Add(("Theocracy", "Rule by a religious group. Restrictions on other religions are likely."));
-            options.Add(("Dictatorship", "Rule by a single individual.  If this is hereditary, it is essentially a monarchy.  To maintain control, there may be customary limitations on the ruler's power."));
-            options.Add(("Representative Democracy", "A group of citizens are elected to run the society.  Will depend on the level of education and involvement of the electorate, and whether this is capturable by special interests."));
-            options.Add(("Athenian Democracy", "Every citizen (however that is defined) votes on every action the society takes.  Below TL 9 this is only practical for groups of up to 10,000."));
-            options.Add(("Corporate State", "Society run by a single large corporation.  Most citizens will be employees.  Society tends to be run smoothly (not necessarily well) for the purpose of high profits."));
-            options.Add(("Technocracy", "Engineers and scientists run society in the name of efficiency.  This can encompass relatively free and open societies to opressive dictatorships."));
+            List<(int, string, string)> options = new List<(int, string, string)>();
+            options.Add(((int)eSocietyType.Anarchy, "Anarchy", "No formal laws.  There may be communal expectations, based on what is deemed acceptable practice by other members of the community."));
+            options.Add(((int)eSocietyType.ClanTribal, "Clan/Tribal", "One large interlocking family of allied clans or tribes.  Customs and traditions will be important to bind the various groups together."));
+            options.Add(((int)eSocietyType.Caste, "Caste", "Similar to clan/tribal, however each clan has a set role.  Likely to be a hierarchy between the clans.  Those who reject their set role are often outcasts with a social stigma."));
+            options.Add(((int)eSocietyType.Feudal, "Feudal", "A dictatorship or monarchy where subsidiary rulers retain local power.  The overall ruler therefore needs to maintain sufficient support from their subsidiaries.  Laws can vary by locality."));
+            options.Add(((int)eSocietyType.Theocracy, "Theocracy", "Rule by a religious group. Restrictions on other religions are likely."));
+            options.Add(((int)eSocietyType.Dictatorship, "Dictatorship", "Rule by a single individual.  If this is hereditary, it is essentially a monarchy.  To maintain control, there may be customary limitations on the ruler's power."));
+            options.Add(((int)eSocietyType.RepresentativeDemocracy, "Representative Democracy", "A group of citizens are elected to run the society.  Will depend on the level of education and involvement of the electorate, and whether this is capturable by special interests."));
+            options.Add(((int)eSocietyType.AthenianDemocracy, "Athenian Democracy", "Every citizen (however that is defined) votes on every action the society takes.  Below TL 9 this is only practical for groups of up to 10,000."));
+            options.Add(((int)eSocietyType.Corporate, "Corporate State", "Society run by a single large corporation.  Most citizens will be employees.  Society tends to be run smoothly (not necessarily well) for the purpose of high profits."));
+            options.Add(((int)eSocietyType.Technocracy, "Technocracy", "Engineers and scientists run society in the name of efficiency.  This can encompass relatively free and open societies to opressive dictatorships."));
 
             int? initial = null;
             switch (p.SocietyType)
@@ -497,31 +462,7 @@ namespace GurpsSpace.PlanetCreation
 
             InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
-            {
-                switch (inDiag.Answer.Item1)
-                {
-                    case "Anarchy":
-                        return eSocietyType.Anarchy;
-                    case "Clan/Tribal":
-                        return eSocietyType.ClanTribal;
-                    case "Caste":
-                        return eSocietyType.Caste;
-                    case "Feudal":
-                        return eSocietyType.Feudal;
-                    case "Theocracy":
-                        return eSocietyType.Theocracy;
-                    case "Dictatorship":
-                        return eSocietyType.Dictatorship;
-                    case "Representative Democracy":
-                        return eSocietyType.RepresentativeDemocracy;
-                    case "Athenian Democracy":
-                        return eSocietyType.AthenianDemocracy;
-                    case "Corporate State":
-                        return eSocietyType.Corporate;
-                    case "Technocracy":
-                        return eSocietyType.Technocracy;
-                }
-            }
+                return (eSocietyType)inDiag.Answer.Item1;
 
             // cancel was clicked
             return p.SocietyType;
@@ -559,17 +500,17 @@ namespace GurpsSpace.PlanetCreation
             //    return minCR;
             //}
 
-            List<(string, string)> options = new List<(string, string)>();
+            List<(int, string, string)> options = new List<(int, string, string)>();
             for (int i = 0; i <= 6; i++) // showing all CR, not just those implied by society types
             {
-                options.Add(("CR " + i.ToString(), RuleBook.ControlRatings[i]));
+                options.Add((i, "CR " + i.ToString(), RuleBook.ControlRatings[i]));
             }
             int? initial = null;
             initial = p.ControlRating;
 
             InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
-                return inDiag.Selected; // no +minCR since we're showing all 0-6
+                return inDiag.Answer.Item1;
             else
                 return p.ControlRating;
 
@@ -652,14 +593,14 @@ namespace GurpsSpace.PlanetCreation
             if (recommendedSpaceportClass > 0)
                 question += "The suggested class given the population and trade volume is Class " + RuleBook.ToRoman(recommendedSpaceportClass) + ". ";
 
-            List<(string, string)> options = new List<(string, string)>();
+            List<(int, string, string)> options = new List<(int, string, string)>();
             for (int i=5;i>=0;i--)
-                options.Add(("Class " + ((i==0)?"0":RuleBook.ToRoman(i)), RuleBook.SpaceportName[i]));
+                options.Add((i, "Class " + ((i==0)?"0":RuleBook.ToRoman(i)), RuleBook.SpaceportName[i]));
 
             int? initial = 5 - p.SpaceportClass;
             InputRadio inDiag = new InputRadio(question, options, initial);
             if (inDiag.ShowDialog() == true)
-                return 5 - inDiag.Selected;
+                return inDiag.Answer.Item1;
             else
                 return p.SpaceportClass;
         }

@@ -8,12 +8,13 @@ namespace GurpsSpace
 
     public partial class InputRadio : Window
     {
-        private int selected; public int Selected { get { return selected; } }
-        List<(string, string)> answerList;
-        public (string, string) Answer { get { return answerList[selected]; } }
+        private int selected;
+        public int Selected { get { return selected; } }
+        private List<(int, string, string)> answerList;
+        public (int, string, string) Answer { get { return answerList[selected]; } }
         private List<RadioButton> radioButtons;
 
-        public InputRadio(string question, List<(string, string)> answers, int? initial = null)
+        public InputRadio(string question, List<(int, string, string)> answers, int? initial = null)
         {
             InitializeComponent();
             lblQuestion.Text = question;
@@ -47,7 +48,7 @@ namespace GurpsSpace
 
 
                 RadioButton rb = new();
-                rb.Content = answerList[i].Item1;
+                rb.Content = answerList[i].Item2;
                 if (i==initial)
                     rb.IsChecked = true;
                 Grid.SetRow(rb, i);
@@ -56,7 +57,7 @@ namespace GurpsSpace
                 radioButtons.Add(rb);
 
                 TextBlock tb = new();
-                tb.Text = answerList[i].Item2;
+                tb.Text = answerList[i].Item3;
                 tb.TextWrapping = TextWrapping.WrapWithOverflow;
                 tb.Margin = new Thickness(5, 5, 5, 5); // to match the margin on the radiobuttons
                 Grid.SetColumn(tb, 1);
