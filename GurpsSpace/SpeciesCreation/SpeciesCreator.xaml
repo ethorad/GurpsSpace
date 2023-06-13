@@ -8,29 +8,41 @@
         Title="GURPS Space - Species Creator" Width="500" SizeToContent="Height">
 
 
-        <StackPanel Orientation="Vertical">
-            
-    <GroupBox Header="General">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+    <StackPanel Orientation="Vertical">
 
-            <Label Grid.Row="0" Grid.Column="0">Name</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Name, Mode=TwoWay}" />
-            <Button Grid.Row="0" Grid.Column="3" Tag="Name" Click="btnRandom_Click">Rand</Button>
+        <GroupBox Header="General">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0">Name</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Name, Mode=TwoWay}" />
+                <Button Grid.Row="0" Grid.Column="3" Tag="Name" Click="btnRandom_Click">Rand</Button>
 
                 <Label Grid.Row="1" Grid.Column="0" >Diet</Label>
                 <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=DietString, Mode=OneWay}" />
                 <Button Grid.Row="1" Grid.Column="2" Tag="Diet" Click="btnSelect_Click">Select</Button>
                 <Button Grid.Row="1" Grid.Column="3" Tag="Diet" Click="btnRandom_Click">Rand</Button>
+
+                <Label Grid.Row="2" Grid.Column="0" >Consumption</Label>
+                <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=ConsumptionString, Mode=OneWay}" />
+                <Button Grid.Row="2" Grid.Column="2" Tag="Consumption" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="2" Grid.Column="3" Tag="Consumption" Click="btnRandom_Click">Rand</Button>
+
+                <Label Grid.Row="3" Grid.Column="0" >Next</Label>
+                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=ReducedConsumptionString, Mode=OneWay}" />
+                <Button Grid.Row="3" Grid.Column="2" Tag="ReducedConsumption" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="3" Grid.Column="3" Tag="ReducedConsumption" Click="btnRandom_Click">Rand</Button>
 
             </Grid>
 
@@ -40,6 +52,6 @@
             <Button Click="btnOK_Click">OK</Button>
             <Button Click="btnTest_Click">Test</Button>
         </StackPanel>
-        </StackPanel>
+    </StackPanel>
 
 </Window>

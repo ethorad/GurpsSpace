@@ -186,7 +186,7 @@ namespace GurpsSpace.PlanetCreation
             int? initial = null;
             for (int i = 0; i < p.Setting.Species.Count; i++)
             {
-                options.Add((i, p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description));
+                options.Add((i, p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description ?? ""));
                 if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
                     initial = i;
             }

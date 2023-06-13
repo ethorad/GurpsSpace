@@ -13,7 +13,6 @@ namespace GurpsSpace.SpeciesCreation
             throw new NotImplementedException();
         }
 
-
         public eSpeciesDiet? GetDiet(Species s)
         {
             List<(int, string, string)> options = new List<(int, string, string)>();

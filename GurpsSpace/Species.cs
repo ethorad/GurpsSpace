@@ -14,12 +14,32 @@ namespace GurpsSpace
         public string? Description { get { return description; } set { description = value; } }
         protected eSpeciesDiet? diet;
         public eSpeciesDiet? Diet { get { return diet; } set { diet = value; } }
-        protected int increasedConsumption;
-        public int IncreasedConsumption { get { return increasedConsumption; } }
-        protected int reducedConsumption;
-        public int ReducedConsumption { get { return reducedConsumption; } }
-        protected bool doesNotEatOrDrink;
-        public bool DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
+        protected int? consumption;
+        public int? Consumption { get { return consumption; } }
+        public int? IncreasedConsumption
+        { 
+            get 
+            { 
+                if (consumption == null) 
+                    return null;
+                if (consumption > 0)
+                    return consumption;
+                return 0;
+            }
+        }
+        public int? ReducedConsumption
+        {
+            get
+            {
+                if (consumption == null)
+                    return null;
+                if (consumption < 0)
+                    return -consumption;
+                return 0;
+            }
+        }
+        protected bool? doesNotEatOrDrink;
+        public bool? DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
         protected long startingColonyPopulation;
         public long StartingColonyPopulation { get { return startingColonyPopulation; } }
         protected double annualGrowthRate;
@@ -33,15 +53,14 @@ namespace GurpsSpace
             this.setting = setting;
         }
         public Species(Setting setting, string name, string description,
-            eSpeciesDiet diet, int increasedConsumption, int reducedConsumption, bool doesNotEatOrDrink,
+            eSpeciesDiet diet, int consumption, bool doesNotEatOrDrink,
             long startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
         {
             this.setting = setting;
             this.name = name;
             this.description = description;
             this.diet = diet;
-            this.increasedConsumption = increasedConsumption;
-            this.reducedConsumption = reducedConsumption;
+            this.consumption = consumption;
             this.doesNotEatOrDrink = doesNotEatOrDrink;
             this.startingColonyPopulation = startingColonyPopulation;
             this.annualGrowthRate = annualGrowthRate;
@@ -50,11 +69,11 @@ namespace GurpsSpace
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
         }
         public Species(Setting s, string name) : this(s, name, "A generic species",
-            eSpeciesDiet.Omnivore, 0, 0, false,
+            eSpeciesDiet.Omnivore, 0, false,
             10000, 0.023, 2)
         { }
         public Species(Setting s, string name, string description) : this(s, name, description,
-            eSpeciesDiet.Omnivore, 0, 0, false,
+            eSpeciesDiet.Omnivore, 0, false,
             10000, 0.023, 2)
         { }
 
@@ -170,11 +189,12 @@ namespace GurpsSpace
         }
         protected double CarryingCapacityIncreasedConsumptionModifier()
         {
-            return Math.Pow(2, -IncreasedConsumption);
+            double power = IncreasedConsumption ?? 0;
+            return Math.Pow(2, -power);
         }
         protected double CarryingCapacityReducedConsumptionModifier()
         {
-            if (DoesNotEatOrDrink)
+            if (DoesNotEatOrDrink ?? false)
                 return 1; // the modifier for doesn't eat or drink supersedes this
             else if (ReducedConsumption == 0)
                 return 1;
@@ -189,7 +209,7 @@ namespace GurpsSpace
         }
         protected double CarryingCapacityDoesNotEatOrDrinkModifier()
         {
-            if (DoesNotEatOrDrink)
+            if (DoesNotEatOrDrink ?? false)
                 return 10;
             else
                 return 1;

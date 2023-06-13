@@ -47,6 +47,22 @@ namespace GurpsSpace.SpeciesCreation
                 MemberUpdated();
             }
         }
+        public string ConsumptionString
+        {
+            get
+            {
+                if (species.Consumption == null || species.DoesNotEatOrDrink == null)
+                    return "tbc";
+                else if (species.DoesNotEatOrDrink ?? false)
+                    return "Doesn't eat or drink";
+                else if (species.ReducedConsumption > 0)
+                    return "Reduced (" + species.ReducedConsumption.ToString() + ")";
+                else if (species.IncreasedConsumption > 0)
+                    return "Increased (" + species.IncreasedConsumption.ToString() + ")";
+                else // so both zero
+                    return "Normal";
+            }
+        }
 
         public ViewModelSpecies(Species species)
         {
