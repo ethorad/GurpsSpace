@@ -11,5 +11,7 @@ namespace GurpsSpace.SpeciesCreation
         string? GetName(Species s);
 
         eSpeciesDiet? GetDiet(Species s);
+
+        (int?, bool?) GetConsumption(Species s);
     }
 }

@@ -47,6 +47,19 @@ namespace GurpsSpace.SpeciesCreation
                 MemberUpdated();
             }
         }
+        public int? Consumption
+        {
+            get { return species.Consumption; }
+            set { species.Consumption = value; MemberUpdated(); }
+        }
+        public bool? DoesNotEatOrDrink
+        {
+            get { return species.DoesNotEatOrDrink; }
+            set
+            {
+                species.DoesNotEatOrDrink = value; MemberUpdated() ;
+            }
+        }
         public string ConsumptionString
         {
             get

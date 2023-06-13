@@ -15,10 +15,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -31,30 +27,64 @@
                 <TextBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Path=Name, Mode=TwoWay}" />
                 <Button Grid.Row="0" Grid.Column="3" Tag="Name" Click="btnRandom_Click">Rand</Button>
 
-                <Label Grid.Row="1" Grid.Column="0" >Diet</Label>
-                <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=DietString, Mode=OneWay}" />
-                <Button Grid.Row="1" Grid.Column="2" Tag="Diet" Click="btnSelect_Click">Select</Button>
-                <Button Grid.Row="1" Grid.Column="3" Tag="Diet" Click="btnRandom_Click">Rand</Button>
+                <Label Grid.Row="1" Grid.Column="0">Description</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" Text="{Binding Path=Description, Mode=TwoWay}" />
 
-                <Label Grid.Row="2" Grid.Column="0" >Consumption</Label>
-                <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=ConsumptionString, Mode=OneWay}" />
-                <Button Grid.Row="2" Grid.Column="2" Tag="Consumption" Click="btnSelect_Click">Select</Button>
-                <Button Grid.Row="2" Grid.Column="3" Tag="Consumption" Click="btnRandom_Click">Rand</Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Diet">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="3" Grid.Column="0" >Starting Colony Population</Label>
-                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=StartingColonyPopulationString, Mode=OneWay}" />
-                <Button Grid.Row="3" Grid.Column="2" Tag="StartingColonyPopulation" Click="btnSelect_Click">Select</Button>
-                <Button Grid.Row="3" Grid.Column="3" Tag="StartingColonyPopulation" Click="btnRandom_Click">Rand</Button>
+                <Label Grid.Row="0" Grid.Column="0" >Diet</Label>
+                <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=DietString, Mode=OneWay}" />
+                <Button Grid.Row="0" Grid.Column="2" Tag="Diet" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="0" Grid.Column="3" Tag="Diet" Click="btnRandom_Click">Rand</Button>
 
-                <Label Grid.Row="4" Grid.Column="0" >Annual Growth Rate</Label>
-                <Label Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=AnnualGrowthRateString, Mode=OneWay}" />
-                <Button Grid.Row="4" Grid.Column="2" Tag="AnnualGrowthRate" Click="btnSelect_Click">Select</Button>
-                <Button Grid.Row="4" Grid.Column="3" Tag="AnnualGrowthRate" Click="btnRandom_Click">Rand</Button>
+                <Label Grid.Row="1" Grid.Column="0" >Consumption</Label>
+                <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=ConsumptionString, Mode=OneWay}" />
+                <Button Grid.Row="1" Grid.Column="2" Tag="Consumption" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="1" Grid.Column="3" Tag="Consumption" Click="btnRandom_Click">Rand</Button>
+
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Population">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
                 
-                <Label Grid.Row="5" Grid.Column="0" >Affinity Multiplier</Label>
-                <Label Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=AffinityMultiplierString, Mode=OneWay}" />
-                <Button Grid.Row="5" Grid.Column="2" Tag="AffinityMultiplier" Click="btnSelect_Click">Select</Button>
-                <Button Grid.Row="5" Grid.Column="3" Tag="AffinityMultiplier" Click="btnRandom_Click">Rand</Button>
+                <Label Grid.Row="0" Grid.Column="0" >Starting Colony Population</Label>
+                <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=StartingColonyPopulationString, Mode=OneWay}" />
+                <Button Grid.Row="0" Grid.Column="2" Tag="StartingColonyPopulation" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="0" Grid.Column="3" Tag="StartingColonyPopulation" Click="btnRandom_Click">Rand</Button>
+
+                <Label Grid.Row="1" Grid.Column="0" >Annual Growth Rate</Label>
+                <Label Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=AnnualGrowthRateString, Mode=OneWay}" />
+                <Button Grid.Row="1" Grid.Column="2" Tag="AnnualGrowthRate" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="1" Grid.Column="3" Tag="AnnualGrowthRate" Click="btnRandom_Click">Rand</Button>
+                
+                <Label Grid.Row="2" Grid.Column="0" >Affinity Multiplier</Label>
+                <Label Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=AffinityMultiplierString, Mode=OneWay}" />
+                <Button Grid.Row="2" Grid.Column="2" Tag="AffinityMultiplier" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="2" Grid.Column="3" Tag="AffinityMultiplier" Click="btnRandom_Click">Rand</Button>
 
             </Grid>
 

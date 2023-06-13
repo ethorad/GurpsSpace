@@ -15,7 +15,19 @@ namespace GurpsSpace
         protected eSpeciesDiet? diet;
         public eSpeciesDiet? Diet { get { return diet; } set { diet = value; } }
         protected int? consumption;
-        public int? Consumption { get { return consumption; } }
+        public int? Consumption
+        { 
+            get { return consumption; }
+            set 
+            {
+                consumption = value;
+                if (value == null) // if this is null, also null out doesn't eat or drink
+                    doesNotEatOrDrink = null;
+                else if (value != 0) // if this is non-zero, then does not eat or drink has to be false
+                    doesNotEatOrDrink = false;
+            }
+
+        }
         public int? IncreasedConsumption
         { 
             get 
@@ -39,7 +51,18 @@ namespace GurpsSpace
             }
         }
         protected bool? doesNotEatOrDrink;
-        public bool? DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
+        public bool? DoesNotEatOrDrink 
+        { 
+            get { return doesNotEatOrDrink; }
+            set
+            {
+                doesNotEatOrDrink = value;
+                if (value == null)
+                    consumption = null; // if this is null, also null out consumption
+                if (value == true)
+                    consumption = 0; // if they don't eat or drink, remove any levels of consumption
+            }
+        }
         protected long? startingColonyPopulation;
         public long? StartingColonyPopulation { get { return startingColonyPopulation; } }
         public long StartingColonyPopulationValue { get { return startingColonyPopulation ?? 0; } }

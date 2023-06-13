@@ -61,6 +61,16 @@ namespace GurpsSpace.SpeciesCreation
                     if (diet != null)
                         vmSpecies.Diet = diet;
                     break;
+                case "Consumption":
+                    int? consumption;
+                    bool? noEatOrDrink;
+                    (consumption, noEatOrDrink) = sc.GetConsumption(vmSpecies.Species);
+                    if (consumption != null && noEatOrDrink!= null)
+                    {
+                        vmSpecies.Consumption= consumption;
+                        vmSpecies.DoesNotEatOrDrink = noEatOrDrink;
+                    }
+                    break;
             }
         }
 
