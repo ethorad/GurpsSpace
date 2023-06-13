@@ -40,12 +40,15 @@ namespace GurpsSpace
         }
         protected bool? doesNotEatOrDrink;
         public bool? DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
-        protected long startingColonyPopulation;
-        public long StartingColonyPopulation { get { return startingColonyPopulation; } }
-        protected double annualGrowthRate;
-        public double AnnualGrowthRate { get { return annualGrowthRate; } }
-        protected double affinityMultiplier;
-        public double AffinityMultiplier { get { return affinityMultiplier; } }
+        protected long? startingColonyPopulation;
+        public long? StartingColonyPopulation { get { return startingColonyPopulation; } }
+        public long StartingColonyPopulationValue { get { return startingColonyPopulation ?? 0; } }
+        protected double? annualGrowthRate;
+        public double? AnnualGrowthRate { get { return annualGrowthRate; } }
+        public double AnnualGrowthRateValue { get { return annualGrowthRate ?? 0; } }
+        protected double? affinityMultiplier;
+        public double? AffinityMultiplier { get { return affinityMultiplier; } }
+        public double AffinityMultiplierValue { get { return affinityMultiplier ?? 1; } }
 
 
         public Species(Setting setting)

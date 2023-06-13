@@ -63,6 +63,36 @@ namespace GurpsSpace.SpeciesCreation
                     return "Normal";
             }
         }
+        public string StartingColonyPopulationString
+        {
+            get
+            {
+                if (species.StartingColonyPopulation == null)
+                    return "tbc";
+                else
+                    return species.StartingColonyPopulationValue.ToString("N0");
+            }
+        }
+        public string AnnualGrowthRateString
+        {
+            get
+            {
+                if (species.AnnualGrowthRate == null)
+                    return "tbc";
+                else
+                    return (species.AnnualGrowthRateValue * 100).ToString() + "%";
+            }
+        }
+        public string AffinityMultiplierString
+        {
+            get
+            {
+                if (species.AffinityMultiplier == null)
+                    return "tbc";
+                else
+                    return species.AffinityMultiplierValue.ToString("N2");
+            }
+        }
 
         public ViewModelSpecies(Species species)
         {

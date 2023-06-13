@@ -17,6 +17,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -39,10 +41,20 @@
                 <Button Grid.Row="2" Grid.Column="2" Tag="Consumption" Click="btnSelect_Click">Select</Button>
                 <Button Grid.Row="2" Grid.Column="3" Tag="Consumption" Click="btnRandom_Click">Rand</Button>
 
-                <Label Grid.Row="3" Grid.Column="0" >Next</Label>
-                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=ReducedConsumptionString, Mode=OneWay}" />
-                <Button Grid.Row="3" Grid.Column="2" Tag="ReducedConsumption" Click="btnSelect_Click">Select</Button>
-                <Button Grid.Row="3" Grid.Column="3" Tag="ReducedConsumption" Click="btnRandom_Click">Rand</Button>
+                <Label Grid.Row="3" Grid.Column="0" >Starting Colony Population</Label>
+                <Label Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=StartingColonyPopulationString, Mode=OneWay}" />
+                <Button Grid.Row="3" Grid.Column="2" Tag="StartingColonyPopulation" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="3" Grid.Column="3" Tag="StartingColonyPopulation" Click="btnRandom_Click">Rand</Button>
+
+                <Label Grid.Row="4" Grid.Column="0" >Annual Growth Rate</Label>
+                <Label Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=AnnualGrowthRateString, Mode=OneWay}" />
+                <Button Grid.Row="4" Grid.Column="2" Tag="AnnualGrowthRate" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="4" Grid.Column="3" Tag="AnnualGrowthRate" Click="btnRandom_Click">Rand</Button>
+                
+                <Label Grid.Row="5" Grid.Column="0" >Affinity Multiplier</Label>
+                <Label Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=AffinityMultiplierString, Mode=OneWay}" />
+                <Button Grid.Row="5" Grid.Column="2" Tag="AffinityMultiplier" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="5" Grid.Column="3" Tag="AffinityMultiplier" Click="btnRandom_Click">Rand</Button>
 
             </Grid>
 
