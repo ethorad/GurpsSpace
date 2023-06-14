@@ -1,0 +1,45 @@
+﻿<Window x:Class="GurpsSpace.SpeciesCreation.SelectConsumption"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GurpsSpace.SpeciesCreation"
+        mc:Ignorable="d"
+        Title="SelectConsumption"  Width="500" SizeToContent="Height">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+            <TextBlock TextWrapping="WrapWithOverflow">Select the level of consumption that the species requires.  A species can
+        only have one of 'increased consumption', 'reduced consumption' or 'does not eat or drink'.</TextBlock>
+        </Label>
+        
+        <Label Grid.Row="1" Grid.Column="0">Increased Consumption</Label>
+        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=IncreasedConsumption, Mode=OneWay}"/>
+        <Slider Grid.Row="1" Grid.Column="2" Minimum="0" Maximum="4" Value="{Binding Path=IncreasedConsumption, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="true" TickPlacement="BottomRight" Margin="20,0,20,0"/>
+
+        <Label Grid.Row="2" Grid.Column="0">Reduced Consumption</Label>
+        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=ReducedConsumption, Mode=OneWay}"/>
+        <Slider Grid.Row="2" Grid.Column="2" Minimum="0" Maximum="4" Value="{Binding Path=ReducedConsumption, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="true" TickPlacement="BottomRight" Margin="20,0,20,0"/>
+
+
+        <Label Grid.Row="3" Grid.Column="0">Does not Eat or Drink</Label>
+        <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding Path=DoesNotEatOrDrink, Mode=TwoWay}"/>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button IsCancel="true">Cancel</Button>
+            <Button Click="btnOK_Click">OK</Button>
+        </StackPanel>
+    </Grid>
+</Window>

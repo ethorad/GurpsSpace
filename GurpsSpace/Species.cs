@@ -38,6 +38,7 @@ namespace GurpsSpace
                     return consumption;
                 return 0;
             }
+            set { consumption = value; }
         }
         public int? ReducedConsumption
         {
@@ -49,6 +50,7 @@ namespace GurpsSpace
                     return -consumption;
                 return 0;
             }
+            set { consumption = -value; }
         }
         protected bool? doesNotEatOrDrink;
         public bool? DoesNotEatOrDrink 

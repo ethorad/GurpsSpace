@@ -41,7 +41,10 @@ namespace GurpsSpace.SpeciesCreation
 
         public (int?, bool?) GetConsumption(Species s)
         {
-            throw new NotImplementedException();
+            SelectConsumption selectConsumption = new SelectConsumption(s);
+            selectConsumption.ShowDialog();
+
+            return (null, null);
         }
     }
 }

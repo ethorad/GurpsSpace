@@ -52,6 +52,16 @@ namespace GurpsSpace.SpeciesCreation
             get { return species.Consumption; }
             set { species.Consumption = value; MemberUpdated(); }
         }
+        public int? ReducedConsumption
+        {
+            get { return species.ReducedConsumption; }
+            set { species.ReducedConsumption = value; MemberUpdated(); }
+        }
+        public int? IncreasedConsumption
+        {
+            get { return species.IncreasedConsumption; }
+            set { species.IncreasedConsumption = value; MemberUpdated(); }
+        }
         public bool? DoesNotEatOrDrink
         {
             get { return species.DoesNotEatOrDrink; }
