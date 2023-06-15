@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace GurpsSpace
 {
-    public class Species : INotifyPropertyChanged
+    public class Species
     {
         protected Setting setting;
         public Setting Setting { get { return setting; } }
@@ -93,8 +93,6 @@ namespace GurpsSpace
             this.startingColonyPopulation = startingColonyPopulation;
             this.annualGrowthRate = annualGrowthRate;
             this.affinityMultiplier = affinityMultiplier;
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
         }
         public Species(Setting s, string name) : this(s, name, "A generic species",
             eSpeciesDiet.Omnivore, 0, false,
@@ -243,6 +241,5 @@ namespace GurpsSpace
                 return 1;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
