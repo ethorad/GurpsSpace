@@ -91,7 +91,34 @@ namespace GurpsSpace.SpeciesCreation
 
         public double? GetStartingColonyPopulation(Species s)
         {
-            return 42;
+            // want to choose a random number from say 1,000 to 100,000
+            // human average of 10,000 in the middle
+            // do it exponentially to reflect the way population growth works
+            // so say:
+            // roll 0 = 1,000
+            // roll 10 = 10,000
+            // roll 20 = 100,000
+
+            // to calculate the effect of +1 on the roll, calculate
+            // (multiple for +X on the roll) ^ (1 / X) - 1
+            // i.e. for here, we have *100 for a +20
+            // so increase for +1 is 100^(1/20)-1 = 25.9%
+
+            // so generate a random number 0-20
+            // then start population is 1,000 * (1 + 25.9%) ^ roll
+
+            double minStartPop = 1000;
+            double maxStartPop = 100000;
+            int maxRoll = 20;
+
+            double increase = Math.Pow((maxStartPop / minStartPop), (1 / (double)maxRoll)) - 1;
+
+            int roll = DiceBag.Rand(0, maxRoll);
+            double pop = minStartPop * Math.Pow(1 + increase, roll);
+            pop = RuleBook.RoundToSignificantFigures(pop, 2);
+
+            return pop;
+
         }
 
         public double? GetAnnualGrowthRate(Species s)
