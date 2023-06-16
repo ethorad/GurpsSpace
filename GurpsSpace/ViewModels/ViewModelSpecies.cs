@@ -86,6 +86,11 @@ namespace GurpsSpace.SpeciesCreation
                     return "Normal";
             }
         }
+        public double? StartingColonyPopulation
+        {
+            get { return species.StartingColonyPopulation; }
+            set { species.StartingColonyPopulation = value; MemberUpdated() ; }
+        }
         public string StartingColonyPopulationString
         {
             get
@@ -96,6 +101,11 @@ namespace GurpsSpace.SpeciesCreation
                     return species.StartingColonyPopulationValue.ToString("N0");
             }
         }
+        public double? AnnualGrowthRate
+        {
+            get { return species.AnnualGrowthRate; }
+            set { species.AnnualGrowthRate = value; MemberUpdated(); }
+        }
         public string AnnualGrowthRateString
         {
             get
@@ -103,7 +113,7 @@ namespace GurpsSpace.SpeciesCreation
                 if (species.AnnualGrowthRate == null)
                     return "tbc";
                 else
-                    return (species.AnnualGrowthRateValue * 100).ToString() + "%";
+                    return (species.AnnualGrowthRateValue * 100).ToString("N1") + "%";
             }
         }
         public string AffinityMultiplierString

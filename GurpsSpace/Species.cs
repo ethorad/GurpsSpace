@@ -65,11 +65,19 @@ namespace GurpsSpace
                     consumption = 0; // if they don't eat or drink, remove any levels of consumption
             }
         }
-        protected long? startingColonyPopulation;
-        public long? StartingColonyPopulation { get { return startingColonyPopulation; } }
-        public long StartingColonyPopulationValue { get { return startingColonyPopulation ?? 0; } }
+        protected double? startingColonyPopulation;
+        public double? StartingColonyPopulation
+        { 
+            get { return startingColonyPopulation; }
+            set { startingColonyPopulation = value; }
+        }
+        public double StartingColonyPopulationValue { get { return startingColonyPopulation ?? 0; } }
         protected double? annualGrowthRate;
-        public double? AnnualGrowthRate { get { return annualGrowthRate; } }
+        public double? AnnualGrowthRate 
+        { 
+            get { return annualGrowthRate; }
+            set { annualGrowthRate = value;}
+        }
         public double AnnualGrowthRateValue { get { return annualGrowthRate ?? 0; } }
         protected double? affinityMultiplier;
         public double? AffinityMultiplier { get { return affinityMultiplier; } }

@@ -50,5 +50,25 @@ namespace GurpsSpace.SpeciesCreation
             }
             return (null, null);
         }
+
+        public double? GetStartingColonyPopulation(Species s)
+        {
+            string question = "Enter the population size used to start a new colony.  Human default is 10,000.";
+            InputString input = new InputString(question,s.StartingColonyPopulation.ToString()??"",true);
+            if (input.ShowDialog() == true)
+                return double.Parse(input.Answer);
+            else
+                return null;
+        }
+
+        public double? GetAnnualGrowthRate(Species s)
+        {
+            string question = "Enter the annual percentage increase in population size.  Human default is 2.3%.";
+            InputString input = new InputString(question, s.AnnualGrowthRate.ToString() ?? "", true);
+            if (input.ShowDialog() == true)
+                return double.Parse(input.Answer) / 100;
+            else
+                return null;
+        }
     }
 }

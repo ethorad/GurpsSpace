@@ -71,6 +71,16 @@ namespace GurpsSpace.SpeciesCreation
                         vmSpecies.DoesNotEatOrDrink = noEatOrDrink;
                     }
                     break;
+                case "StartingColonyPopulation":
+                    double? colonyPop = sc.GetStartingColonyPopulation(vmSpecies.Species);
+                    if (colonyPop != null)
+                        vmSpecies.StartingColonyPopulation = colonyPop;
+                    break;
+                case "AnnualGrowthRate":
+                    double? growth = sc.GetAnnualGrowthRate(vmSpecies.Species);
+                    if (growth != null)
+                        vmSpecies.AnnualGrowthRate = growth;
+                    break;
             }
         }
 

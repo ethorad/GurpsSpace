@@ -13,5 +13,9 @@ namespace GurpsSpace.SpeciesCreation
         eSpeciesDiet? GetDiet(Species s);
 
         (int?, bool?) GetConsumption(Species s);
+
+        double? GetStartingColonyPopulation(Species s);
+
+        double? GetAnnualGrowthRate(Species s);
     }
 }

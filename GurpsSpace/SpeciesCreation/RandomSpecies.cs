@@ -88,5 +88,17 @@ namespace GurpsSpace.SpeciesCreation
             return (consumption, noEatOrDrink);
 
         }
+
+        public double? GetStartingColonyPopulation(Species s)
+        {
+            return 42;
+        }
+
+        public double? GetAnnualGrowthRate(Species s)
+        {
+            // human is 2.3%
+            // choose a random number between 0.5% and 5.0%
+            return Math.Round((double)DiceBag.Rand(5, 50) / 10 / 100, 3);
+        }
     }
 }
