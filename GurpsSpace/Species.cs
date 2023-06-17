@@ -3,50 +3,117 @@ using System.ComponentModel;
 
 namespace GurpsSpace
 {
-    public class Species : INotifyPropertyChanged
+    public class Species
     {
-        protected string name;
-        public string Name { get { return name; } }
-        private string description; public string Description { get { return description; } }
-        protected Setting setting; public Setting Setting { get { return setting; } }
-        protected eSpeciesDiet diet; public eSpeciesDiet Diet { get { return diet; } }
-        protected int increasedConsumption; public int IncreasedConsumption { get { return increasedConsumption; } }
-        protected int reducedConsumption; public int ReducedConsumption { get { return reducedConsumption; } }
-        protected bool doesNotEatOrDrink; public bool DoesNotEatOrDrink { get { return doesNotEatOrDrink; } }
-        protected long startingColonyPopulation; public long StartingColonyPopulation { get { return startingColonyPopulation; } }
-        protected double annualGrowthRate; public double AnnualGrowthRate { get { return annualGrowthRate; } }
-        protected double affinityMultiplier; public double AffinityMultiplier { get { return affinityMultiplier; } }
+        protected Setting setting;
+        public Setting Setting { get { return setting; } }
+
+        protected string? name;
+        public string? Name { get { return name; } set { name = value; } }
+        protected string? description;
+        public string? Description { get { return description; } set { description = value; } }
+        protected eSpeciesDiet? diet;
+        public eSpeciesDiet? Diet { get { return diet; } set { diet = value; } }
+        protected int? consumption;
+        public int? Consumption
+        { 
+            get { return consumption; }
+            set 
+            {
+                consumption = value;
+                if (value == null) // if this is null, also null out doesn't eat or drink
+                    doesNotEatOrDrink = null;
+                else if (value != 0) // if this is non-zero, then does not eat or drink has to be false
+                    doesNotEatOrDrink = false;
+            }
+
+        }
+        public int? IncreasedConsumption
+        { 
+            get 
+            { 
+                if (consumption == null) 
+                    return null;
+                if (consumption > 0)
+                    return consumption;
+                return 0;
+            }
+            set { consumption = value; }
+        }
+        public int? ReducedConsumption
+        {
+            get
+            {
+                if (consumption == null)
+                    return null;
+                if (consumption < 0)
+                    return -consumption;
+                return 0;
+            }
+            set { consumption = -value; }
+        }
+        protected bool? doesNotEatOrDrink;
+        public bool? DoesNotEatOrDrink 
+        { 
+            get { return doesNotEatOrDrink; }
+            set
+            {
+                doesNotEatOrDrink = value;
+                if (value == null)
+                    consumption = null; // if this is null, also null out consumption
+                if (value == true)
+                    consumption = 0; // if they don't eat or drink, remove any levels of consumption
+            }
+        }
+        protected double? startingColonyPopulation;
+        public double? StartingColonyPopulation
+        { 
+            get { return startingColonyPopulation; }
+            set { startingColonyPopulation = value; }
+        }
+        public double StartingColonyPopulationValue { get { return startingColonyPopulation ?? 0; } }
+        protected double? annualGrowthRate;
+        public double? AnnualGrowthRate 
+        { 
+            get { return annualGrowthRate; }
+            set { annualGrowthRate = value;}
+        }
+        public double AnnualGrowthRateValue { get { return annualGrowthRate ?? 0; } }
+        protected double? affinityMultiplier;
+        public double? AffinityMultiplier
+        { 
+            get { return affinityMultiplier; }
+            set {  affinityMultiplier = value;}
+        }
+        public double AffinityMultiplierValue { get { return affinityMultiplier ?? 1; } }
 
 
+        public Species(Setting setting)
+        {
+            this.setting = setting;
+        }
         public Species(Setting setting, string name, string description,
-            eSpeciesDiet diet, int increasedConsumption, int reducedConsumption, bool doesNotEatOrDrink,
+            eSpeciesDiet diet, int consumption, bool doesNotEatOrDrink,
             long startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
         {
             this.setting = setting;
             this.name = name;
             this.description = description;
             this.diet = diet;
-            this.increasedConsumption = increasedConsumption;
-            this.reducedConsumption = reducedConsumption;
+            this.consumption = consumption;
             this.doesNotEatOrDrink = doesNotEatOrDrink;
             this.startingColonyPopulation = startingColonyPopulation;
             this.annualGrowthRate = annualGrowthRate;
             this.affinityMultiplier = affinityMultiplier;
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
         }
         public Species(Setting s, string name) : this(s, name, "A generic species",
-            eSpeciesDiet.Omnivore, 0, 0, false,
+            eSpeciesDiet.Omnivore, 0, false,
             10000, 0.023, 2)
-        {
-
-        }
+        { }
         public Species(Setting s, string name, string description) : this(s, name, description,
-            eSpeciesDiet.Omnivore, 0, 0, false,
+            eSpeciesDiet.Omnivore, 0, false,
             10000, 0.023, 2)
-        {
-
-        }
+        { }
 
         public virtual int Habitability(Planet p)
         {
@@ -135,7 +202,7 @@ namespace GurpsSpace
 
             long carryCap = (long)defaultCarryCap;
 
-            carryCap = RuleBook.RoundToSignificantFigures(carryCap,2);
+            carryCap = RuleBook.RoundToSignificantFigures(carryCap, 2);
 
             return carryCap;
         }
@@ -160,11 +227,12 @@ namespace GurpsSpace
         }
         protected double CarryingCapacityIncreasedConsumptionModifier()
         {
-            return Math.Pow(2, -IncreasedConsumption);
+            double power = IncreasedConsumption ?? 0;
+            return Math.Pow(2, -power);
         }
         protected double CarryingCapacityReducedConsumptionModifier()
         {
-            if (DoesNotEatOrDrink)
+            if (DoesNotEatOrDrink ?? false)
                 return 1; // the modifier for doesn't eat or drink supersedes this
             else if (ReducedConsumption == 0)
                 return 1;
@@ -179,12 +247,11 @@ namespace GurpsSpace
         }
         protected double CarryingCapacityDoesNotEatOrDrinkModifier()
         {
-            if (DoesNotEatOrDrink)
+            if (DoesNotEatOrDrink ?? false)
                 return 10;
             else
                 return 1;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

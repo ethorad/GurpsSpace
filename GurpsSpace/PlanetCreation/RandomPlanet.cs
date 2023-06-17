@@ -334,7 +334,7 @@ namespace GurpsSpace.PlanetCreation
             return pop;
         }
         private double GetPopulationColony(Planet p)
-        { 
+        {
             // rather than using the table directly, instead calculating based on the box on page 93
             // each race has a starting colony size, a growth rate, and an affinity multiplier
 
@@ -347,7 +347,7 @@ namespace GurpsSpace.PlanetCreation
             Species s = p.LocalSpecies;
 
             int ageInDecades = p.ColonyAge / 10;
-            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplier) / Math.Log(1 + s.AnnualGrowthRate) / 10, 0);
+            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
             int roll = DiceBag.Roll(3) + p.AffinityScore * affinityMod + ageInDecades;
@@ -356,7 +356,7 @@ namespace GurpsSpace.PlanetCreation
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
             // then calculate the population
-            double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
+            double population = s.StartingColonyPopulationValue * Math.Pow(1 + s.AnnualGrowthRateValue, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
             if (population > s.CarryingCapacity(p))
                 population = s.CarryingCapacity(p);

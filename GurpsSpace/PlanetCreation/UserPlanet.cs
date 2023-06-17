@@ -184,9 +184,9 @@ namespace GurpsSpace.PlanetCreation
         {
             List<(int, string, string)> options = new List<(int, string, string)>();
             int? initial = null;
-            for (int i=0;i<p.Setting.Species.Count;i++)
+            for (int i = 0; i < p.Setting.Species.Count; i++)
             {
-                options.Add((i, p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description));
+                options.Add((i, p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description ?? ""));
                 if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
                     initial = i;
             }
@@ -299,7 +299,7 @@ namespace GurpsSpace.PlanetCreation
             Species s = p.LocalSpecies;
 
             int ageInDecades = p.ColonyAge / 10;
-            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplier) / Math.Log(1 + s.AnnualGrowthRate) / 10, 0);
+            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
             int roll = 10 + p.AffinityScore * affinityMod + ageInDecades; // assuming a roll of 10
@@ -308,13 +308,13 @@ namespace GurpsSpace.PlanetCreation
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
             // then calculate the population
-            double population = s.StartingColonyPopulation * Math.Pow(1 + s.AnnualGrowthRate, effectiveDecadesOfGrowth * 10);
+            double population = s.StartingColonyPopulationValue * Math.Pow(1 + s.AnnualGrowthRateValue, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
             if (population > s.CarryingCapacity(p))
                 population = s.CarryingCapacity(p);
 
             string question = "Enter the colony population below. ";
-            question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulation.ToString("N0") + ". ";
+            question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulationValue.ToString("N0") + ". ";
             question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
             InputString inDiag = new InputString(question, p.Population.ToString("N0"), true);
