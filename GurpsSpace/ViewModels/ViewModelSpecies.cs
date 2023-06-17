@@ -116,6 +116,11 @@ namespace GurpsSpace.SpeciesCreation
                     return (species.AnnualGrowthRateValue * 100).ToString("N1") + "%";
             }
         }
+        public double? AffinityMultiplier
+        {
+            get { return species.AffinityMultiplier; }
+            set { Species.AffinityMultiplier = value; MemberUpdated(); }
+        }
         public string AffinityMultiplierString
         {
             get

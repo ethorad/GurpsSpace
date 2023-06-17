@@ -17,5 +17,7 @@ namespace GurpsSpace.SpeciesCreation
         double? GetStartingColonyPopulation(Species s);
 
         double? GetAnnualGrowthRate(Species s);
+
+        double? GetAffinityMultiplier(Species s);
     }
 }

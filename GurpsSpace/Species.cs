@@ -80,7 +80,11 @@ namespace GurpsSpace
         }
         public double AnnualGrowthRateValue { get { return annualGrowthRate ?? 0; } }
         protected double? affinityMultiplier;
-        public double? AffinityMultiplier { get { return affinityMultiplier; } }
+        public double? AffinityMultiplier
+        { 
+            get { return affinityMultiplier; }
+            set {  affinityMultiplier = value;}
+        }
         public double AffinityMultiplierValue { get { return affinityMultiplier ?? 1; } }
 
 

@@ -127,5 +127,13 @@ namespace GurpsSpace.SpeciesCreation
             // choose a random number between 0.5% and 5.0%
             return Math.Round((double)DiceBag.Rand(5, 50) / 10 / 100, 3);
         }
+
+        public double? GetAffinityMultiplier(Species s)
+        {
+            // assume a value between 1 + 3d/10 gives a value from 1.3 to 2.8 centered around 2
+            // and 2 is the Human default
+
+            return 1 + (double)DiceBag.Roll(3) / 10;
+        }
     }
 }

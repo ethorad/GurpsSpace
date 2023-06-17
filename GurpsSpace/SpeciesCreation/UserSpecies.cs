@@ -70,5 +70,16 @@ namespace GurpsSpace.SpeciesCreation
             else
                 return null;
         }
+
+        public double? GetAffinityMultiplier(Species s)
+        {
+            string question = "Enter the multiplier to population for each +1 in planetary affinity.";
+            question += "\r\nHuman default is 2, which doubles the population for each +1.";
+            InputString input = new InputString(question, s.AffinityMultiplier.ToString() ?? "", true);
+            if (input.ShowDialog() == true)
+                return double.Parse(input.Answer);
+            else
+                return null;
+        }
     }
 }

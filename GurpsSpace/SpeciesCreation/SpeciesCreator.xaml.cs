@@ -81,6 +81,11 @@ namespace GurpsSpace.SpeciesCreation
                     if (growth != null)
                         vmSpecies.AnnualGrowthRate = growth;
                     break;
+                case "AffinityMultiplier":
+                    double? mult = sc.GetAffinityMultiplier(vmSpecies.Species);
+                    if (mult!=null)
+                        vmSpecies.AffinityMultiplier = mult;
+                    break;
             }
         }
 
