@@ -19,6 +19,7 @@ namespace GurpsSpace
             s.AddSpecies(new Species(s, "Eldar", "Noble and arrogant."));
             s.AddSpecies(new Species(s, "Orks", "Savage and warlike."));
             vmSetting = new ViewModelSetting(s);
+            cmbPlanets.ItemsSource = vmSetting.PlanetList.Planets;
             this.DataContext = vmSetting;
         }
 
@@ -29,8 +30,18 @@ namespace GurpsSpace
             if (creator.ShowDialog()==true)
             {
                 vmSetting.Add(creator.Planet);
+                cmbPlanets.SelectedIndex = cmbPlanets.Items.Count - 1;
             }
         }
+        private void btnEditPlanet(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Editing");
+        }
+        private void btnDeletePlanet(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Delete");
+        }
+
         private void btnCreateSpecies(object sender, RoutedEventArgs e)
         {
             SpeciesCreator creator = new(s);
