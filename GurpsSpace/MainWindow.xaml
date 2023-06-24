@@ -48,8 +48,16 @@
 
         <GroupBox Header="Planet Creation">
             <WrapPanel>
-                <Button Click="btnCreatePlanet">New Planet</Button>
-                <Label Content="{Binding Path=PlanetList.Planets[0].Name, Mode=OneWay}"/>
+                <ComboBox Name="cmbPlanets" Width="150">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Click="btnCreatePlanet">New</Button>
+                <Button Click="btnEditPlanet">Edit</Button>
+                <Button Click="btnDeletePlanet">Delete</Button>
             </WrapPanel>
         </GroupBox>
         

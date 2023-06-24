@@ -64,6 +64,19 @@ namespace GurpsSpace.ViewModels
             setting.Species.Add(s);
             MemberUpdated();
         }
+        public void Remove(Planet p)
+        {
+            for (int i=0; i<planetList.Count; i++)
+            {
+                if (planetList.Planets[i].Planet == p)
+                {
+                    setting.Planets.RemoveAt(i);
+                    planetList.Planets.RemoveAt(i);
+                    MemberUpdated();
+                    break;
+                }
+            }
+        }
 
     }
 }

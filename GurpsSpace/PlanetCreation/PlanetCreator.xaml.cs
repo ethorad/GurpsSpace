@@ -16,9 +16,25 @@ namespace GurpsSpace.PlanetCreation
         private IPlanetCreator randomiser;
         private IPlanetCreator userInput;
 
+// disabling warnings on non-nullable fields not being set up in the constructor
+// This is because they are given values in the SetUp() call in the constructor but the compiler doesn't notice
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public PlanetCreator(Setting setting)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Planet = new(setting);
+            SetUp();
+        }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public PlanetCreator(Planet p)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        {
+            Planet = p;
+            SetUp();
+        }
+        private void SetUp()
+        {
             vmPlanet = new ViewModelPlanet(Planet);
             randomiser = new RandomPlanet();
             userInput = new UserPlanet();
@@ -260,11 +276,6 @@ namespace GurpsSpace.PlanetCreation
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
-        }
-
-        private void btnTest_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(vmPlanet.PopulationRating.ToString());
         }
 
         private void btnViewInstallation_Click(object sender, RoutedEventArgs e)

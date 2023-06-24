@@ -6,7 +6,11 @@ namespace GurpsSpace.PlanetCreation
     public class ViewModelPlanet : ViewModel
     {
         private Planet planet;
-        public Planet Planet { get { return planet; } }
+        public Planet Planet
+        { 
+            get { return planet; } 
+            set { planet = value; MemberUpdated(); }
+        }
 
         public ViewModelPlanet(Planet p)
         {
@@ -245,7 +249,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public string LocalSpeciesName
         {
-            get { return planet.LocalSpecies.Name; }
+            get { return planet.LocalSpecies.Name ?? "tbc"; }
         }
         public int AffinityScore { get { return planet.AffinityScore; } }
         public string AffinityString

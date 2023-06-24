@@ -19,6 +19,7 @@ namespace GurpsSpace
             s.AddSpecies(new Species(s, "Eldar", "Noble and arrogant."));
             s.AddSpecies(new Species(s, "Orks", "Savage and warlike."));
             vmSetting = new ViewModelSetting(s);
+            cmbPlanets.ItemsSource = vmSetting.PlanetList.Planets;
             this.DataContext = vmSetting;
         }
 
@@ -29,8 +30,28 @@ namespace GurpsSpace
             if (creator.ShowDialog()==true)
             {
                 vmSetting.Add(creator.Planet);
+                cmbPlanets.SelectedIndex = cmbPlanets.Items.Count - 1;
             }
         }
+        private void btnEditPlanet(object sender, RoutedEventArgs e)
+        {
+            // take a copy of the selected planet, and only replace it if we clicked OK
+            // as otherwise changes on the creator screen immediately flow back to the item
+            ViewModelPlanet selected = (ViewModelPlanet)cmbPlanets.SelectedItem;
+            Planet p = new Planet(selected.Planet);
+
+            PlanetCreator creator = new(p);
+            if(creator.ShowDialog()==true)
+            {
+                selected.Planet = p;
+            }
+        }
+        private void btnDeletePlanet(object sender, RoutedEventArgs e)
+        {
+            ViewModelPlanet selected = (ViewModelPlanet)cmbPlanets.SelectedItem;
+            vmSetting.Remove(selected.Planet);
+        }
+
         private void btnCreateSpecies(object sender, RoutedEventArgs e)
         {
             SpeciesCreator creator = new(s);
