@@ -464,6 +464,45 @@ namespace GurpsSpace
             CheckRanges();
         }
 
+        // disabling this check as the non-nullable fields all get set in the various set properties
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public Planet(Planet p)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        {
+            // creates a copy of p
+            Setting = p.Setting; // don't need to copy this since not editing the setting
+            Name = p.Name;
+            Description=p.Description;
+            Size = p.Size;
+            Subtype = p.Subtype;
+            AtmosphericMass = p.AtmosphericMass;
+            AtmosphericConditions = p.AtmosphericConditions;
+            AtmosphericDescription = p.AtmosphericDescription;
+            HydrographicCoverage = p.HydrographicCoverage;
+            AverageSurfaceTempK = p.AverageSurfaceTempK;
+            Density = p.Density;
+            Gravity = p.Gravity;
+            LocalSpecies =p.LocalSpecies; // don't need to copy this since aren't going to edit the species here
+            LocalTechLevel = p.LocalTechLevel;
+            LocalTechLevelRelativity = p.LocalTechLevelRelativity;
+            ResourceValueCategory = p.ResourceValueCategory;
+            SettlementType = p.SettlementType;
+            Interstellar = p.Interstellar;
+            ColonyAge = p.ColonyAge;
+            Population = p.Population;
+            WorldUnityLevel = p.WorldUnityLevel;
+            GovernmentSpecialConditions = p.GovernmentSpecialConditions;
+            SocietyType = p.SocietyType;
+            ControlRating = p.ControlRating;
+            TradeVolume = p.TradeVolume;
+            SpaceportClass = p.SpaceportClass;
+            Installations = new List<Installation>(); // copy this so we don't edit the origial's installation list
+            foreach (Installation inst in p.Installations)
+            {
+                Installations.Add(new Installation(inst.Type, inst.Subtype, inst.PR));
+            }
+        }
+
         private void CheckRanges()
         {
 

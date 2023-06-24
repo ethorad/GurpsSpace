@@ -35,19 +35,21 @@ namespace GurpsSpace
         }
         private void btnEditPlanet(object sender, RoutedEventArgs e)
         {
-            Planet p = ((ViewModelPlanet)cmbPlanets.SelectedItem).Planet;
+            // take a copy of the selected planet, and only replace it if we clicked OK
+            // as otherwise changes on the creator screen immediately flow back to the item
+            ViewModelPlanet selected = (ViewModelPlanet)cmbPlanets.SelectedItem;
+            Planet p = new Planet(selected.Planet);
+
             PlanetCreator creator = new(p);
             if(creator.ShowDialog()==true)
             {
-                // do something
-                // at the moment, the creator window edits the actual planet
-                // so even if you cancel the changes are made
-                // also the drop down list doesn't update
+                selected.Planet = p;
             }
         }
         private void btnDeletePlanet(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Delete");
+            ViewModelPlanet selected = (ViewModelPlanet)cmbPlanets.SelectedItem;
+            vmSetting.Remove(selected.Planet);
         }
 
         private void btnCreateSpecies(object sender, RoutedEventArgs e)

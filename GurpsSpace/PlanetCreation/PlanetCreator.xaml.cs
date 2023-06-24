@@ -278,11 +278,6 @@ namespace GurpsSpace.PlanetCreation
             this.DialogResult = true;
         }
 
-        private void btnTest_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(vmPlanet.PopulationRating.ToString());
-        }
-
         private void btnViewInstallation_Click(object sender, RoutedEventArgs e)
         {
             InstallationsList instWindow = new InstallationsList(new ViewModelInstallationList(Planet.Installations));
