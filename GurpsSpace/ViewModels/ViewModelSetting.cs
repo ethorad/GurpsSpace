@@ -12,11 +12,11 @@ namespace GurpsSpace.ViewModels
     internal class ViewModelSetting : ViewModel
     {
         private Setting setting;
-        private ViewModelPlanetList planetList;
-        public ViewModelPlanetList PlanetList { get { return planetList; } }
+        private ViewModelList<ViewModelPlanet> planetList;
+        public ViewModelList<ViewModelPlanet> PlanetList { get { return  planetList; } }
 
-        private ViewModelSpeciesList speciesList;
-        public ViewModelSpeciesList SpeciesList { get { return speciesList; } }
+        private ViewModelList<ViewModelSpecies> speciesList;
+        public ViewModelList<ViewModelSpecies> SpeciesList { get { return speciesList; } }
 
         public Species MainSpecies { get { return setting.MainSpecies; } }
 
@@ -53,30 +53,34 @@ namespace GurpsSpace.ViewModels
         public ViewModelSetting(Setting setting)
         {
             this.setting = setting;
-            planetList = new ViewModelPlanetList(setting.Planets);
-            speciesList = new ViewModelSpeciesList(setting.Species);
+            planetList = new ViewModelList<ViewModelPlanet>();
+            foreach (Planet p in setting.Planets)
+                planetList.Add(new ViewModelPlanet(p));
+            speciesList = new ViewModelList<ViewModelSpecies>();
+            foreach(Species s in setting.Species)
+                speciesList.Add(new ViewModelSpecies(s));
         }
 
         public void Add(Planet p)
         {
             setting.Planets.Add(p);
-            planetList.Add(p);
+            planetList.Add(new ViewModelPlanet(p));
             MemberUpdated();
         }
         public void Add(Species s)
         {
             setting.Species.Add(s);
-            speciesList.Add(s);
+            speciesList.Add(new ViewModelSpecies(s));
             MemberUpdated();
         }
         public void Remove(Planet p)
         {
             for (int i=0; i<planetList.Count; i++)
             {
-                if (planetList.Planets[i].Planet == p)
+                if (planetList.Items[i].Planet == p)
                 {
                     setting.Planets.RemoveAt(i);
-                    planetList.Planets.RemoveAt(i);
+                    planetList.Items.RemoveAt(i);
                     MemberUpdated();
                     break;
                 }
@@ -86,10 +90,10 @@ namespace GurpsSpace.ViewModels
         {
             for (int i=0;i<speciesList.Count;i++)
             {
-                if (speciesList.Species[i].Species == s)
+                if (speciesList.Items[i].Species == s)
                 {
                     setting.Species.RemoveAt(i);
-                    speciesList.Species.RemoveAt(i);
+                    speciesList.Items.RemoveAt(i);
                     MemberUpdated();
                     break;
                 }

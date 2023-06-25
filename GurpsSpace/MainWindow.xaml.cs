@@ -19,8 +19,8 @@ namespace GurpsSpace
             s.AddSpecies(new Species(s, "Eldar", "Noble and arrogant."));
             s.AddSpecies(new Species(s, "Orks", "Savage and warlike."));
             vmSetting = new ViewModelSetting(s);
-            cmbPlanets.ItemsSource = vmSetting.PlanetList.Planets;
-            cmbSpecies.ItemsSource = vmSetting.SpeciesList.Species;
+            cmbPlanets.ItemsSource = vmSetting.PlanetList.Items;
+            cmbSpecies.ItemsSource = vmSetting.SpeciesList.Items;
             this.DataContext = vmSetting;
         }
 
