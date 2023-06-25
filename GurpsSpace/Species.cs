@@ -6,7 +6,7 @@ namespace GurpsSpace
     public class Species
     {
         protected Setting setting;
-        public Setting Setting { get { return setting; } }
+        public Setting Setting { get { return setting; } set { setting = value; } }
 
         protected string? name;
         public string? Name { get { return name; } set { name = value; } }
@@ -114,6 +114,23 @@ namespace GurpsSpace
             eSpeciesDiet.Omnivore, 0, false,
             10000, 0.023, 2)
         { }
+
+        // disabling this check as the non-nullable fields all get set in the various set properties
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public Species(Species s)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        {
+            // creates a copy of s
+            Setting = s.Setting; // don't need to copy this since not editing the setting
+            Name = s.Name;
+            Description = s.Description;
+            Diet = s.Diet;
+            Consumption = s.Consumption;
+            DoesNotEatOrDrink = s.DoesNotEatOrDrink;
+            StartingColonyPopulation = s.StartingColonyPopulation;
+            AnnualGrowthRate = s.AnnualGrowthRate;
+            AffinityMultiplier = s.AffinityMultiplier;
+        }
 
         public virtual int Habitability(Planet p)
         {
