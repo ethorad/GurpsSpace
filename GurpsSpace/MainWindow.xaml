@@ -41,8 +41,16 @@
 
         <GroupBox Header="Species Creation">
             <WrapPanel>
-                <Button Click="btnCreateSpecies">New Species</Button>
-                <Label Content="{Binding Path=SpeciesList[0].Name, Mode=OneWay}"/>
+                <ComboBox Name="cmbSpecies" Width="150">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Click="btnCreateSpecies">New</Button>
+                <Button Click="btnEditSpecies">Edit</Button>
+                <Button Click="btnDeleteSpecies">Delete</Button>
             </WrapPanel>
         </GroupBox>
 

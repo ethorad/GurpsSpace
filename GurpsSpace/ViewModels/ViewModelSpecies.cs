@@ -9,7 +9,11 @@ namespace GurpsSpace.SpeciesCreation
     public class ViewModelSpecies : ViewModel
     {
         private Species species;
-        public Species Species { get { return species; } }
+        public Species Species
+        { 
+            get { return species; }
+            set { species = value; MemberUpdated(); }
+        }
         public string? Name
         {
             get { return species.Name ?? "tbc"; }

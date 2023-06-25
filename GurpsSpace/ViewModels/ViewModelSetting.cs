@@ -1,4 +1,5 @@
 ﻿using GurpsSpace.PlanetCreation;
+using GurpsSpace.SpeciesCreation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +15,9 @@ namespace GurpsSpace.ViewModels
         private ViewModelPlanetList planetList;
         public ViewModelPlanetList PlanetList { get { return planetList; } }
 
-        public List<Species> SpeciesList { get { return setting.Species; } }
+        private ViewModelSpeciesList speciesList;
+        public ViewModelSpeciesList SpeciesList { get { return speciesList; } }
+
         public Species MainSpecies { get { return setting.MainSpecies; } }
 
         public string Name
@@ -51,6 +54,7 @@ namespace GurpsSpace.ViewModels
         {
             this.setting = setting;
             planetList = new ViewModelPlanetList(setting.Planets);
+            speciesList = new ViewModelSpeciesList(setting.Species);
         }
 
         public void Add(Planet p)
@@ -62,6 +66,7 @@ namespace GurpsSpace.ViewModels
         public void Add(Species s)
         {
             setting.Species.Add(s);
+            speciesList.Add(s);
             MemberUpdated();
         }
         public void Remove(Planet p)
@@ -72,6 +77,19 @@ namespace GurpsSpace.ViewModels
                 {
                     setting.Planets.RemoveAt(i);
                     planetList.Planets.RemoveAt(i);
+                    MemberUpdated();
+                    break;
+                }
+            }
+        }
+        public void Remove(Species s)
+        {
+            for (int i=0;i<speciesList.Count;i++)
+            {
+                if (speciesList.Species[i].Species == s)
+                {
+                    setting.Species.RemoveAt(i);
+                    speciesList.Species.RemoveAt(i);
                     MemberUpdated();
                     break;
                 }

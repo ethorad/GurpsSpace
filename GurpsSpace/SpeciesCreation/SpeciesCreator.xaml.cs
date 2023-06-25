@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GurpsSpace.PlanetCreation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,15 +26,28 @@ namespace GurpsSpace.SpeciesCreation
         private ISpeciesCreator randomiser;
         private ISpeciesCreator userInput;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public SpeciesCreator(Setting s)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Species = new Species(s);
+            SetUp();
+        }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public SpeciesCreator(Species s)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        {
+            Species = s;
+            SetUp();
+        }
+        private void SetUp()
+        {
             vmSpecies = new ViewModelSpecies(Species);
-
             randomiser = new RandomSpecies();
             userInput = new UserSpecies();
 
             InitializeComponent();
+
             this.DataContext = vmSpecies;
         }
 
