@@ -23,7 +23,10 @@ namespace GurpsSpace
             cmbSpecies.ItemsSource = vmSetting.SpeciesList.Items;
             this.DataContext = vmSetting;
         }
-
+        private void btnExitApp(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
 
         private void btnCreatePlanet(object sender, RoutedEventArgs e)
         {
@@ -92,6 +95,7 @@ namespace GurpsSpace
                 MessageBox.Show(testDiag.Answer);
             }
         }
+
 
     }
 }
