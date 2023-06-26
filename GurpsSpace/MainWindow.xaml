@@ -7,7 +7,18 @@
         mc:Ignorable="d"
         Title="GURPS Space" Width="400" SizeToContent="Height">
 
+
     <StackPanel Orientation="Vertical">
+
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Header="E_xit" Click="btnExitApp"/>
+            </MenuItem>
+            <MenuItem Header="_Create">
+                <MenuItem Header="_Species" Click="btnCreateSpecies"/>
+                <MenuItem Header="_Planet" Click="btnCreatePlanet"/>
+            </MenuItem>
+        </Menu>
 
         <GroupBox Header="Setting">
             <Grid>
