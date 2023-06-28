@@ -29,14 +29,12 @@ namespace GurpsSpace.PlanetCreation
             get { return planet.Name ?? "tbc"; }
             set { planet.Name = value; MemberUpdated(); }
         }
-        public eSize? Size
+        public eSize Size
         {
-            get { return planet.Size; }
             set { planet.Size = value; MemberUpdated(); }
         }
-        public eSubtype? Subtype
+        public eSubtype Subtype
         {
-            get { return planet.Subtype; }
             set { planet.Subtype = value; MemberUpdated(); }
         }
         public string TypeString
@@ -89,12 +87,7 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                if (!planet.HasAtmosphere) // no atmosphere
-                    return "n/a";
-                if (planet.HasAtmosphere && planet.AtmosphericDescription == "") // has atmosphere, but not yet set
-                    return "tbc";
-                else
-                    return planet.AtmosphericConditions.ToString();
+                return (planet.AtmosphericConditions.ToString()) ?? "tbc";
             }
         }
         public bool HasAtmosphericOptions
@@ -108,7 +101,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public string AtmosphericDescription
         {
-            get { return planet.AtmosphericDescription; }
+            get { return planet.AtmosphericDescription ?? "tbc"; }
             set { planet.AtmosphericDescription = value; MemberUpdated(); }
         }
         public string AtmosphericPressureString
@@ -139,7 +132,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public string LiquidType
         {
-            get { return planet.LiquidType.ToString(); }
+            get { return planet.LiquidType.ToString() ?? "tbc"; }
         }
 
         // Climate
@@ -162,7 +155,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public string ClimateTypeString
         {
-            get { return planet.ClimateType.ToString(); }
+            get { return planet.ClimateType.ToString() ?? "tbc"; }
         }
         public int BlackbodyTempK
         {
@@ -176,7 +169,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public string CoreTypeString
         {
-            get { return planet.CoreType.ToString(); }
+            get { return planet.CoreType.ToString() ?? "tbc"; }
         }
         public double MinDensity
         {
@@ -219,41 +212,50 @@ namespace GurpsSpace.PlanetCreation
             get { return planet.SettlementType; }
             set { planet.SettlementType = value; MemberUpdated(); }
         }
-        public bool HasSettlement { get { return planet.HasSettlement; } }
+        public bool HasSettlement { get { return planet.HasSettlement ?? false; } }
         public string SettlementTypeString
         {
             get
             {
-                string res = planet.SettlementType.ToString();
-                if (planet.SettlementType==eSettlementType.Colony)
+                if (planet.SettlementType == null)
+                    return "tbc";
+
+                string res = planet.SettlementType.ToString() ?? "tbc";
+                if (planet.SettlementType == eSettlementType.Colony)
                 {
-                    res += " (" + planet.ColonyAge.ToString("N0") + " years old)";
+                    if (planet.ColonyAge == null)
+                        res += " (age tbc)";
+                    else
+                        res += " (" + (planet.ColonyAge ?? 0).ToString("N0") + " years old)";
                 }
                 if (planet.SettlementType == eSettlementType.Homeworld)
                 {
-                    if (planet.Interstellar)
-                        res += " (Interstellar)";
-                    else
-                        res += " (Uncontacted)";
+                    if (planet.Interstellar != null)
+                    {
+                        if (planet.Interstellar ?? false)
+                            res += " (Interstellar)";
+                        else
+                            res += " (Uncontacted)";
+                    }
                 }
                 return res;
             }
         }
         public int ColonyAge
         {
-            get { return planet.ColonyAge; }
+            get { return (planet.ColonyAge ?? 0); }
             set { planet.ColonyAge = value; MemberUpdated(); }
         }
         public bool Interstellar
         {
-            get { return planet.Interstellar; }
+            get { return planet.Interstellar ?? true; }
             set { planet.Interstellar = value; MemberUpdated(); }
         }
         public string LocalSpeciesName
         {
             get { return planet.LocalSpecies.Name ?? "tbc"; }
         }
-        public int AffinityScore { get { return planet.AffinityScore; } }
+        public int AffinityScore { get { return (planet.AffinityScore ?? 0); } }
         public string AffinityString
         {
             get
@@ -265,7 +267,7 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
-        public int Habitability { get { return planet.Habitability; } }
+        public int Habitability { get { return (planet.Habitability ?? 0); } }
         public int LocalTechLevel
         {
             get { return planet.LocalTechLevel; }
@@ -303,7 +305,7 @@ namespace GurpsSpace.PlanetCreation
         }
 
         // habitants
-        public double CarryingCapacity { get { return planet.CarryingCapacity; } }
+        public double CarryingCapacity { get { return (planet.CarryingCapacity ?? 0); } }
         public double Population
         {
             get { return planet.Population; }
@@ -313,7 +315,7 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
-        public int PopulationRating { get { return planet.PopulationRating; } }
+        public int PopulationRating { get { return (planet.PopulationRating ?? 0); } }
         public string PopulationString
         {
             get
@@ -354,22 +356,26 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                string res = planet.SocietyType.ToString();
-                if (planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
+                string res = planet.SocietyType.ToString() ?? "tbc";
+                if (planet.GovernmentSpecialConditions != null
+                    && planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
                     res += " (" + planet.GovernmentSpecialConditions.ToString() + ")";
                 return res;
             }
         }
         public int ControlRating
         {
-            get { return planet.ControlRating; }
+            get { return (planet.ControlRating ?? 0); }
             set { planet.ControlRating = value; MemberUpdated(); }
         }
         public string ControlRatingString
         {
             get
             {
-                return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[ControlRating] + ")";
+                if (planet.ControlRating == null)
+                    return "tbc";
+                else
+                    return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[(planet.ControlRating ?? 0)] + ")";
             }
         }
 

@@ -530,11 +530,14 @@ namespace GurpsSpace
                 }
             }
         }
-        public eWealthLevel WealthLevel
+        public eWealthLevel? WealthLevel
         {
             get
             {
-                double relativeWealth = IncomePerCapita / Setting.AverageIncome;
+                if (IncomePerCapita == null)
+                    return null;
+
+                double relativeWealth = (IncomePerCapita ?? 0) / Setting.AverageIncome;
                 switch (relativeWealth)
                 {
                     case <= 0.09:
@@ -552,7 +555,13 @@ namespace GurpsSpace
         }
         public double EconomicVolume
         {
-            get { return RuleBook.RoundToSignificantFigures((double)IncomePerCapita * Population, 2); }
+            get
+            {
+                if (IncomePerCapita == null || Population == null)
+                    return null;
+                else
+                    return RuleBook.RoundToSignificantFigures((double)(IncomePerCapita ?? 0) * (Population ?? 0), 2);
+            }
         }
         private double tradeVolume;
         public double TradeVolume
