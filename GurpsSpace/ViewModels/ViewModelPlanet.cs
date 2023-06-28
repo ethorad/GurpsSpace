@@ -26,15 +26,15 @@ namespace GurpsSpace.PlanetCreation
         }
         public string Name
         {
-            get { return planet.Name; }
+            get { return planet.Name ?? "tbc"; }
             set { planet.Name = value; MemberUpdated(); }
         }
-        public eSize Size
+        public eSize? Size
         {
             get { return planet.Size; }
             set { planet.Size = value; MemberUpdated(); }
         }
-        public eSubtype Subtype
+        public eSubtype? Subtype
         {
             get { return planet.Subtype; }
             set { planet.Subtype = value; MemberUpdated(); }
@@ -43,9 +43,11 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                if ((planet.Size == eSize.None) || (planet.Subtype == eSubtype.None))
+                if ((Size == null) || (Subtype == null))
+                    return "tbc";
+                if ((Size == eSize.None) || (Subtype == eSubtype.None))
                     return "n/a";
-                if (planet.Size == eSize.AsteroidBelt)
+                if (Size == eSize.AsteroidBelt)
                     return "Asteroid Belt (" + planet.OverallType + ")";
                 else
                     return planet.Size + " " + planet.Subtype + " (" + planet.OverallType + ")";
@@ -65,7 +67,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public string Description
         {
-            get { return planet.Description; }
+            get { return planet.Description ?? "tbc"; }
             set { planet.Description = value; MemberUpdated(); }
         }
         public bool IsPlanet
@@ -393,7 +395,15 @@ namespace GurpsSpace.PlanetCreation
         }
         public string TradeVolumeString
         {
-            get { return "$" + TradeVolume.ToString("N0"); }
+            get 
+            {
+                if (Interstellar == true)
+                    return "$" + TradeVolume.ToString("N0");
+                else if (Interstellar == false)
+                    return "Uncontacted";
+                else
+                    return "tbc";
+            }
         }
         public int SpaceportClass
         {

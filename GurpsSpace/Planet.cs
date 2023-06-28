@@ -10,11 +10,11 @@ namespace GurpsSpace
         public Setting Setting { get { return setting; } set { setting = value; } }
 
         private PlanetParameters? parameters;
-        private string name;
-        public string Name { get { return name; } set { name = value; } }
-        public eOverallType OverallType { get { return (parameters == null) ? eOverallType.None : parameters.OverallType; } }
-        private string description;
-        public string Description
+        private string? name;
+        public string? Name { get { return name; } set { name = value; } }
+        public eOverallType? OverallType { get { return (parameters == null) ? null : parameters.OverallType; } }
+        private string? description;
+        public string? Description
         {
             get { return description; }
             set
@@ -22,55 +22,49 @@ namespace GurpsSpace
                 description = value;
             }
         }
-        private eSize size; 
-        public eSize Size
+        private eSize? size; 
+        public eSize SizeVal { get { return size ?? eSize.None; } }
+        public eSize? Size
         {
             get { return size; }
             set
             {
                 bool change = (size != value);
                 size = value;
-                if (RuleBook.PlanetParams.ContainsKey((Size, Subtype)))
-                    parameters = RuleBook.PlanetParams[(Size, Subtype)];
-                else
-                    parameters = null;
-                CheckRanges();
                 if (change)
                     PlanetTypeChanged();
             }
         }
-        private eSubtype subtype;
-        public eSubtype Subtype
+        private eSubtype? subtype;
+        public eSubtype SubtypeVal { get { return subtype?? eSubtype.None; } }
+        public eSubtype? Subtype
         {
             get { return subtype; }
             set
             {
                 bool change = (subtype != value);
                 subtype = value;
-                if (RuleBook.PlanetParams.ContainsKey((Size, Subtype)))
-                    parameters = RuleBook.PlanetParams[(Size, Subtype)];
-                else
-                    parameters = null;
-                CheckRanges();
                 if (change)
                     PlanetTypeChanged();
             }
         }
 
-        public bool IsPlanet
+        public bool? IsPlanet
         {
             get
             {
-                if (Size == eSize.None || Size == eSize.AsteroidBelt)
+                if (Size == null)
+                    return null;
+                else if (Size == eSize.None || Size == eSize.AsteroidBelt)
                     return false;
                 else
                     return true;
             }
         }
 
-        public bool HasAtmosphere { get { return (parameters == null) ? false : parameters.HasAtmosphere; } }
-        private double atmosphericMass;
-        public double AtmosphericMass
+        public bool? HasAtmosphere { get { return (parameters == null) ? null : parameters.HasAtmosphere; } }
+        private double? atmosphericMass;
+        public double? AtmosphericMass
         {
             get { return atmosphericMass; }
             set
@@ -81,27 +75,18 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public bool HasAtmosphericOptions { get { return (parameters == null) ? true : (parameters.AtmosphereANumber < 18); } }
-        private fAtmosphericConditions atmosphericConditions;
-        public fAtmosphericConditions AtmosphericConditions
+        public bool? HasAtmosphericOptions { get { return (parameters == null) ? null : (parameters.AtmosphereANumber < 18); } }
+        private fAtmosphericConditions? atmosphericConditions;
+        public fAtmosphericConditions? AtmosphericConditions
         {
             get { return atmosphericConditions; }
             set
             {
                 atmosphericConditions = value;
-                CheckRanges();
             }
         }
-        private string atmosphericDescription;
-        public string AtmosphericDescription
-        {
-            get { return atmosphericDescription; }
-            set
-            {
-                atmosphericDescription = value;
-                CheckRanges();
-            }
-        }
+        private string? atmosphericDescription;
+        public string? AtmosphericDescription { get { return atmosphericDescription; } set { atmosphericDescription = value; } }
         public bool IsSuffocating { get { return ((AtmosphericConditions & fAtmosphericConditions.Suffocating) == fAtmosphericConditions.Suffocating); } }
         public bool IsMildlyToxic { get { return ((AtmosphericConditions & fAtmosphericConditions.MildlyToxic) == fAtmosphericConditions.MildlyToxic); } }
         public bool IsHighlyToxic { get { return ((AtmosphericConditions & fAtmosphericConditions.HighlyToxic) == fAtmosphericConditions.HighlyToxic); } }
@@ -111,11 +96,11 @@ namespace GurpsSpace
         public bool IsMarginal { get { return ((AtmosphericConditions & fAtmosphericConditions.Marginal) == fAtmosphericConditions.Marginal); } }
         public bool IsBreathable { get { return ((AtmosphericMass > 0) && (!IsSuffocating) && (!IsToxic) && (!IsCorrosive)); } }
         
-        public bool HasLiquid { get { return (parameters == null) ? false : !(parameters.Liquid == eLiquid.None); } }
-        public double MinimumHydrographicCoverage { get { return (parameters == null) ? 0 : parameters.HydroMin; } }
-        public double MaximumHydrographicCoverage { get { return (parameters == null) ? 0 : parameters.HydroMax; } }
-        private double hydrographicCoverage;
-        public double HydrographicCoverage
+        public bool? HasLiquid { get { return (parameters == null) ? null : !(parameters.Liquid == eLiquid.None); } }
+        public double? MinimumHydrographicCoverage { get { return (parameters == null) ? null : parameters.HydroMin; } }
+        public double? MaximumHydrographicCoverage { get { return (parameters == null) ? null : parameters.HydroMax; } }
+        private double? hydrographicCoverage;
+        public double? HydrographicCoverage
         {
             get { return hydrographicCoverage; }
             set
@@ -126,13 +111,13 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public eLiquid LiquidType { get { return (parameters == null) ? eLiquid.None : parameters.Liquid; } }
+        public eLiquid? LiquidType { get { return (parameters == null) ? null : parameters.Liquid; } }
 
-        public int MinSurfaceTemperatureK { get { return (parameters == null) ? 0 : parameters.MinSurfaceTemperatureK; } }
-        public int MaxSurfaceTemperatureK { get { return (parameters == null) ? 0 : parameters.MaxSurfaceTemperatureK; } }
-        public int StepSurfaceTemperatureK { get { return (parameters == null) ? 0 : parameters.StepSurfaceTemperatureK; } }
-        private int averageSurfaceTempK;
-        public int AverageSurfaceTempK
+        public int? MinSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MinSurfaceTemperatureK; } }
+        public int? MaxSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MaxSurfaceTemperatureK; } }
+        public int? StepSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.StepSurfaceTemperatureK; } }
+        private int? averageSurfaceTempK;
+        public int? AverageSurfaceTempK
         {
             get { return averageSurfaceTempK; }
             set
@@ -141,12 +126,26 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public eClimateType ClimateType { get { return RuleBook.ClimateType(AverageSurfaceTempK); } }
-        public int BlackbodyTempK
+        public eClimateType? ClimateType
         {
             get
             {
-                double absorption = (parameters == null) ? 0 : parameters.BlackbodyAbsorption; 
+                if (AverageSurfaceTempK == null)
+                    return null;
+                else
+                    return RuleBook.ClimateType(AverageSurfaceTempK ?? 0); // OK to use ?? as we know it isn't null here
+            }
+        }
+        public int? BlackbodyTempK
+        {
+            get
+            {
+                // check for values we need
+                if (parameters == null || AtmosphericMass == null || AverageSurfaceTempK == null)
+                    return null;
+                // so can now use ?? on all nullable values
+
+                double absorption = (parameters == null) ? 0 : parameters.BlackbodyAbsorption;
                 double greenhouse = (parameters == null) ? 0 : parameters.BlackbodyGreenhouse;
 
                 if (Subtype == eSubtype.Ocean || Subtype == eSubtype.Garden)
@@ -161,19 +160,19 @@ namespace GurpsSpace
                         absorption = 0.84;
                 }
 
-                double bbCorrection = absorption * (1 + AtmosphericMass * greenhouse);
-                double bbTemp = AverageSurfaceTempK / bbCorrection;
+                double bbCorrection = absorption * (1 + (AtmosphericMass ?? 0) * greenhouse);
+                double bbTemp = (AverageSurfaceTempK ?? 0) / bbCorrection;
 
                 return ((int)Math.Round(bbTemp, 0));
             }
         }
 
-        public eCoreType CoreType { get { return (parameters == null) ? eCoreType.None : parameters.CoreType; } }
-        public double MinDensity
+        public eCoreType? CoreType { get { return (parameters == null) ? null : parameters.CoreType; } }
+        public double? MinDensity
         {
             get
             {
-                switch (CoreType)
+                switch (CoreType ?? eCoreType.None) // so falls to default if null
                 {
                     case eCoreType.Icy:
                         return RuleBook.DensityIcyCore[0];
@@ -182,15 +181,15 @@ namespace GurpsSpace
                     case eCoreType.LargeIron:
                         return RuleBook.DensityLargeIronCore[0];
                     default:
-                        return 0;
+                        return null;
                 }
             }
         }
-        public double MaxDensity
+        public double? MaxDensity
         {
             get
             {
-                switch (CoreType)
+                switch (CoreType ?? eCoreType.None) // so falls to default if null
                 {
                     case eCoreType.Icy:
                         return RuleBook.DensityIcyCore[20];
@@ -203,8 +202,8 @@ namespace GurpsSpace
                 }
             }
         }
-        private double density;
-        public double Density
+        private double? density;
+        public double? Density
         {
             get { return density; }
             set
@@ -213,26 +212,36 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public double MinGravity
+        public double? MinGravity
         {
             get
             {
+                // check for values we need
+                if (parameters == null || BlackbodyTempK == null || Density == null)
+                    return null;
+                // so can now use ?? on all nullable values
+
                 double minSizeFactor = (parameters == null) ? 0 : parameters.MinSizeFactor;
-                double minG = Math.Sqrt((double)BlackbodyTempK * Density) * minSizeFactor;
+                double minG = Math.Sqrt((double)(BlackbodyTempK ?? 0) * (Density ?? 0)) * minSizeFactor;
                 return Math.Round(minG, 2);
             }
         }
-        public double MaxGravity
+        public double? MaxGravity
         {
             get
             {
+                // check for values we need
+                if (parameters == null || BlackbodyTempK == null || Density == null)
+                    return null;
+                // so can now use ?? on all nullable values
+
                 double maxSizeFactor = (parameters == null) ? 0 : parameters.MaxSizeFactor;
-                double maxG = Math.Sqrt((double)BlackbodyTempK * Density) * maxSizeFactor;
+                double maxG = Math.Sqrt((double)(BlackbodyTempK ?? 0) * (Density ?? 0)) * maxSizeFactor;
                 return Math.Round(maxG, 2);
             }
         }
-        private double gravity;
-        public double Gravity
+        private double? gravity;
+        public double? Gravity
         {
             get { return gravity; }
             set
@@ -241,42 +250,71 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public double DiameterEarths 
+        public double? DiameterEarths
         {
             get
             {
-                if (Density == 0)
+                // check for values we need
+                if (Density == null || Gravity == null)
+                    return null;
+                // so can now use ?? on all nullable values
+
+                else if (Density == 0)
                     return 0;
                 else
-                    return Math.Round(Gravity / Density, 2);
+                    return Math.Round((Gravity ?? 0) / (Density ?? 0), 2);
             }
         }
-        public double DiameterMiles { get { return DiameterEarths * RuleBook.EarthDiameterInMiles; } }
-        public double Mass { get { return Density * DiameterEarths * DiameterEarths * DiameterEarths; } }
-
-        public double AtmosphericPressure
+        public double? DiameterMiles 
         {
             get
             {
-                double pressureFac = (parameters == null) ? 0 : parameters.PressureFactor;
-                return AtmosphericMass * pressureFac * Gravity;
-            }
+                if (DiameterEarths == null)
+                    return null;
+                else
+                    return (DiameterEarths ?? 0) * RuleBook.EarthDiameterInMiles;
+            } 
         }
-        public ePressureCategory AtmosphericPressureCategory { get { return RuleBook.PressureCategory(AtmosphericPressure); } }
-
-        private Species localSpecies;
-        public Species LocalSpecies
-        {
-            get { return localSpecies; }
-            set
+        public double? Mass 
+        { 
+            get 
             {
-                localSpecies = value;
-                CheckRanges();
+                if (Density == null || DiameterEarths == null)
+                    return null;
+                else
+                    return (Density ?? 0) * (DiameterEarths ?? 0) * (DiameterEarths ?? 0) * (DiameterEarths ?? 0); 
             }
         }
 
-        private int localTechLevel;
-        public int LocalTechLevel
+        public double? AtmosphericPressure
+        {
+            get
+            {
+                if (parameters == null || AtmosphericMass == null || Gravity == null)
+                    return null;
+                else
+                {
+                    double pressureFac = (parameters == null) ? 0 : parameters.PressureFactor;
+                    return (AtmosphericMass ?? 0) * pressureFac * (Gravity ?? 0);
+                }
+            }
+        }
+        public ePressureCategory? AtmosphericPressureCategory 
+        {
+            get
+            {
+                if (AtmosphericPressure == null)
+                    return null;
+                else
+                    return RuleBook.PressureCategory((AtmosphericPressure ?? 0));
+            }
+        }
+
+        private Species? localSpecies;
+        public Species? LocalSpecies { get { return localSpecies; } set { localSpecies = value; } }
+
+        private int? localTechLevel;
+        public int? LocalTechLevel
         {
             get { return localTechLevel; }
             set
@@ -285,134 +323,212 @@ namespace GurpsSpace
                 localTechLevelRelativity = eTechLevelRelativity.Normal;
             }
         }
-        public string LocalTechLevelAge { get { return RuleBook.TechLevelParams[LocalTechLevel].Age; } }
-        private eTechLevelRelativity localTechLevelRelativity;
-        public eTechLevelRelativity LocalTechLevelRelativity
+        public string? LocalTechLevelAge 
+        { 
+            get 
+            {
+                if (LocalTechLevel == null)
+                    return null;
+                else
+                    return RuleBook.TechLevelParams[(LocalTechLevel ?? 0)].Age; 
+            } 
+        }
+        private eTechLevelRelativity? localTechLevelRelativity;
+        public eTechLevelRelativity? LocalTechLevelRelativity
         {
             get { return localTechLevelRelativity; }
             set { localTechLevelRelativity = value;}
         }
-        private eResourceValueCategory resourceValueCategory;
-        public eResourceValueCategory ResourceValueCategory
+        private eResourceValueCategory? resourceValueCategory;
+        public eResourceValueCategory? ResourceValueCategory { get { return resourceValueCategory; } set { resourceValueCategory = value; } }
+        public int? ResourceValueModifier 
         {
-            get { return resourceValueCategory; }
-            set
+            get
             {
-                resourceValueCategory = value;
-                CheckRanges();
+                if (ResourceValueCategory == null)
+                    return null;
+                else
+                    return (int)ResourceValueCategory;
+            } 
+        }
+        public int? Habitability
+        {
+            get
+            {
+                if (LocalSpecies == null)
+                    return null;
+                else
+                    return LocalSpecies.Habitability(this);
+            } 
+        }
+        public int? AffinityScore
+        {
+            get
+            {
+                if (ResourceValueModifier == null || Habitability == null)
+                    return null;
+                else
+                    return ResourceValueModifier + Habitability;
             }
         }
-        public int ResourceValueModifier { get { return (int)ResourceValueCategory; } }
-        public int Habitability { get { return LocalSpecies.Habitability(this); } }
-        public int AffinityScore { get { return ResourceValueModifier + Habitability; } }
 
-        private eSettlementType settlementType;
-        public eSettlementType SettlementType
+        private eSettlementType? settlementType;
+        public eSettlementType? SettlementType
         {
             get { return settlementType; }
             set
             {
                 bool change = (settlementType != value);
                 settlementType = value;
-                CheckRanges();
                 if (change)
                     SettlementTypeChanged();
             }
         }
-        public bool HasSettlement { get { return (SettlementType != eSettlementType.None); } }
-        private bool interstellar;
-        public bool Interstellar
+        public bool? HasSettlement 
+        {
+            get
+            {
+                if (SettlementType == null)
+                    return null;
+                else
+                    return (SettlementType != eSettlementType.None);
+            }
+        }
+        private bool? interstellar;
+        public bool? Interstellar
         {
             get { return interstellar; }
             set { interstellar = value; }
         }
-        private int colonyAge;
-        public int ColonyAge
+        private int? colonyAge;
+        public int? ColonyAge
         {
             get { return colonyAge; }
             set
             {
                 colonyAge = value;
-                CheckRanges();
             }
         }
 
-        public double CarryingCapacity
+        public double? CarryingCapacity
         {
-            get { return LocalSpecies.CarryingCapacity(this); }
+            get
+            {
+                if (LocalSpecies == null)
+                    return null;
+                else
+                    return LocalSpecies.CarryingCapacity(this);
+            }
         }
-        private double population;
-        public double Population
+        private double? population;
+        public double? Population
         {
             get { return population; }
             set { population = value; }
         }
-        public int PopulationRating { get { return (Population == 0) ? 0 : (int)Math.Log10(Population); } }
+        public int? PopulationRating
+        { 
+            get 
+            {
+                if (Population == null)
+                    return null;
+                else if (Population == 0)
+                    return 0;
+                else
+                    return (int)Math.Log10(Population ?? 0); 
+            } 
+        }
 
-        private eWorldUnityLevel worldUnityLevel;
-        public eWorldUnityLevel WorldUnityLevel 
+        private eWorldUnityLevel? worldUnityLevel;
+        public eWorldUnityLevel? WorldUnityLevel 
         { 
             get { return worldUnityLevel; }
             set {  worldUnityLevel = value; }
         }
-        private fGovernmentSpecialConditions governmentSpecialConditions;
-        public fGovernmentSpecialConditions GovernmentSpecialConditions
+        private fGovernmentSpecialConditions? governmentSpecialConditions;
+        public fGovernmentSpecialConditions? GovernmentSpecialConditions
         {
             get { return governmentSpecialConditions; }
-            set { governmentSpecialConditions = value; }
+            set { governmentSpecialConditions = value; CheckRanges(); }
         }
-        public bool HasGovernmentSpecialCondition(fGovernmentSpecialConditions flag)
+        public bool? HasGovernmentSpecialCondition(fGovernmentSpecialConditions flag)
         {
-            return (GovernmentSpecialConditions & flag) == flag;
+            if (GovernmentSpecialConditions == null)
+                return null;
+            else
+                return (GovernmentSpecialConditions & flag) == flag;
         }
-        private eSocietyType societyType;
-        public eSocietyType SocietyType
+        private eSocietyType? societyType;
+        public eSocietyType? SocietyType
         {
             get { return societyType; }
             set { societyType = value; CheckRanges(); }
         }
-        public int MinControlRating { get { return RuleBook.SocietyTypeParams[SocietyType].MinControlRating; } }
-        public int MaxControlRating { get { return RuleBook.SocietyTypeParams[SocietyType].MaxControlRating; } }
-        private int controlRating;
-        public int ControlRating 
+        public int? MinControlRating 
+        {
+            get
+            {
+                if (SocietyType == null)
+                    return null;
+                else
+                    return RuleBook.SocietyTypeParams[(SocietyType ?? eSocietyType.Anarchy)].MinControlRating;
+            }
+        }
+        public int? MaxControlRating
+        {
+            get
+            {
+                if (SocietyType == null)
+                    return null;
+                else
+                    return RuleBook.SocietyTypeParams[(SocietyType ?? eSocietyType.Anarchy)].MaxControlRating;
+            }
+        }
+        private int? controlRating;
+        public int? ControlRating 
         {
             get { return controlRating; }
             set { controlRating = value; }
         }
 
-        public int IncomePerCapita 
-        { 
-            get 
+        public int? IncomePerCapita 
+        {
+            get
             {
-                double baseIncome = RuleBook.TechLevelParams[LocalTechLevel].BaseIncome;
-                double multiplier = 1;
-                switch (AffinityScore)
+                if (LocalTechLevel == null || AffinityScore == null || CarryingCapacity == null || Population == null)
+                    return null;
+                else
                 {
-                    case <= 0:
-                        multiplier += -0.3;
-                        break;
-                    case >1 and <=3:
-                        multiplier += -0.2;
-                        break;
-                    case > 3 and <= 6:
-                        multiplier += -0.1;
-                        break;
-                    case > 6 and <= 8:
-                        multiplier += 0;
-                        break;
-                    case 9:
-                        multiplier += 0.2;
-                        break;
-                    case > 9:
-                        multiplier += 0.4;
-                        break;
-                }
+                    double baseIncome = RuleBook.TechLevelParams[(LocalTechLevel ?? 0)].BaseIncome;
+                    double multiplier = 1;
+                    switch ((AffinityScore ?? 0))
+                    {
+                        case <= 0:
+                            multiplier += -0.3;
+                            break;
+                        case > 1 and <= 3:
+                            multiplier += -0.2;
+                            break;
+                        case > 3 and <= 6:
+                            multiplier += -0.1;
+                            break;
+                        case > 6 and <= 8:
+                            multiplier += 0;
+                            break;
+                        case 9:
+                            multiplier += 0.2;
+                            break;
+                        case > 9:
+                            multiplier += 0.4;
+                            break;
+                    }
 
-                if (CarryingCapacity < Population)
-                    multiplier *= ((double)CarryingCapacity / (double)Population);
-                
-                return (int)(baseIncome * multiplier); 
-            } 
+                    if (CarryingCapacity < Population)
+                        multiplier *= ((double)CarryingCapacity / (double)Population);
+
+                    return (int)(baseIncome * multiplier);
+                }
+            }
         }
         public eWealthLevel WealthLevel
         {
@@ -455,11 +571,6 @@ namespace GurpsSpace
         public Planet(Setting setting)
         {
             this.setting = setting;
-            localSpecies = setting.MainSpecies;
-            name = "";
-            description = "";
-            atmosphericDescription = "";
-            localTechLevel = setting.TechLevel;
             Installations = new List<Installation>();
             CheckRanges();
         }
@@ -547,6 +658,13 @@ namespace GurpsSpace
 
         private void PlanetTypeChanged()
         {
+            // update the parameters
+            if (RuleBook.PlanetParams.ContainsKey((SizeVal, SubtypeVal)))
+                parameters = RuleBook.PlanetParams[(SizeVal, SubtypeVal)];
+            else
+                parameters = null;
+            CheckRanges();
+
             // refresh various parameters if the planet type has updated
 
             // set atmosphere to 1, or 0 if there is no atmosphere
@@ -558,7 +676,7 @@ namespace GurpsSpace
             // if there's no choice over atmosphere, set it to the single option
             // otherwise set as blank
             if (!HasAtmosphericOptions)
-                (AtmosphericConditions, AtmosphericDescription) = RuleBook.PlanetParams[(Size, Subtype)].AtmosphereA;
+                (AtmosphericConditions, AtmosphericDescription) = RuleBook.PlanetParams[(SizeVal, SubtypeVal)].AtmosphereA;
             else
                 (AtmosphericConditions, AtmosphericDescription) = (fAtmosphericConditions.None, "");
 

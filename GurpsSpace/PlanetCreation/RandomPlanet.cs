@@ -10,13 +10,13 @@ namespace GurpsSpace.PlanetCreation
 {
     internal class RandomPlanet : IPlanetCreator
     {
-        public string GetName(Planet p)
+        public string? GetName(Planet p)
         {
             string name = "Randomia-" + DiceBag.Rand(1, 100);
             return name;
         }
 
-        public (eSize, eSubtype) GetSizeAndSubtype(Planet p)
+        public (eSize?, eSubtype?) GetSizeAndSubtype(Planet p)
         {
             eSize size;
             eSubtype subtype;
@@ -40,7 +40,7 @@ namespace GurpsSpace.PlanetCreation
             return (size, subtype);
         }
 
-        public eResourceValueCategory GetResourceValueCategory(Planet p)
+        public eResourceValueCategory? GetResourceValueCategory(Planet p)
         {
             int roll = DiceBag.Roll(3);
             if (p.IsPlanet)
@@ -49,7 +49,7 @@ namespace GurpsSpace.PlanetCreation
                 return RuleBook.ResourceValueCategoryAsteroidBelt[roll];
         }
 
-        public double GetAtmosphericMass(Planet p)
+        public double? GetAtmosphericMass(Planet p)
         {
 
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
@@ -68,7 +68,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
+        public (fAtmosphericConditions?, string?) GetAtmosphericConditions(Planet p)
         {
 
             if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
@@ -156,7 +156,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public double GetHydrographicCoverage(Planet p)
+        public double? GetHydrographicCoverage(Planet p)
         {
             PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
             double cover = 0;
@@ -174,7 +174,7 @@ namespace GurpsSpace.PlanetCreation
             return cover;
         }
 
-        public int GetAverageSurfaceTempK(Planet p)
+        public int? GetAverageSurfaceTempK(Planet p)
         {
             int tempMin = p.MinSurfaceTemperatureK;
             int tempStep = p.StepSurfaceTemperatureK;
@@ -182,7 +182,7 @@ namespace GurpsSpace.PlanetCreation
             return tempK;
         }
 
-        public double GetDensity(Planet p)
+        public double? GetDensity(Planet p)
         {
             switch(p.CoreType)
             {
@@ -196,7 +196,7 @@ namespace GurpsSpace.PlanetCreation
             return p.Density;
         }
 
-        public double GetGravity(Planet p)
+        public double? GetGravity(Planet p)
         {
             double minG = p.MinGravity;
             double maxG = p.MaxGravity;
@@ -212,7 +212,7 @@ namespace GurpsSpace.PlanetCreation
             return grav;
         }
 
-        public (eSettlementType, int, bool) GetSettlementType(Planet p)
+        public (eSettlementType?, int?, bool?) GetSettlementType(Planet p)
         {
             eSettlementType settType = eSettlementType.None;
             int colonyAge = 0;
@@ -244,14 +244,14 @@ namespace GurpsSpace.PlanetCreation
             return (settType, colonyAge, interstellar);
         }
 
-        public Species GetLocalSpecies(Planet p)
+        public Species? GetLocalSpecies(Planet p)
         {
             int numSpecies = p.Setting.Species.Count;
             int randNum = DiceBag.Rand(0, numSpecies - 1);
             return p.Setting.Species[randNum];
         }
 
-        public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
+        public (int?, eTechLevelRelativity?) GetLocalTechLevel(Planet p)
         {
             int roll = DiceBag.Roll(3);
 
@@ -308,7 +308,7 @@ namespace GurpsSpace.PlanetCreation
             return (tl, adj);
         }
 
-        public double GetPopulation(Planet p)
+        public double? GetPopulation(Planet p)
         {
             switch (p.SettlementType)
             {
@@ -373,7 +373,7 @@ namespace GurpsSpace.PlanetCreation
             return population;
         }
 
-        public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
+        public (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(Planet p)
         {
             int roll;
             eWorldUnityLevel unity;
@@ -425,7 +425,7 @@ namespace GurpsSpace.PlanetCreation
             return (unity, specCond | secondCond);
         }
 
-        public eSocietyType GetSocietyType(Planet p)
+        public eSocietyType? GetSocietyType(Planet p)
         {
             int roll = DiceBag.Roll(3);
 
@@ -452,7 +452,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public int GetControlRating(Planet p)
+        public int? GetControlRating(Planet p)
         {
             int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
             int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
@@ -501,7 +501,7 @@ namespace GurpsSpace.PlanetCreation
             return DiceBag.Rand(minCR, maxCR);
         }
 
-        public double GetTradeVolume(Planet p)
+        public double? GetTradeVolume(Planet p)
         { 
             // For trade volume between worlds use:
             // T = K * V1 * V2 / D
@@ -534,7 +534,7 @@ namespace GurpsSpace.PlanetCreation
             return trade;
         }
 
-        public int GetSpaceportClass(Planet p)
+        public int? GetSpaceportClass(Planet p)
         {
             // check for class V
             if (p.TradeVolume > RuleBook.TradeForSpaceportV ||
@@ -565,7 +565,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public List<Installation> GetInstallations(Planet p)
+        public List<Installation>? GetInstallations(Planet p)
         {
             List<Installation> lst = new List<Installation>();
 
@@ -631,7 +631,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public List<Installation> GetInstallation(Planet p, string installationType)
+        public List<Installation>? GetInstallation(Planet p, string installationType)
         {
             List<Installation> lst = new List<Installation>();
             InstallationParameters instParam = RuleBook.InstallationParams[0];

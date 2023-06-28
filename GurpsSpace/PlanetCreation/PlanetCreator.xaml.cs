@@ -178,15 +178,18 @@ namespace GurpsSpace.PlanetCreation
             switch (param)
             {
                 case "Name":
-                    string name = pc.GetName(vmPlanet.Planet);
-                    vmPlanet.Name = name;
+                    string? name = pc.GetName(vmPlanet.Planet);
+                    if (name != null)
+                        vmPlanet.Name = name;
                     break;
                 case "Type":
-                    eSize size;
-                    eSubtype subtype;
+                    eSize? size;
+                    eSubtype? subtype;
                     (size, subtype) = pc.GetSizeAndSubtype(vmPlanet.Planet);
-                    vmPlanet.Size = size;
-                    vmPlanet.Subtype = subtype;
+                    if (size != null)
+                        vmPlanet.Size = size;
+                    if (subtype != null)
+                        vmPlanet.Subtype = subtype;
                     break;
                 case "ResourceValueCategory":
                     eResourceValueCategory res = pc.GetResourceValueCategory(vmPlanet.Planet);
