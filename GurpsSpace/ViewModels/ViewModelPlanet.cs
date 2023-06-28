@@ -41,11 +41,11 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                if ((Size == null) || (Subtype == null))
+                if ((planet.Size == null) || (planet.Subtype == null))
                     return "tbc";
-                if ((Size == eSize.None) || (Subtype == eSubtype.None))
+                if ((planet.Size == eSize.None) || (planet.Subtype == eSubtype.None))
                     return "n/a";
-                if (Size == eSize.AsteroidBelt)
+                if (planet.Size == eSize.AsteroidBelt)
                     return "Asteroid Belt (" + planet.OverallType + ")";
                 else
                     return planet.Size + " " + planet.Subtype + " (" + planet.OverallType + ")";
@@ -375,18 +375,23 @@ namespace GurpsSpace.PlanetCreation
                 if (planet.ControlRating == null)
                     return "tbc";
                 else
-                    return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[(planet.ControlRating ?? 0)] + ")";
+                    return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[ControlRating] + ")";
             }
         }
 
         // economics
-        public double IncomePerCapita { get { return planet.IncomePerCapita; } }
-        public eWealthLevel WealthLevel { get { return planet.WealthLevel; } }
+        public eWealthLevel WealthLevel { get { return (planet.WealthLevel ?? 0); } }
         public string IncomePerCapitaString 
-        { 
-            get { return "$" + IncomePerCapita.ToString("N0") + " (" + WealthLevel + ")"; }
+        {
+            get
+            {
+                if (planet.IncomePerCapita == null)
+                    return "tbc";
+                else
+                    return "$" + (planet.IncomePerCapita ?? 0).ToString("N0") + " (" + planet.WealthLevel + ")";
+            }
         }
-        public double EconomicVolume { get { return planet.EconomicVolume; } }
+        public double EconomicVolume { get { return (planet.EconomicVolume ?? 0); } }
         public string EconomicVolumeString
         {
             get

@@ -187,49 +187,60 @@ namespace GurpsSpace.PlanetCreation
                     eSubtype? subtype;
                     (size, subtype) = pc.GetSizeAndSubtype(vmPlanet.Planet);
                     if (size != null)
-                        vmPlanet.Size = size;
+                        vmPlanet.Size = size ?? eSize.None;
                     if (subtype != null)
-                        vmPlanet.Subtype = subtype;
+                        vmPlanet.Subtype = subtype ?? eSubtype.None;
                     break;
                 case "ResourceValueCategory":
-                    eResourceValueCategory res = pc.GetResourceValueCategory(vmPlanet.Planet);
-                    vmPlanet.ResourceValueCategory = res;
+                    eResourceValueCategory? res = pc.GetResourceValueCategory(vmPlanet.Planet);
+                    if (res != null)
+                        vmPlanet.ResourceValueCategory = res ?? eResourceValueCategory.Average;
                     break;
                 case "AtmosphericMass":
-                    double atmMass = pc.GetAtmosphericMass(vmPlanet.Planet);
-                    vmPlanet.AtmosphericMass = atmMass;
+                    double? atmMass = pc.GetAtmosphericMass(vmPlanet.Planet);
+                    if (atmMass != null)
+                        vmPlanet.AtmosphericMass = atmMass ?? 0;
                     break;
                 case "AtmosphericConditions":
-                    fAtmosphericConditions cond;
-                    string condDesc;
+                    fAtmosphericConditions? cond;
+                    string? condDesc;
                     (cond, condDesc) = pc.GetAtmosphericConditions(vmPlanet.Planet);
-                    vmPlanet.AtmosphericConditions = cond;
-                    vmPlanet.AtmosphericDescription = condDesc;
+                    if (cond != null)
+                        vmPlanet.AtmosphericConditions = cond ?? fAtmosphericConditions.None;
+                    if (condDesc != null)
+                        vmPlanet.AtmosphericDescription = condDesc ?? "tbc";
                     break;
                 case "HydrographicCoverage":
-                    double hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);
-                    vmPlanet.HydrographicCoverage = hydro;
+                    double? hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);
+                    if (hydro != null)
+                        vmPlanet.HydrographicCoverage = hydro ??;
                     break;
                 case "AverageSurfaceTempK":
-                    int tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);
-                    vmPlanet.AverageSurfaceTempK = tempK;
+                    int? tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);
+                    if (tempK != null)
+                        vmPlanet.AverageSurfaceTempK = tempK ?? 0;
                     break;
                 case "Density":
-                    double density = pc.GetDensity(vmPlanet.Planet);
-                    vmPlanet.Density = density;
+                    double? density = pc.GetDensity(vmPlanet.Planet);
+                    if (density != null)
+                        vmPlanet.Density = density ?? 0;
                     break;
                 case "Gravity":
-                    double grav = pc.GetGravity(vmPlanet.Planet);
-                    vmPlanet.Gravity = grav;
+                    double? grav = pc.GetGravity(vmPlanet.Planet);
+                    if (grav != null)
+                        vmPlanet.Gravity = grav ?? 0;
                     break;
                 case "SettlementType":
-                    eSettlementType settType;
-                    int colonyAge;
-                    bool interstellar;
+                    eSettlementType? settType;
+                    int? colonyAge;
+                    bool? interstellar;
                     (settType, colonyAge, interstellar) = pc.GetSettlementType(vmPlanet.Planet);
-                    vmPlanet.SettlementType = settType;
-                    vmPlanet.ColonyAge = colonyAge;
-                    vmPlanet.Interstellar = interstellar;
+                    if (settType != null)
+                    {
+                        vmPlanet.SettlementType = settType ?? eSettlementType.None;
+                        vmPlanet.ColonyAge = colonyAge ?? 0;
+                        vmPlanet.Interstellar = interstellar ?? true;
+                    }
                     break;
                 case "Species":
                     Species s = pc.GetLocalSpecies(vmPlanet.Planet);
