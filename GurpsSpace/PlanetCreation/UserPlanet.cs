@@ -37,9 +37,10 @@ namespace GurpsSpace.PlanetCreation
             foreach (int i in vals)
                 options.Add((i, i.ToString(), ((eResourceValueCategory)i).ToString()));
 
-            for (int i = 0; i < options.Count; i++)
-                if (options[i].Item2 == p.ResourceValueCategory.ToString())
-                    startVal = i;
+            if (p.ResourceValueCategory != null)
+                for (int i = 0; i < options.Count; i++)
+                    if (vals[i] == (int)(p.ResourceValueCategory ?? 0))
+                        startVal = i;
 
             string question = "Select the resource value for this " + ((p.IsPlanet ?? true) ? "planet. " : "asteroid belt. ");
             if (p.IsPlanet == true)
@@ -165,9 +166,9 @@ namespace GurpsSpace.PlanetCreation
                     (1, "Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
                         };
                         initial = null;
-                        if (p.Interstellar)
+                        if (p.Interstellar == true)
                             initial = 0;
-                        else
+                        else if (p.Interstellar == false)
                             initial = 1;
                         InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", options, initial);
                         bool interstellar = true;
@@ -220,7 +221,7 @@ namespace GurpsSpace.PlanetCreation
             foreach (TechLevelParameters tlp in RuleBook.TechLevelParams.Values)
                 options.Add((tlp.TL,tlp.TL.ToString(), tlp.Age));
 
-            string question = "Select the main Tech Level for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
+            string question = "Select the main Tech Level for this " + ((p.IsPlanet ?? true) ? "planet. " : "asteroid belt. ");
             question += "\r\nThe setting's TL is " + p.Setting.TechLevel.ToString() + " so anything at " + (p.Setting.TechLevel - 4).ToString() + " or below would be considered primitive.";
             InputRadio radioDiag = new InputRadio(question, options, p.LocalTechLevel);
             if (radioDiag.ShowDialog() == true)
@@ -519,8 +520,13 @@ namespace GurpsSpace.PlanetCreation
 
         public int? GetControlRating(Planet p)
         {
-            int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
-            int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
+            if (p.SocietyType==null)
+            {
+                MessageBox.Show("Need a society type before choosing control rating.");
+                return null;
+            }
+            int minCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? eSocietyType.Anarchy)].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? eSocietyType.Anarchy)].MaxControlRating;
 
             string question = "Select the control rating from the range below.";
             question += "\r\nFor a " + p.SocietyType.ToString() + " society this is generally CR " + minCR.ToString() + ((minCR == maxCR) ? "." : (" to CR " + maxCR.ToString() + "."));

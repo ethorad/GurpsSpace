@@ -57,11 +57,14 @@ namespace GurpsSpace.PlanetCreation
             set { planet.ResourceValueCategory = value; MemberUpdated(); }
         }
         public string ResourceValueString
-        { 
-            get 
-            { 
-                return planet.ResourceValueModifier.ToString() + " (" + planet.ResourceValueCategory.ToString() + ")"; 
-            } 
+        {
+            get
+            {
+                if (planet.ResourceValueCategory == null)
+                    return "tbc";
+                else
+                    return planet.ResourceValueModifier.ToString() + " (" + planet.ResourceValueCategory.ToString() + ")";
+            }
         }
         public string Description
         {
@@ -471,6 +474,9 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
+                if (planet.SpaceportClass == null)
+                    return "tbc";
+
                 string classNum = "";
                 switch (planet.SpaceportClass)
                 {
@@ -494,7 +500,7 @@ namespace GurpsSpace.PlanetCreation
                         break;
                 }
 
-                return "Class " + classNum + " (" + RuleBook.SpaceportName[planet.SpaceportClass] + ")";
+                return "Class " + classNum + " (" + RuleBook.SpaceportName[(planet.SpaceportClass ?? 0)] + ")";
 
             }
         }

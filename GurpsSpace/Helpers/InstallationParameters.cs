@@ -168,7 +168,7 @@ namespace GurpsSpace
         }
         public int TargetNumber(Planet p, int count)
         {
-            int targ = targetBase + targetCrMult * p.ControlRating + targetPrMult * p.PopulationRating;
+            int targ = targetBase + targetCrMult * (p.ControlRating ?? 0) + targetPrMult * (p.PopulationRating ?? 0);
             targ += count * targetAdjPerInstallation;
 
             return targ;

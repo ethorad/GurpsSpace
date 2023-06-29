@@ -513,8 +513,11 @@ namespace GurpsSpace.PlanetCreation
 
         public int? GetControlRating(Planet p)
         {
-            int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
-            int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
+            if (p.SocietyType == null)
+                return null;
+
+            int minCR = RuleBook.SocietyTypeParams[(p.SocietyType??0)].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? 0)].MaxControlRating;
 
             // adjust for any special conditions
             // see Campaigns p510 for details

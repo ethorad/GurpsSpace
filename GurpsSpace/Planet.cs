@@ -686,11 +686,11 @@ namespace GurpsSpace
 
             // if there's no choice over atmosphere, set it to the single option
             // otherwise set as blank
-            if (HasAtmosphericOptions==null)
+            if (HasAtmosphericOptions == null)
             {
                 AtmosphericConditions = null;
-                AtmosphericDescription= null;
-            }    
+                AtmosphericDescription = null;
+            }
             if (HasAtmosphericOptions == false)
                 (AtmosphericConditions, AtmosphericDescription) = RuleBook.PlanetParams[(SizeVal, SubtypeVal)].AtmosphereA;
             else
@@ -699,8 +699,8 @@ namespace GurpsSpace
             // set ranged inputs to be the midpoint
             HydrographicCoverage = (MinimumHydrographicCoverage + MaximumHydrographicCoverage) / 2;
             AverageSurfaceTempK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
-            Density = Math.Round((MinDensity + MaxDensity) / 2, 1);
-            Gravity = Math.Round((MinGravity + MaxGravity) / 2, 2);
+            Density = Math.Round(((MinDensity + MaxDensity) ?? 0) / 2, 1);
+            Gravity = Math.Round(((MinGravity + MaxGravity) ?? 0) / 2, 2);
         }
 
         private void SettlementTypeChanged()

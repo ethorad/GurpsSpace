@@ -225,15 +225,15 @@ namespace GurpsSpace
         }
         protected double CarryingCapacityBase(Planet p)
         {
-            return RuleBook.TechLevelParams[p.LocalTechLevel].BaseCarryingCapacity;
+            return RuleBook.TechLevelParams[(p.LocalTechLevel ?? 0)].BaseCarryingCapacity;
         }
         protected double CarryingCapacityMultiplier(Planet p)
         {
-            return RuleBook.CarryingCapacityMultiplierByAffinity[p.AffinityScore];
+            return RuleBook.CarryingCapacityMultiplierByAffinity[(p.AffinityScore ?? 0)];
         }
         protected double CarryingCapacityPlanetSizeModifier(Planet p)
         {
-            return (p.Size == eSize.AsteroidBelt) ? 50 : (p.DiameterEarths * p.DiameterEarths);
+            return (p.Size == eSize.AsteroidBelt) ? 50 : ((p.DiameterEarths * p.DiameterEarths) ?? 1);
         }
         protected double CarryingCapacityDietModifier(Planet p)
         {
