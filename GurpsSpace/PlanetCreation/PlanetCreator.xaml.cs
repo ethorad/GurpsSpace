@@ -150,17 +150,23 @@ namespace GurpsSpace.PlanetCreation
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
             string instType = RuleBook.InstallationParams[val].Type;
-            List<Installation> lst = userInput.GetInstallation(vmPlanet.Planet, instType);
-            vmPlanet.ClearInstallations(instType);
-            vmPlanet.AddInstallations(lst);
+            List<Installation>? lst = userInput.GetInstallation(vmPlanet.Planet, instType);
+            if (lst != null)
+            {
+                vmPlanet.ClearInstallations(instType);
+                vmPlanet.AddInstallations(lst);
+            }
         }
         private void btnRandInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
             string instType = RuleBook.InstallationParams[val].Type;
-            List<Installation> lst = randomiser.GetInstallation(vmPlanet.Planet, instType);
-            vmPlanet.ClearInstallations(instType);
-            vmPlanet.AddInstallations(lst);
+            List<Installation>? lst = randomiser.GetInstallation(vmPlanet.Planet, instType);
+            if (lst != null)
+            {
+                vmPlanet.ClearInstallations(instType);
+                vmPlanet.AddInstallations(lst);
+            }
         }
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
@@ -213,7 +219,7 @@ namespace GurpsSpace.PlanetCreation
                 case "HydrographicCoverage":
                     double? hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);
                     if (hydro != null)
-                        vmPlanet.HydrographicCoverage = hydro ??;
+                        vmPlanet.HydrographicCoverage = hydro ?? 0;
                     break;
                 case "AverageSurfaceTempK":
                     int? tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);
@@ -243,46 +249,57 @@ namespace GurpsSpace.PlanetCreation
                     }
                     break;
                 case "Species":
-                    Species s = pc.GetLocalSpecies(vmPlanet.Planet);
-                    vmPlanet.LocalSpecies = s;
+                    Species? s = pc.GetLocalSpecies(vmPlanet.Planet);
+                    if (s != null)
+                        vmPlanet.LocalSpecies = s;
                     break;
                 case "TechLevel":
-                    int tl;
-                    eTechLevelRelativity adj;
+                    int? tl;
+                    eTechLevelRelativity? adj;
                     (tl, adj) = pc.GetLocalTechLevel(vmPlanet.Planet);
-                    vmPlanet.LocalTechLevel = tl;
-                    vmPlanet.LocalTechLevelRelativity = adj;
+                    if (tl != null)
+                        vmPlanet.LocalTechLevel = tl ?? 0;
+                    if (adj != null)
+                        vmPlanet.LocalTechLevelRelativity = adj ?? eTechLevelRelativity.Normal;
                     break;
                 case "Population":
-                    double pop = pc.GetPopulation(vmPlanet.Planet);
-                    vmPlanet.Population = pop;
+                    double? pop = pc.GetPopulation(vmPlanet.Planet);
+                    if (pop != null)
+                        vmPlanet.Population = pop ?? 0;
                     break;
                 case "WorldGovernance":
-                    eWorldUnityLevel unity;
-                    fGovernmentSpecialConditions specCond;
+                    eWorldUnityLevel? unity;
+                    fGovernmentSpecialConditions? specCond;
                     (unity,specCond) = pc.GetWorldGovernance(vmPlanet.Planet);
-                    vmPlanet.WorldUnityLevel = unity;
-                    vmPlanet.GovernmentSpecialConditions = specCond;
+                    if (unity != null)
+                        vmPlanet.WorldUnityLevel = unity ?? eWorldUnityLevel.Diffuse;
+                    if (specCond != null)
+                        vmPlanet.GovernmentSpecialConditions = specCond ?? fGovernmentSpecialConditions.None;
                     break;
                 case "SocietyType":
-                    eSocietyType soc = pc.GetSocietyType(vmPlanet.Planet);
-                    vmPlanet.SocietyType = soc;
+                    eSocietyType? soc = pc.GetSocietyType(vmPlanet.Planet);
+                    if (soc != null)
+                        vmPlanet.SocietyType = soc ?? eSocietyType.Anarchy;
                     break;
                 case "ControlRating":
-                    int cr = pc.GetControlRating(vmPlanet.Planet);
-                    vmPlanet.ControlRating = cr;
+                    int? cr = pc.GetControlRating(vmPlanet.Planet);
+                    if (cr != null)
+                        vmPlanet.ControlRating = cr ?? 0;
                     break;
                 case "TradeVolume":
-                    double trade = pc.GetTradeVolume(vmPlanet.Planet);
-                    vmPlanet.TradeVolume = trade;
+                    double? trade = pc.GetTradeVolume(vmPlanet.Planet);
+                    if (trade != null)
+                        vmPlanet.TradeVolume = trade ?? 0;
                     break;
                 case "SpaceportClass":
-                    int spacepostClass = pc.GetSpaceportClass(vmPlanet.Planet);
-                    vmPlanet.SpaceportClass = spacepostClass;
+                    int? spacepostClass = pc.GetSpaceportClass(vmPlanet.Planet);
+                    if (spacepostClass != null)
+                        vmPlanet.SpaceportClass = spacepostClass ?? 0;
                     break;
                 case "Installations":
-                    List<Installation> newInst = pc.GetInstallations(vmPlanet.Planet);
-                    vmPlanet.InstallationsList = new ViewModelInstallationList(newInst);
+                    List<Installation>? newInst = pc.GetInstallations(vmPlanet.Planet);
+                    if (newInst != null)
+                        vmPlanet.InstallationsList = new ViewModelInstallationList(newInst);
                     break;
             }
         }

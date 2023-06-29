@@ -451,10 +451,10 @@ namespace GurpsSpace
             get { return governmentSpecialConditions; }
             set { governmentSpecialConditions = value; CheckRanges(); }
         }
-        public bool? HasGovernmentSpecialCondition(fGovernmentSpecialConditions flag)
+        public bool HasGovernmentSpecialCondition(fGovernmentSpecialConditions flag)
         {
             if (GovernmentSpecialConditions == null)
-                return null;
+                return false;
             else
                 return (GovernmentSpecialConditions & flag) == flag;
         }
@@ -553,7 +553,7 @@ namespace GurpsSpace
                 }
             }
         }
-        public double EconomicVolume
+        public double? EconomicVolume
         {
             get
             {
@@ -563,14 +563,14 @@ namespace GurpsSpace
                     return RuleBook.RoundToSignificantFigures((double)(IncomePerCapita ?? 0) * (Population ?? 0), 2);
             }
         }
-        private double tradeVolume;
-        public double TradeVolume
+        private double? tradeVolume;
+        public double? TradeVolume
         {
             get { return tradeVolume; }
             set { tradeVolume = value; }
         }
-        private int spaceportClass;
-        public int SpaceportClass
+        private int? spaceportClass;
+        public int? SpaceportClass
         {
             get { return spaceportClass; }
             set { spaceportClass = value; }
@@ -677,14 +677,21 @@ namespace GurpsSpace
             // refresh various parameters if the planet type has updated
 
             // set atmosphere to 1, or 0 if there is no atmosphere
-            if (HasAtmosphere)
+            if (HasAtmosphere == null)
+                AtmosphericMass = null;
+            else if (HasAtmosphere == true)
                 AtmosphericMass = 1;
             else
                 AtmosphericMass = 0;
 
             // if there's no choice over atmosphere, set it to the single option
             // otherwise set as blank
-            if (!HasAtmosphericOptions)
+            if (HasAtmosphericOptions==null)
+            {
+                AtmosphericConditions = null;
+                AtmosphericDescription= null;
+            }    
+            if (HasAtmosphericOptions == false)
                 (AtmosphericConditions, AtmosphericDescription) = RuleBook.PlanetParams[(SizeVal, SubtypeVal)].AtmosphereA;
             else
                 (AtmosphericConditions, AtmosphericDescription) = (fAtmosphericConditions.None, "");

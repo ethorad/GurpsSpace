@@ -284,7 +284,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">World Unity</Label>
-                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=WorldUnityLevel, Mode=OneWay}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=WorldUnityString, Mode=OneWay}"/>
                             
 
                             <Button Grid.Row="0" Grid.Column="2" Tag="WorldGovernance" Click="btnSelect_Click">Select</Button>
