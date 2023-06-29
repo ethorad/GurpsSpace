@@ -2,33 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
+using System.Windows;
 
 namespace GurpsSpace.PlanetCreation
 {
     internal class UserPlanet : IPlanetCreator
     {
 
-
-        public string GetName(Planet p)
+        public string? GetName(Planet p)
         {
-            InputString inStr = new("Enter planet's name:", p.Name);
+            InputString inStr = new("Enter planet's name:", p.Name ?? "tbc");
             if (inStr.ShowDialog() == true)
                 return inStr.Answer;
             else // clicked cancel
-                return p.Name;
+                return null;
         }
 
-        public (eSize, eSubtype) GetSizeAndSubtype(Planet p)
+        public (eSize?, eSubtype?) GetSizeAndSubtype(Planet p)
         {
             PlanetTypeSelection typeDiag = new();
             if (typeDiag.ShowDialog() == true)
                 return (typeDiag.Size, typeDiag.Subtype);
             else
-                return (p.Size, p.Subtype);
+                return (null, null);
         }
 
-        public eResourceValueCategory GetResourceValueCategory(Planet p)
+        public eResourceValueCategory? GetResourceValueCategory(Planet p)
         {
+
             List<(int, string, string)> options = new List<(int, string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eResourceValueCategory))).ToList<int>();
             int? startVal = null;
@@ -36,32 +37,39 @@ namespace GurpsSpace.PlanetCreation
             foreach (int i in vals)
                 options.Add((i, i.ToString(), ((eResourceValueCategory)i).ToString()));
 
-            for (int i = 0; i < options.Count; i++)
-                if (options[i].Item2 == p.ResourceValueCategory.ToString())
-                    startVal = i;
+            if (p.ResourceValueCategory != null)
+                for (int i = 0; i < options.Count; i++)
+                    if (vals[i] == (int)(p.ResourceValueCategory ?? 0))
+                        startVal = i;
 
-            string question = "Select the resource value for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
-            if (p.IsPlanet)
+            string question = "Select the resource value for this " + ((p.IsPlanet ?? true) ? "planet. " : "asteroid belt. ");
+            if (p.IsPlanet == true)
                 question += "\r\nFor a planet, this is normally between -2 (Very Poor) and +2 (Very Abundant).";
 
             InputRadio radioDiag = new InputRadio(question, options, startVal);
             if (radioDiag.ShowDialog() == true)
                 return (eResourceValueCategory)radioDiag.Answer.Item1;
             else // clicked cancel
-                return p.ResourceValueCategory;
+                return null;
         }
 
-        public double GetAtmosphericMass(Planet p)
+        public double? GetAtmosphericMass(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
+        public (fAtmosphericConditions?, string?) GetAtmosphericConditions(Planet p)
         {
-            if (!p.HasAtmosphericOptions)
-                return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
+            if (p.HasAtmosphericOptions == null)
+            {
+                MessageBox.Show("Need to select more fields first.");
+                return (null, null);
+            }
 
-            PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
+            if (p.HasAtmosphericOptions== false)
+                return RuleBook.PlanetParams[(p.SizeVal, p.SubtypeVal)].AtmosphereA;
+
+            PlanetParameters pp = RuleBook.PlanetParams[(p.SizeVal, p.SubtypeVal)];
             int? initial = null;
             if (p.AtmosphericDescription == pp.AtmosphereA.Item2)
                 initial = 0;
@@ -83,30 +91,30 @@ namespace GurpsSpace.PlanetCreation
                 else if (radioDiag.Selected == 1)
                     return pp.AtmosphereB;
             }
-            return (p.AtmosphericConditions, p.AtmosphericDescription);
+            return (null, null);
         }
 
-        public double GetHydrographicCoverage(Planet p)
+        public double? GetHydrographicCoverage(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public int GetAverageSurfaceTempK(Planet p)
+        public int? GetAverageSurfaceTempK(Planet p)
         { 
             throw new NotImplementedException(); 
         }
 
-        public double GetDensity(Planet p)
+        public double? GetDensity(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public double GetGravity(Planet p)
+        public double? GetGravity(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public (eSettlementType, int, bool) GetSettlementType(Planet p)
+        public (eSettlementType?, int?, bool?) GetSettlementType(Planet p)
         {
 
             string question = "Select the settlement type to be present:";
@@ -131,19 +139,27 @@ namespace GurpsSpace.PlanetCreation
             {
                 switch ((eSettlementType)radioDiag.Answer.Item1)
                 {
+                    case eSettlementType.None:
+                        return (eSettlementType.None, null, null);
+
                     case eSettlementType.Outpost:
-                        return (eSettlementType.Outpost, 0, true);
+                        return (eSettlementType.Outpost, null, true);
 
                     case eSettlementType.Colony:
                         // get age
-                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", p.ColonyAge.ToString(), true);
+                        string currAge;
+                        if (p.ColonyAge == null)
+                            currAge = "";
+                        else
+                            currAge = (p.ColonyAge ?? 0).ToString();
+                        InputString inStr = new InputString("Enter colony age.  This is used to aid with the population count.", currAge, true);
                         if (inStr.ShowDialog() == true)
                         {
                             int colonyAge = int.Parse(inStr.Answer);
                             return (eSettlementType.Colony, colonyAge, true);
                         }
                         else
-                            return (p.SettlementType, p.ColonyAge, p.Interstellar);
+                            return (null, null, null);
 
                     case eSettlementType.Homeworld:
                         // get interstellar or not
@@ -153,9 +169,9 @@ namespace GurpsSpace.PlanetCreation
                     (1, "Uncontacted","The homeworld has not spread outside of its system, and has not been contacted.")
                         };
                         initial = null;
-                        if (p.Interstellar)
+                        if (p.Interstellar == true)
                             initial = 0;
-                        else
+                        else if (p.Interstellar == false)
                             initial = 1;
                         InputRadio inRadio = new InputRadio("Is the homeworld part of an interstellar civilisation?", options, initial);
                         bool interstellar = true;
@@ -165,41 +181,41 @@ namespace GurpsSpace.PlanetCreation
                                 interstellar = true;
                             if (inRadio.Selected == 1)
                                 interstellar = false;
-                            return (eSettlementType.Homeworld, 0, interstellar);
+                            return (eSettlementType.Homeworld, null, interstellar);
                         }
                         else
-                            return (p.SettlementType, p.ColonyAge, p.Interstellar);
+                            return (null, null, null);
 
                     default:
                         // shouldn't ever get here, but needed to ensure all paths return a value
-                        return (p.SettlementType, p.ColonyAge, p.Interstellar);
+                        return (null, null, null);
                 }
             }
             else // clicked cancel
-                return (p.SettlementType, p.ColonyAge, p.Interstellar);
+                return (null, null, null);
 
         }
 
-        public Species GetLocalSpecies(Planet p)
+        public Species? GetLocalSpecies(Planet p)
         {
             List<(int, string, string)> options = new List<(int, string, string)>();
             int? initial = null;
             for (int i = 0; i < p.Setting.Species.Count; i++)
             {
                 options.Add((i, p.Setting.Species[i].Name + "\r\nHabitability: " + p.Setting.Species[i].Habitability(p), p.Setting.Species[i].Description ?? ""));
-                if (p.LocalSpecies.Name == p.Setting.Species[i].Name)
+                if (p.LocalSpecies != null && p.LocalSpecies.Name == p.Setting.Species[i].Name)
                     initial = i;
             }
 
 
-            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet) ? "planet:" : "asteroid belt:"), options, initial);
+            InputRadio radioDiag = new InputRadio("Select the main race inhabiting this " + ((p.IsPlanet ?? true) ? "planet:" : "asteroid belt:"), options, initial);
             if (radioDiag.ShowDialog() == true)
                 return p.Setting.Species[radioDiag.Selected];
             else
-                return p.LocalSpecies;
+                return null;
         }
 
-        public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
+        public (int?, eTechLevelRelativity?) GetLocalTechLevel(Planet p)
         {
             int tl = p.Setting.TechLevel;
             eTechLevelRelativity adj = eTechLevelRelativity.Normal;
@@ -208,7 +224,7 @@ namespace GurpsSpace.PlanetCreation
             foreach (TechLevelParameters tlp in RuleBook.TechLevelParams.Values)
                 options.Add((tlp.TL,tlp.TL.ToString(), tlp.Age));
 
-            string question = "Select the main Tech Level for this " + ((p.IsPlanet) ? "planet. " : "asteroid belt. ");
+            string question = "Select the main Tech Level for this " + ((p.IsPlanet ?? true) ? "planet. " : "asteroid belt. ");
             question += "\r\nThe setting's TL is " + p.Setting.TechLevel.ToString() + " so anything at " + (p.Setting.TechLevel - 4).ToString() + " or below would be considered primitive.";
             InputRadio radioDiag = new InputRadio(question, options, p.LocalTechLevel);
             if (radioDiag.ShowDialog() == true)
@@ -245,10 +261,10 @@ namespace GurpsSpace.PlanetCreation
                     return (tl, adj);
                 }
             }
-            return (p.LocalTechLevel, p.LocalTechLevelRelativity);
+            return (null, null);
         }
 
-        public double GetPopulation(Planet p)
+        public double? GetPopulation(Planet p)
         {
             switch (p.SettlementType)
             {
@@ -259,50 +275,80 @@ namespace GurpsSpace.PlanetCreation
                 case eSettlementType.Outpost:
                     return GetPopulationOutpost(p);
                 default:
-                    return 0;
+                    return null;
             }
         }
-        private double GetPopulationHomeworld(Planet p)
+        private double? GetPopulationHomeworld(Planet p)
         {
+            if (p.CarryingCapacity==null)
+            {
+                MessageBox.Show("Error - insufficient fields filled in to determine the base carrying capacity.");
+                return null;
+            }
+
             string question;
+
             if (p.LocalTechLevel <= 4)
             {
-                question = "The carrying capacity for this " + ((p.IsPlanet) ? "planet" : "asteroid belt") + " is " + p.CarryingCapacity.ToString("N0") + ". " +
+                question = "The carrying capacity for this " + ((p.IsPlanet??true) ? "planet" : "asteroid belt") + " is " + (p.CarryingCapacity??0).ToString("N0") + ". " +
                     "At up to TL 4, homeworld populations will generally be around 50-150% of carrying capacity due to limited " +
                     "control over birth and death rates.  Enter the percentage below:";
             }
             else // TL 5+
             {
-                question = "The carrying capacity for this " + ((p.IsPlanet) ? "planet" : "asteroid belt") + " is " + p.CarryingCapacity.ToString("N0") + ". " +
+                question = "The carrying capacity for this " + ((p.IsPlanet??true) ? "planet" : "asteroid belt") + " is " + (p.CarryingCapacity??0).ToString("N0") + ". " +
                     "At TL 5 and higher, advances in medical care and resource extraction mean the population can vary widely, from " +
                     "80-500%.  Enter the percentage below:";
             }
-            int currPerc = (int)(p.Population / p.CarryingCapacity * 100);
-            InputString inDiag = new InputString(question, currPerc.ToString("N0"), true);
+            string currPerc;
+            if (p.Population == null)
+                currPerc = "";
+            else
+                currPerc = ((int)((p.Population ?? 0) / (p.CarryingCapacity ?? 0) * 100)).ToString("N0");
+            InputString inDiag = new InputString(question, currPerc, true);
 
             if (inDiag.ShowDialog() == true)
             {
                 double perc = double.Parse(inDiag.Answer, NumberStyles.AllowThousands) / 100;
-                double pop = p.CarryingCapacity * perc;
+                double pop = (p.CarryingCapacity ?? 0) * perc;
                 pop = RuleBook.RoundToSignificantFigures(pop, 2);
                 return pop;
             }
 
-            return p.Population;
+            return null;
         }
-        private double GetPopulationColony(Planet p)
+        private double? GetPopulationColony(Planet p)
         {
             // calculate the suggested colony size using the same approach as the random one
             // but assuming a roll of 10
             // this is to include in the user prompt
 
+            if (p.LocalSpecies==null)
+            {
+                MessageBox.Show("No species selected, do that before determining colonial population.");
+                return null;
+            }
+            if (p.ColonyAge==null)
+            {
+                // shouldn't ever end up here, as colony age should always get set when a colony is selected
+                MessageBox.Show("Error, colonial age not set.");
+                return null;
+            }
+            if (p.AffinityScore==null)
+            {
+                // i.e. Resource or Habitability is null
+                MessageBox.Show("No affinity score, more fields need set before determining colonial population.");
+                return null;
+            }
+
             Species s = p.LocalSpecies;
 
-            int ageInDecades = p.ColonyAge / 10;
+            int ageInDecades = (p.ColonyAge ?? 0) / 10;
             int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
-            int roll = 10 + p.AffinityScore * affinityMod + ageInDecades; // assuming a roll of 10
+            // should be an affinity score
+            int roll = 10 + (p.AffinityScore ?? 0) * affinityMod + ageInDecades; // assuming a roll of 10
 
             // effective decades of growth is the difference between the roll and the min
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
@@ -317,27 +363,37 @@ namespace GurpsSpace.PlanetCreation
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulationValue.ToString("N0") + ". ";
             question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
-            InputString inDiag = new InputString(question, p.Population.ToString("N0"), true);
+            string currPop;
+            if (p.Population == null)
+                currPop = "";
+            else
+                currPop = (p.Population ?? 0).ToString("N0");
+            InputString inDiag = new InputString(question, currPop, true);
             if (inDiag.ShowDialog() == true)
             {
                 if (inDiag.Answer != "")
                     return double.Parse(inDiag.Answer, NumberStyles.AllowThousands);
             }
 
-            return p.Population;
+            return null;
         }
-        private double GetPopulationOutpost(Planet p)
+        private double? GetPopulationOutpost(Planet p)
         {
             string question = "Enter the outpost population below. This will generally be in the range 100 to 100,000.";
-            InputString inDiag = new InputString(question, p.Population.ToString("N0"), true);
+            string currPop;
+            if (p.Population == null)
+                currPop = "";
+            else
+                currPop = (p.Population ?? 0).ToString("N0");
+            InputString inDiag = new InputString(question, currPop, true);
             if(inDiag.ShowDialog()==true)
             {
                 return double.Parse(inDiag.Answer, NumberStyles.AllowThousands);
             }
-            return p.Population;
+            return null;
         }
 
-        public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
+        public (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(Planet p)
         {
 
             string question = "Select the degree to which the settlement is socially unified. " +
@@ -374,15 +430,13 @@ namespace GurpsSpace.PlanetCreation
                 if (specCond != null)
                 {
                     // i.e. we must have clicked OK on the unity and any special conditions windows
-                    return (unity, specCond ?? fGovernmentSpecialConditions.None);
-                    // need the ?? as we don't want to return the nullable version
-                    // since we've checked it is not null, shouldn't ever be an issue
+                    return (unity, specCond);
                 }
 
             }
 
             // if here then must have clicked cancel on one of the windows
-            return (p.WorldUnityLevel, p.GovernmentSpecialConditions);
+            return (null, null);
         }
         private fGovernmentSpecialConditions? GetGovernmentSpecialConditions(Planet p)
         {
@@ -429,7 +483,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public eSocietyType GetSocietyType(Planet p)
+        public eSocietyType? GetSocietyType(Planet p)
         {
             string question = "Select the type of society prevalent in the settlement:";
             List<(int, string, string)> options = new List<(int, string, string)>();
@@ -464,13 +518,18 @@ namespace GurpsSpace.PlanetCreation
                 return (eSocietyType)inDiag.Answer.Item1;
 
             // cancel was clicked
-            return p.SocietyType;
+            return null;
         }
 
-        public int GetControlRating(Planet p)
+        public int? GetControlRating(Planet p)
         {
-            int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
-            int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
+            if (p.SocietyType==null)
+            {
+                MessageBox.Show("Need a society type before choosing control rating.");
+                return null;
+            }
+            int minCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? eSocietyType.Anarchy)].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? eSocietyType.Anarchy)].MaxControlRating;
 
             string question = "Select the control rating from the range below.";
             question += "\r\nFor a " + p.SocietyType.ToString() + " society this is generally CR " + minCR.ToString() + ((minCR == maxCR) ? "." : (" to CR " + maxCR.ToString() + "."));
@@ -511,7 +570,7 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
                 return inDiag.Answer.Item1;
             else
-                return p.ControlRating;
+                return null;
 
         }
         private (int, int, string) AdjustForSpecialConditions(Planet p, fGovernmentSpecialConditions specCond, int minCR, int maxCR, string question, int CRceiling = -1, int CRfloor = -1, int CRadj = 0)
@@ -546,13 +605,24 @@ namespace GurpsSpace.PlanetCreation
             return (minCR, maxCR, question);
         }
 
-        public double GetTradeVolume(Planet p)
+        public double? GetTradeVolume(Planet p)
         {
-            if (!p.Interstellar)
+            if (p.Interstellar == null)
+            {
+                MessageBox.Show("Whether the settlement is interstellar has not been set, check the settlement type.");
+                return null;
+            }
+            if (p.EconomicVolume == null)
+            {
+                MessageBox.Show("Need to specify the total economic volume before determining trade.");
+                return null;
+            }
+
+            if (!(p.Interstellar ?? true))
                 // no interstellar trade if uncontacted
                 return 0;
 
-            string question = "Enter the trade volume as a percentage of the total economic volume ($" + p.EconomicVolume.ToString("N0") + "). ";
+            string question = "Enter the trade volume as a percentage of the total economic volume ($" + (p.EconomicVolume ?? 0).ToString("N0") + "). ";
             switch (p.SettlementType)
             {
                 case eSettlementType.Homeworld:
@@ -566,19 +636,19 @@ namespace GurpsSpace.PlanetCreation
                     break;
             }
 
-            InputString inDiag = new InputString(question, (p.TradeVolume/p.EconomicVolume*100).ToString("N0"), true);
+            InputString inDiag = new InputString(question, ((p.TradeVolume / p.EconomicVolume * 100) ?? 0).ToString("N0"), true);
             if (inDiag.ShowDialog() == true)
             {
                 double prop = double.Parse(inDiag.Answer, NumberStyles.AllowThousands) / 100;
-                double trade = prop * p.EconomicVolume;
+                double trade = prop * (p.EconomicVolume ?? 0);
                 trade = RuleBook.RoundToSignificantFigures(trade, 2);
                 return trade;
             }
             else
-                return p.TradeVolume;
+                return null;
         }
 
-        public int GetSpaceportClass(Planet p)
+        public int? GetSpaceportClass(Planet p)
         {
             int recommendedSpaceportClass = 0;
             if (p.TradeVolume > RuleBook.TradeForSpaceportV && p.PopulationRating >= 6)
@@ -601,15 +671,15 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
                 return inDiag.Answer.Item1;
             else
-                return p.SpaceportClass;
+                return null;
         }
 
-        public List<Installation> GetInstallations(Planet p)
+        public List<Installation>? GetInstallations(Planet p)
         {
             throw new NotImplementedException();
         }
 
-        public List<Installation> GetInstallation(Planet p, string installationType)
+        public List<Installation>? GetInstallation(Planet p, string installationType)
         {
 
             // and get the relevant parameters
@@ -654,7 +724,7 @@ namespace GurpsSpace.PlanetCreation
             }
 
             if (!success) // i.e. user clicked cancel on first one
-                return p.GetInstallations(installationType);
+                return null;
             else
                 return instLst;
         }

@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -26,23 +27,23 @@ namespace GurpsSpace.PlanetCreation
         }
         public string Name
         {
-            get { return planet.Name; }
+            get { return planet.Name ?? "tbc"; }
             set { planet.Name = value; MemberUpdated(); }
         }
         public eSize Size
         {
-            get { return planet.Size; }
             set { planet.Size = value; MemberUpdated(); }
         }
         public eSubtype Subtype
         {
-            get { return planet.Subtype; }
             set { planet.Subtype = value; MemberUpdated(); }
         }
         public string TypeString
         {
             get
             {
+                if ((planet.Size == null) || (planet.Subtype == null))
+                    return "tbc";
                 if ((planet.Size == eSize.None) || (planet.Subtype == eSubtype.None))
                     return "n/a";
                 if (planet.Size == eSize.AsteroidBelt)
@@ -53,286 +54,345 @@ namespace GurpsSpace.PlanetCreation
         }
         public eResourceValueCategory ResourceValueCategory
         {
-            get { return planet.ResourceValueCategory; }
             set { planet.ResourceValueCategory = value; MemberUpdated(); }
         }
         public string ResourceValueString
-        { 
-            get 
-            { 
-                return planet.ResourceValueModifier.ToString() + " (" + planet.ResourceValueCategory.ToString() + ")"; 
-            } 
+        {
+            get
+            {
+                if (planet.ResourceValueCategory == null)
+                    return "tbc";
+                else
+                    return planet.ResourceValueModifier.ToString() + " (" + planet.ResourceValueCategory.ToString() + ")";
+            }
         }
         public string Description
         {
-            get { return planet.Description; }
+            get { return planet.Description ?? "tbc"; }
             set { planet.Description = value; MemberUpdated(); }
-        }
-        public bool IsPlanet
-        {
-            get { return planet.IsPlanet; }
         }
 
         // Atmosphere
         public bool HasAtmosphere
         {
-            get { return planet.HasAtmosphere; }
+            get { return planet.HasAtmosphere ?? false; }
         }
         public double AtmosphericMass
         {
-            get { return planet.AtmosphericMass; }
+            get { return (planet.AtmosphericMass ?? 0); }
             set { planet.AtmosphericMass = value; MemberUpdated(); }
         }
         public string AtmosphericConditionsString
         {
             get
             {
-                if (!planet.HasAtmosphere) // no atmosphere
-                    return "n/a";
-                if (planet.HasAtmosphere && planet.AtmosphericDescription == "") // has atmosphere, but not yet set
-                    return "tbc";
-                else
-                    return planet.AtmosphericConditions.ToString();
+                return (planet.AtmosphericConditions.ToString()) ?? "tbc";
             }
         }
         public bool HasAtmosphericOptions
         {
-            get { return planet.HasAtmosphericOptions; }
+            get { return planet.HasAtmosphericOptions ?? false; }
         }
         public fAtmosphericConditions AtmosphericConditions
         {
-            get { return planet.AtmosphericConditions; }
             set { planet.AtmosphericConditions = value; MemberUpdated(); }
         }
         public string AtmosphericDescription
         {
-            get { return planet.AtmosphericDescription; }
+            get { return planet.AtmosphericDescription ?? "tbc"; }
             set { planet.AtmosphericDescription = value; MemberUpdated(); }
         }
         public string AtmosphericPressureString
         {
             get
             {
-                return planet.AtmosphericPressure.ToString("N2") + " (" + planet.AtmosphericPressureCategory.ToString() + ")";
+                if (planet.AtmosphericPressure == null)
+                    return "tbc";
+                else
+                    return (planet.AtmosphericPressure ?? 0).ToString("N2") + " (" + planet.AtmosphericPressureCategory.ToString() + ")";
             }
         }
 
         // Aquasphere
         public bool HasLiquid
         {
-            get { return planet.HasLiquid; }
+            get { return planet.HasLiquid ?? false; }
         }
         public double MinimumHydrographicCoverage
         {
-            get { return planet.MinimumHydrographicCoverage; }
+            get { return (planet.MinimumHydrographicCoverage ?? 0); }
         }
         public double MaximumHydrographicCoverage
         {
-            get { return planet.MaximumHydrographicCoverage; }
+            get { return (planet.MaximumHydrographicCoverage ?? 0); }
         }
         public double HydrographicCoverage
         {
-            get { return planet.HydrographicCoverage; }
+            get { return (planet.HydrographicCoverage ?? 0); }
             set { planet.HydrographicCoverage = value; MemberUpdated(); }
         }
         public string LiquidType
         {
-            get { return planet.LiquidType.ToString(); }
+            get { return planet.LiquidType.ToString() ?? "tbc"; }
         }
 
         // Climate
         public int TempMin
         {
-            get { return planet.MinSurfaceTemperatureK; }
-        }
+            get { return (planet.MinSurfaceTemperatureK ?? 0); }
+        }   
         public int TempMax
         {
-            get { return planet.MaxSurfaceTemperatureK; }
+            get { return (planet.MaxSurfaceTemperatureK ?? 0); }
         }
         public int TempStep
         {
-            get { return planet.StepSurfaceTemperatureK; }
+            get { return (planet.StepSurfaceTemperatureK ?? 0); }
         }
         public int AverageSurfaceTempK
         {
-            get { return planet.AverageSurfaceTempK; }
+            get { return (planet.AverageSurfaceTempK ?? 0); }
             set { planet.AverageSurfaceTempK = value; MemberUpdated(); }
         }
         public string ClimateTypeString
         {
-            get { return planet.ClimateType.ToString(); }
+            get { return planet.ClimateType.ToString() ?? "tbc"; }
         }
         public int BlackbodyTempK
         {
-            get { return planet.BlackbodyTempK; }
+            get { return (planet.BlackbodyTempK ?? 0); }
         }
 
         // Lithosphere
-        public eCoreType CoreType
-        {
-            get { return planet.CoreType; }
-        }
         public string CoreTypeString
         {
-            get { return planet.CoreType.ToString(); }
+            get 
+            {
+                if (planet.CoreType == null)
+                    return "tbc";
+                else
+                    return planet.CoreType.ToString()!; 
+            }
         }
         public double MinDensity
         {
-            get { return planet.MinDensity; }
+            get { return (planet.MinDensity ?? 0); }
         }
         public double MaxDensity
         {
-            get { return planet.MaxDensity; }
+            get { return (planet.MaxDensity ?? 0); }
         }
         public double Density
         {
-            get { return planet.Density; }
+            get { return (planet.Density ?? 0); }
             set { planet.Density = value; MemberUpdated(); }
         }
         public double MinGravity
         {
-            get { return planet.MinGravity; }
+            get { return (planet.MinGravity ?? 0); }
         }
         public double MaxGravity
         {
-            get { return planet.MaxGravity; }
+            get { return (planet.MaxGravity ?? 0); }
         }
         public double Gravity
         {
-            get { return planet.Gravity; }
+            get { return (planet.Gravity ?? 0); }
             set { planet.Gravity = value; MemberUpdated(); }
         }
         public string DiameterString
         {
-            get { return planet.DiameterEarths.ToString("N2") + " Earths (" + planet.DiameterMiles.ToString("N0") + " Miles)"; }
+            get
+            {
+                if (planet.DiameterEarths == null)
+                    return "tbc";
+                else
+                    return (planet.DiameterEarths ?? 0).ToString("N2") + " Earths (" + (planet.DiameterMiles ?? 0).ToString("N0") + " Miles)";
+            }
         }
         public string MassString
         {
-            get { return planet.Mass.ToString("N2") + " Earths"; }
+            get 
+            {
+                if (planet.Mass == null)
+                    return "tbc";
+                else
+                    return (planet.Mass ?? 0).ToString("N2") + " Earths"; 
+            }
         }
 
         // Social
         public eSettlementType SettlementType
         {
-            get { return planet.SettlementType; }
-            set { planet.SettlementType = value; MemberUpdated(); }
+            set
+            { 
+                planet.SettlementType = value;
+                if (planet.SettlementType == eSettlementType.None)
+                {
+                    planet.LocalSpecies = null;
+                    planet.LocalTechLevel = null;
+                    planet.LocalTechLevelRelativity = null;
+                }
+                MemberUpdated(); 
+            }
         }
-        public bool HasSettlement { get { return planet.HasSettlement; } }
+        public bool HasSettlement { get { return planet.HasSettlement ?? false; } }
         public string SettlementTypeString
         {
             get
             {
-                string res = planet.SettlementType.ToString();
-                if (planet.SettlementType==eSettlementType.Colony)
+                if (planet.SettlementType == null)
+                    return "tbc";
+
+                string res = planet.SettlementType.ToString() ?? "tbc";
+                if (planet.SettlementType == eSettlementType.Colony)
                 {
-                    res += " (" + planet.ColonyAge.ToString("N0") + " years old)";
+                    if (planet.ColonyAge == null)
+                        res += " (age tbc)";
+                    else
+                        res += " (" + (planet.ColonyAge ?? 0).ToString("N0") + " years old)";
                 }
                 if (planet.SettlementType == eSettlementType.Homeworld)
                 {
-                    if (planet.Interstellar)
-                        res += " (Interstellar)";
-                    else
-                        res += " (Uncontacted)";
+                    if (planet.Interstellar != null)
+                    {
+                        if (planet.Interstellar ?? false)
+                            res += " (Interstellar)";
+                        else
+                            res += " (Uncontacted)";
+                    }
                 }
                 return res;
             }
         }
         public int ColonyAge
         {
-            get { return planet.ColonyAge; }
+            get { return (planet.ColonyAge ?? 0); }
             set { planet.ColonyAge = value; MemberUpdated(); }
         }
         public bool Interstellar
         {
-            get { return planet.Interstellar; }
+            get { return planet.Interstellar ?? true; }
             set { planet.Interstellar = value; MemberUpdated(); }
         }
         public string LocalSpeciesName
         {
-            get { return planet.LocalSpecies.Name ?? "tbc"; }
+            get
+            {
+                if (planet.LocalSpecies == null)
+                    return "tbc";
+                else
+                    return planet.LocalSpecies.Name!;
+            }
         }
-        public int AffinityScore { get { return planet.AffinityScore; } }
+        public int AffinityScore { get { return (planet.AffinityScore ?? 0); } }
         public string AffinityString
         {
             get
             {
-                string res = planet.AffinityScore.ToString("N0");
-                res += " (Resources: " + planet.ResourceValueModifier.ToString("N0") + ", ";
-                res += "Habitability: " + planet.Habitability.ToString("N0") + ")";
-                return res;
-
+                if (planet.AffinityScore == null)
+                    return "tbc";
+                else
+                {
+                    // if affinity score is not null, then resources and habitability are both not null
+                    string res = (planet.AffinityScore ?? 0).ToString("N0");
+                    res += " (Resources: " + (planet.ResourceValueModifier ?? 0).ToString("N0") + ", ";
+                    res += "Habitability: " + (planet.Habitability ?? 0).ToString("N0") + ")";
+                    return res;
+                }
             }
         }
-        public int Habitability { get { return planet.Habitability; } }
+        public int Habitability { get { return (planet.Habitability ?? 0); } }
         public int LocalTechLevel
         {
-            get { return planet.LocalTechLevel; }
             set { planet.LocalTechLevel = value; MemberUpdated(); }
         }
         public eTechLevelRelativity LocalTechLevelRelativity
         {
-            get { return planet.LocalTechLevelRelativity; }
             set { planet.LocalTechLevelRelativity = value; MemberUpdated(); }
         }
         public string LocalTechLevelString
         {
             get
             {
-                string TLval = "TL" + planet.LocalTechLevel.ToString("N0");
-                string AgeDesc = "(" + planet.LocalTechLevelAge;
-                if (planet.LocalTechLevelRelativity == eTechLevelRelativity.Delayed)
+                if (planet.LocalTechLevel == null || planet.LocalTechLevelRelativity == null)
+                    return "tbc";
+                else
                 {
-                    TLval += "-1";
-                    AgeDesc += " - Delayed";
+                    string TLval = "TL" + (planet.LocalTechLevel ?? 0).ToString("N0");
+                    string AgeDesc = "(" + planet.LocalTechLevelAge;
+                    if (planet.LocalTechLevelRelativity == eTechLevelRelativity.Delayed)
+                    {
+                        TLval += "-1";
+                        AgeDesc += " - Delayed";
+                    }
+                    if (planet.LocalTechLevelRelativity == eTechLevelRelativity.Advanced)
+                    {
+                        TLval += "+1";
+                        AgeDesc += " - Advanced";
+                    }
+                    AgeDesc += ")";
+                    return TLval + " " + AgeDesc;
                 }
-                if (planet.LocalTechLevelRelativity == eTechLevelRelativity.Advanced)
-                {
-                    TLval += "+1";
-                    AgeDesc += " - Advanced";
-                }
-                AgeDesc += ")";
-                return TLval + " " + AgeDesc;
             }
         }
         public Species LocalSpecies
         {
-            get { return planet.LocalSpecies; }
+            get { return planet.LocalSpecies!; }
             set { planet.LocalSpecies = value; MemberUpdated(); }
         }
 
         // habitants
-        public double CarryingCapacity { get { return planet.CarryingCapacity; } }
+        public double CarryingCapacity { get { return (planet.CarryingCapacity ?? 0); } }
         public double Population
         {
-            get { return planet.Population; }
+            get { return planet.Population ?? 0; }
             set
             {
                 planet.Population = value;
                 MemberUpdated();
             }
         }
-        public int PopulationRating { get { return planet.PopulationRating; } }
         public string PopulationString
         {
             get
             {
-                return planet.Population.ToString("N0") + " (PR " + planet.PopulationRating.ToString("N0") + ")";
+                if (planet.Population == null)
+                    return "tbc";
+                else
+                    return (planet.Population ?? 0).ToString("N0") + " (PR " + (planet.PopulationRating ?? 0).ToString("N0") + ")";
             }
         }
 
         // governance
         public eWorldUnityLevel WorldUnityLevel 
         { 
-            get { return planet.WorldUnityLevel; }
+            get
+            {
+                return planet.WorldUnityLevel ?? eWorldUnityLevel.Diffuse; 
+            }
             set 
             {
                 planet.WorldUnityLevel = value;
                 MemberUpdated(); 
             }
         }
+        public string WorldUnityString
+        {
+            get
+            {
+                if (planet.WorldUnityLevel == null)
+                    return "tbc";
+                else
+                    return planet.WorldUnityLevel.ToString()!;
+            }
+        }
         public fGovernmentSpecialConditions GovernmentSpecialConditions
         {
-            get { return planet.GovernmentSpecialConditions; }
+            get 
+            { 
+                return planet.GovernmentSpecialConditions ?? fGovernmentSpecialConditions.None; 
+            }
             set
             {
                 planet.GovernmentSpecialConditions = value;
@@ -341,7 +401,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public eSocietyType SocietyType
         {
-            get { return planet.SocietyType; }
+            get { return planet.SocietyType ?? eSocietyType.Anarchy; }
             set
             {
                 planet.SocietyType = value;
@@ -352,58 +412,83 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                string res = planet.SocietyType.ToString();
-                if (planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
+                if (planet.SocietyType == null)
+                    return "tbc";
+                string res = planet.SocietyType.ToString()!;
+                if (planet.GovernmentSpecialConditions != null
+                    && planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
                     res += " (" + planet.GovernmentSpecialConditions.ToString() + ")";
                 return res;
             }
         }
         public int ControlRating
         {
-            get { return planet.ControlRating; }
+            get { return (planet.ControlRating ?? 0); }
             set { planet.ControlRating = value; MemberUpdated(); }
         }
         public string ControlRatingString
         {
             get
             {
-                return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[ControlRating] + ")";
+                if (planet.ControlRating == null)
+                    return "tbc";
+                else
+                    return "CR " + ControlRating.ToString() + " (" + RuleBook.ControlRatings[ControlRating] + ")";
             }
         }
 
         // economics
-        public double IncomePerCapita { get { return planet.IncomePerCapita; } }
-        public eWealthLevel WealthLevel { get { return planet.WealthLevel; } }
+        public eWealthLevel WealthLevel { get { return (planet.WealthLevel ?? 0); } }
         public string IncomePerCapitaString 
-        { 
-            get { return "$" + IncomePerCapita.ToString("N0") + " (" + WealthLevel + ")"; }
+        {
+            get
+            {
+                if (planet.IncomePerCapita == null)
+                    return "tbc";
+                else
+                    return "$" + (planet.IncomePerCapita ?? 0).ToString("N0") + " (" + planet.WealthLevel + ")";
+            }
         }
-        public double EconomicVolume { get { return planet.EconomicVolume; } }
+        public double EconomicVolume { get { return (planet.EconomicVolume ?? 0); } }
         public string EconomicVolumeString
         {
             get
             {
-                return "$" + planet.EconomicVolume.ToString("N0");
+                if (planet.EconomicVolume == null)
+                    return "tbc";
+                else
+                    return "$" + (planet.EconomicVolume ?? 0).ToString("N0");
             }
         }
         public double TradeVolume
         {
-            get { return planet.TradeVolume; }
+            get { return planet.TradeVolume ?? 0; }
             set { planet.TradeVolume = value; MemberUpdated(); }
         }
         public string TradeVolumeString
         {
-            get { return "$" + TradeVolume.ToString("N0"); }
+            get 
+            {
+                if (Interstellar == true)
+                    return "$" + TradeVolume.ToString("N0");
+                else if (Interstellar == false)
+                    return "Uncontacted";
+                else
+                    return "tbc";
+            }
         }
         public int SpaceportClass
         {
-            get { return planet.SpaceportClass; }
+            get { return planet.SpaceportClass ?? 0; }
             set { planet.SpaceportClass = value; MemberUpdated(); }
         }
         public string SpaceportClassString
         {
             get
             {
+                if (planet.SpaceportClass == null)
+                    return "tbc";
+
                 string classNum = "";
                 switch (planet.SpaceportClass)
                 {
@@ -427,7 +512,7 @@ namespace GurpsSpace.PlanetCreation
                         break;
                 }
 
-                return "Class " + classNum + " (" + RuleBook.SpaceportName[planet.SpaceportClass] + ")";
+                return "Class " + classNum + " (" + RuleBook.SpaceportName[(planet.SpaceportClass ?? 0)] + ")";
 
             }
         }

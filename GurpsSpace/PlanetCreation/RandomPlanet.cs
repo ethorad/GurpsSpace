@@ -10,13 +10,13 @@ namespace GurpsSpace.PlanetCreation
 {
     internal class RandomPlanet : IPlanetCreator
     {
-        public string GetName(Planet p)
+        public string? GetName(Planet p)
         {
             string name = "Randomia-" + DiceBag.Rand(1, 100);
             return name;
         }
 
-        public (eSize, eSubtype) GetSizeAndSubtype(Planet p)
+        public (eSize?, eSubtype?) GetSizeAndSubtype(Planet p)
         {
             eSize size;
             eSubtype subtype;
@@ -40,19 +40,29 @@ namespace GurpsSpace.PlanetCreation
             return (size, subtype);
         }
 
-        public eResourceValueCategory GetResourceValueCategory(Planet p)
+        public eResourceValueCategory? GetResourceValueCategory(Planet p)
         {
+            if (p.IsPlanet==null)
+                return null;
+
             int roll = DiceBag.Roll(3);
-            if (p.IsPlanet)
+            if (p.IsPlanet == true)
                 return RuleBook.ResourceValueCategoryPlanet[roll];
             else
                 return RuleBook.ResourceValueCategoryAsteroidBelt[roll];
         }
 
-        public double GetAtmosphericMass(Planet p)
+        public double? GetAtmosphericMass(Planet p)
         {
+            if (p.Size == null || p.Subtype == null)
+            {
+                MessageBox.Show("Need to select a planet size and subtype first.");
+                return null;
+            }
+            eSize size = p.Size ?? eSize.None;
+            eSubtype subtype = p.Subtype ?? eSubtype.None;
 
-            if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
+            if (!RuleBook.PlanetParams.ContainsKey((size, subtype)) || !RuleBook.PlanetParams[(size, subtype)].HasAtmosphere)
                 return 0;
 
             else
@@ -68,17 +78,25 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public (fAtmosphericConditions, string) GetAtmosphericConditions(Planet p)
+        public (fAtmosphericConditions?, string?) GetAtmosphericConditions(Planet p)
         {
+            if (p.Size == null || p.Subtype == null)
+            {
+                MessageBox.Show("Need to select a planet size and subtype first.");
+                return (null, null);
+            }
+            eSize size = p.Size ?? eSize.None;
+            eSubtype subtype = p.Subtype ?? eSubtype.None;
 
-            if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
+
+            if (!RuleBook.PlanetParams.ContainsKey((size, subtype)) || !RuleBook.PlanetParams[(size, subtype)].HasAtmosphere)
             {
                 return (fAtmosphericConditions.None, "None. ");
             }
             else
             {
-                fAtmosphericConditions baseCon;
-                string baseDesc;
+                fAtmosphericConditions? baseCon;
+                string? baseDesc;
                 fAtmosphericConditions margCon = fAtmosphericConditions.None;
                 string margDesc = "";
 
@@ -90,16 +108,25 @@ namespace GurpsSpace.PlanetCreation
             }
 
         }
-        private (fAtmosphericConditions, string) GetBaseAtmosphericConditions(Planet p)
+        private (fAtmosphericConditions?, string?) GetBaseAtmosphericConditions(Planet p)
         {
-            if (!RuleBook.PlanetParams.ContainsKey((p.Size, p.Subtype)) || !RuleBook.PlanetParams[(p.Size, p.Subtype)].HasAtmosphere)
+            if (p.Size == null || p.Subtype == null)
+            {
+                MessageBox.Show("Need to select a planet size and subtype first.");
+                return (null, null);
+            }
+
+            eSize size = p.Size ?? eSize.None;
+            eSubtype subtype = p.Subtype ?? eSubtype.None;
+
+            if (!RuleBook.PlanetParams.ContainsKey((size, subtype)) || !RuleBook.PlanetParams[(size, subtype)].HasAtmosphere)
                 return (fAtmosphericConditions.None, "None");
 
             int roll = DiceBag.Roll(3);
-            if (roll <= RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereANumber)
-                return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereA;
+            if (roll <= RuleBook.PlanetParams[(size, subtype)].AtmosphereANumber)
+                return RuleBook.PlanetParams[(size, subtype)].AtmosphereA;
             else
-                return RuleBook.PlanetParams[(p.Size, p.Subtype)].AtmosphereB;
+                return RuleBook.PlanetParams[(size, subtype)].AtmosphereB;
 
         }
         private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(Planet p)
@@ -156,9 +183,17 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public double GetHydrographicCoverage(Planet p)
+        public double? GetHydrographicCoverage(Planet p)
         {
-            PlanetParameters pp = RuleBook.PlanetParams[(p.Size, p.Subtype)];
+            if (p.Size == null || p.Subtype == null)
+            {
+                MessageBox.Show("Need to select a planet size and subtype first.");
+                return null;
+            }
+            eSize size = p.Size ?? eSize.None;
+            eSubtype subtype = p.Subtype ?? eSubtype.None;
+
+            PlanetParameters pp = RuleBook.PlanetParams[(size, subtype)];
             double cover = 0;
 
             cover = ((double)(DiceBag.Roll(pp.HydroDice) + pp.HydroAdj)) * 0.1;
@@ -174,15 +209,21 @@ namespace GurpsSpace.PlanetCreation
             return cover;
         }
 
-        public int GetAverageSurfaceTempK(Planet p)
+        public int? GetAverageSurfaceTempK(Planet p)
         {
-            int tempMin = p.MinSurfaceTemperatureK;
-            int tempStep = p.StepSurfaceTemperatureK;
+            // should really be all or none here, so could just check one of them
+            if (p.MinSurfaceTemperatureK == null ||
+                p.MaxSurfaceTemperatureK == null ||
+                p.StepSurfaceTemperatureK == null)
+                return null;
+
+            int tempMin = (p.MinSurfaceTemperatureK ?? 0);
+            int tempStep = (p.StepSurfaceTemperatureK ?? 0);
             int tempK = tempMin + (DiceBag.Roll(3) - 3) * tempStep;
             return tempK;
         }
 
-        public double GetDensity(Planet p)
+        public double? GetDensity(Planet p)
         {
             switch(p.CoreType)
             {
@@ -196,10 +237,13 @@ namespace GurpsSpace.PlanetCreation
             return p.Density;
         }
 
-        public double GetGravity(Planet p)
+        public double? GetGravity(Planet p)
         {
-            double minG = p.MinGravity;
-            double maxG = p.MaxGravity;
+            if (p.MinGravity == null || p.MaxGravity == null)
+                return null;
+
+            double minG = (p.MinGravity ?? 0);
+            double maxG = (p.MaxGravity ?? 0);
             int roll = DiceBag.Roll(2) - 2;
             int adj = DiceBag.Rand(-5, 5);
             double perc = (double)roll / 10 + (double)adj / 100;
@@ -212,7 +256,7 @@ namespace GurpsSpace.PlanetCreation
             return grav;
         }
 
-        public (eSettlementType, int, bool) GetSettlementType(Planet p)
+        public (eSettlementType?, int?, bool?) GetSettlementType(Planet p)
         {
             eSettlementType settType = eSettlementType.None;
             int colonyAge = 0;
@@ -244,19 +288,22 @@ namespace GurpsSpace.PlanetCreation
             return (settType, colonyAge, interstellar);
         }
 
-        public Species GetLocalSpecies(Planet p)
+        public Species? GetLocalSpecies(Planet p)
         {
             int numSpecies = p.Setting.Species.Count;
             int randNum = DiceBag.Rand(0, numSpecies - 1);
             return p.Setting.Species[randNum];
         }
 
-        public (int, eTechLevelRelativity) GetLocalTechLevel(Planet p)
+        public (int?, eTechLevelRelativity?) GetLocalTechLevel(Planet p)
         {
             int roll = DiceBag.Roll(3);
 
+            if (p.SettlementType == null || p.Habitability==null)
+                return (null, null);
+
             // -10 if uncontacted homeworld
-            if (p.SettlementType == eSettlementType.Homeworld && !p.Interstellar)
+            if (p.SettlementType == eSettlementType.Homeworld && (!p.Interstellar ?? true))
                 roll -= 10;
 
             if ((p.Habitability >= 4 && p.Habitability <= 6) &&
@@ -308,7 +355,7 @@ namespace GurpsSpace.PlanetCreation
             return (tl, adj);
         }
 
-        public double GetPopulation(Planet p)
+        public double? GetPopulation(Planet p)
         {
             switch (p.SettlementType)
             {
@@ -322,18 +369,21 @@ namespace GurpsSpace.PlanetCreation
                     return 0;
             }
         }
-        private double GetPopulationHomeworld(Planet p)
+        private double? GetPopulationHomeworld(Planet p)
         {
+            if (p.CarryingCapacity == null)
+                return null;
+
             double proportion;
             if (p.LocalTechLevel <= 4)
                 proportion = ((double)DiceBag.Roll(2) + 3) / 10;
             else
                 proportion = 10 / (double)DiceBag.Roll(2);
-            double pop = proportion * p.CarryingCapacity;
+            double pop = proportion * (p.CarryingCapacity ?? 0);
             pop = RuleBook.RoundToSignificantFigures(pop, 2);
             return pop;
         }
-        private double GetPopulationColony(Planet p)
+        private double? GetPopulationColony(Planet p)
         {
             // rather than using the table directly, instead calculating based on the box on page 93
             // each race has a starting colony size, a growth rate, and an affinity multiplier
@@ -344,13 +394,20 @@ namespace GurpsSpace.PlanetCreation
             // LN(affinitymult) / LN(1+growth) gives how many years of growth is equal to the affinity multiplier
             // and this figure / 10 is how many rows on the table from each +1 to affinity
 
+            if (p.LocalSpecies == null)
+                return null;
+            if (p.ColonyAge == null)
+                return null;
+            if (p.AffinityScore == null)
+                return null;
+
             Species s = p.LocalSpecies;
 
-            int ageInDecades = p.ColonyAge / 10;
+            int ageInDecades = (p.ColonyAge??0) / 10;
             int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
-            int roll = DiceBag.Roll(3) + p.AffinityScore * affinityMod + ageInDecades;
+            int roll = DiceBag.Roll(3) + (p.AffinityScore ?? 0) * affinityMod + ageInDecades;
 
             // effective decades of growth is the difference between the roll and the min
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
@@ -363,7 +420,7 @@ namespace GurpsSpace.PlanetCreation
 
             return population;
         }
-        private double GetPopulationOutpost(Planet p)
+        private double? GetPopulationOutpost(Planet p)
         {
             int roll = DiceBag.Roll(3);
             double population = RuleBook.OutpostPopulation[roll];
@@ -373,7 +430,7 @@ namespace GurpsSpace.PlanetCreation
             return population;
         }
 
-        public (eWorldUnityLevel, fGovernmentSpecialConditions) GetWorldGovernance(Planet p)
+        public (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(Planet p)
         {
             int roll;
             eWorldUnityLevel unity;
@@ -425,15 +482,18 @@ namespace GurpsSpace.PlanetCreation
             return (unity, specCond | secondCond);
         }
 
-        public eSocietyType GetSocietyType(Planet p)
+        public eSocietyType? GetSocietyType(Planet p)
         {
+            if (p.LocalTechLevel == null || p.Interstellar == null)
+                return null;
+
             int roll = DiceBag.Roll(3);
 
-            roll += Math.Min(10, p.LocalTechLevel);
+            roll += Math.Min(10, (p.LocalTechLevel ?? 0));
 
-            if (!p.Interstellar)
+            if (p.Interstellar == false)
                 return RuleBook.SocietyTypeAnarchy[roll];
-            
+
             switch (p.Setting.SocietyType)
             {
                 case eSettingSocietyType.Anarchy:
@@ -449,13 +509,15 @@ namespace GurpsSpace.PlanetCreation
                 default:
                     return RuleBook.SocietyTypeAnarchy[roll];
             }
-
         }
 
-        public int GetControlRating(Planet p)
+        public int? GetControlRating(Planet p)
         {
-            int minCR = RuleBook.SocietyTypeParams[p.SocietyType].MinControlRating;
-            int maxCR = RuleBook.SocietyTypeParams[p.SocietyType].MaxControlRating;
+            if (p.SocietyType == null)
+                return null;
+
+            int minCR = RuleBook.SocietyTypeParams[(p.SocietyType??0)].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? 0)].MaxControlRating;
 
             // adjust for any special conditions
             // see Campaigns p510 for details
@@ -501,8 +563,8 @@ namespace GurpsSpace.PlanetCreation
             return DiceBag.Rand(minCR, maxCR);
         }
 
-        public double GetTradeVolume(Planet p)
-        { 
+        public double? GetTradeVolume(Planet p)
+        {
             // For trade volume between worlds use:
             // T = K * V1 * V2 / D
             // where:
@@ -518,9 +580,12 @@ namespace GurpsSpace.PlanetCreation
             // If colony, then higher trade volume, say 30%-70%
             // If outpost then virtually all trade volume, say 80%-100%
 
+            if (p.Interstellar == null || p.EconomicVolume == null)
+                return null;
+
             double tradeProp = 0;
 
-            if (!p.Interstellar)
+            if (!(p.Interstellar ?? true))
                 tradeProp = 0;
             else if (p.SettlementType == eSettlementType.Homeworld)
                 tradeProp = ((double)DiceBag.Rand(1, 4)) * 0.1;
@@ -529,12 +594,12 @@ namespace GurpsSpace.PlanetCreation
             else if (p.SettlementType == eSettlementType.Outpost)
                 tradeProp = ((double)DiceBag.Rand(8, 10)) * 0.1;
 
-            double trade = tradeProp * p.EconomicVolume;
+            double trade = tradeProp * (p.EconomicVolume ?? 0);
             trade = RuleBook.RoundToSignificantFigures(trade, 2);
             return trade;
         }
 
-        public int GetSpaceportClass(Planet p)
+        public int? GetSpaceportClass(Planet p)
         {
             // check for class V
             if (p.TradeVolume > RuleBook.TradeForSpaceportV ||
@@ -565,7 +630,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public List<Installation> GetInstallations(Planet p)
+        public List<Installation>? GetInstallations(Planet p)
         {
             List<Installation> lst = new List<Installation>();
 
@@ -631,7 +696,7 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public List<Installation> GetInstallation(Planet p, string installationType)
+        public List<Installation>? GetInstallation(Planet p, string installationType)
         {
             List<Installation> lst = new List<Installation>();
             InstallationParameters instParam = RuleBook.InstallationParams[0];
