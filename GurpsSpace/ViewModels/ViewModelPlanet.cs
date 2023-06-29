@@ -224,7 +224,17 @@ namespace GurpsSpace.PlanetCreation
         // Social
         public eSettlementType SettlementType
         {
-            set { planet.SettlementType = value; MemberUpdated(); }
+            set
+            { 
+                planet.SettlementType = value;
+                if (planet.SettlementType == eSettlementType.None)
+                {
+                    planet.LocalSpecies = null;
+                    planet.LocalTechLevel = null;
+                    planet.LocalTechLevelRelativity = null;
+                }
+                MemberUpdated(); 
+            }
         }
         public bool HasSettlement { get { return planet.HasSettlement ?? false; } }
         public string SettlementTypeString
@@ -402,7 +412,9 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                string res = planet.SocietyType.ToString() ?? "tbc";
+                if (planet.SocietyType == null)
+                    return "tbc";
+                string res = planet.SocietyType.ToString()!;
                 if (planet.GovernmentSpecialConditions != null
                     && planet.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
                     res += " (" + planet.GovernmentSpecialConditions.ToString() + ")";

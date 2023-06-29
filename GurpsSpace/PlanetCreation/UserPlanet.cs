@@ -139,6 +139,9 @@ namespace GurpsSpace.PlanetCreation
             {
                 switch ((eSettlementType)radioDiag.Answer.Item1)
                 {
+                    case eSettlementType.None:
+                        return (eSettlementType.None, null, null);
+
                     case eSettlementType.Outpost:
                         return (eSettlementType.Outpost, null, true);
 
