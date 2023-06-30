@@ -42,9 +42,11 @@ namespace GurpsSpace.PlanetCreation
 
         public eResourceValueCategory? GetResourceValueCategory(Planet p)
         {
-            if (p.IsPlanet==null)
+            if (p.IsPlanet == null)
+            {
+                MessageBox.Show("Need to have a planet type selected.");
                 return null;
-
+            }
             int roll = DiceBag.Roll(3);
             if (p.IsPlanet == true)
                 return RuleBook.ResourceValueCategoryPlanet[roll];

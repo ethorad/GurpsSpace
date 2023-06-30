@@ -75,7 +75,7 @@ namespace GurpsSpace.PlanetCreation
         // Atmosphere
         public bool HasAtmosphere
         {
-            get { return planet.HasAtmosphere ?? false; }
+            get { return (planet.AtmosphericMass ?? 0) > 0; }
         }
         public double AtmosphericMass
         {

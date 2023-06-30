@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace GurpsSpace.PlanetCreation
@@ -10,9 +11,21 @@ namespace GurpsSpace.PlanetCreation
     public class PlanetFactory
     {
         private Planet planet;
+        public Planet Planet { get { return planet; } }
+        private PlanetParameters? parameters;
 
         private IPlanetCreator randomiser;
         private IPlanetCreator userInput;
+
+        public string? Name { get { return planet.Name; } set {  planet.Name = value; } }
+        public eSize? Size { get { return planet.Size; } set { planet.Size = value; } }
+        public eSubtype? Subtype { get { return planet.Subtype; } set { planet.Subtype = value; } }
+        public eOverallType? OverallType { get { return planet.OverallType; } }
+        public eResourceValueCategory? ResourceValueCategory { get { return planet.ResourceValueCategory; } }
+        public int? ResourceValueModifier { get { return planet.ResourceValueModifier; } }
+        public string? Description { get { return planet.Description; } set { planet.Description = value; } }
+
+        public bool? HasAtmosphere { get { return (parameters == null) ? null : parameters.HasAtmosphere; } }
 
         public List<Installation> Installations { get { return planet.Installations; } }
 
@@ -73,19 +86,11 @@ namespace GurpsSpace.PlanetCreation
             switch (param)
             {
                 case "Name":
-                    string? name = pc.GetName(planet);
-                    if (name != null)
-                        planet.Name = name;
+                    SetName(pc);
                     break;
 
                 case "Type":
-                    eSize? size;
-                    eSubtype? subtype;
-                    (size, subtype) = pc.GetSizeAndSubtype(planet);
-                    if (size != null)
-                        planet.Size = size ?? eSize.None;
-                    if (subtype != null)
-                        planet.Subtype = subtype ?? eSubtype.None;
+                    SetType(pc);
                     break;
 
                 case "ResourceValueCategory":
@@ -200,6 +205,29 @@ namespace GurpsSpace.PlanetCreation
                         planet.SpaceportClass = spacepostClass ?? 0;
                     break;
             }
+        }
+
+        private void SetName(IPlanetCreator pc)
+        {
+            string? name = pc.GetName(planet);
+            if (name != null)
+                planet.Name = name;
+        }
+
+        private void SetType(IPlanetCreator pc)
+        {
+            eSize? size;
+            eSubtype? subtype;
+            (size, subtype) = pc.GetSizeAndSubtype(planet);
+            if (size != null)
+                planet.Size = size ?? eSize.None;
+            if (subtype != null)
+                planet.Subtype = subtype ?? eSubtype.None;
+
+            if (RuleBook.PlanetParams.ContainsKey((planet.SizeVal, planet.SubtypeVal)))
+                parameters = RuleBook.PlanetParams[(planet.SizeVal, planet.SubtypeVal)];
+            else
+                parameters = null;
         }
 
 

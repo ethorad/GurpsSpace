@@ -12,7 +12,7 @@ namespace GurpsSpace
         private PlanetParameters? parameters;
         private string? name;
         public string? Name { get { return name; } set { name = value; } }
-        public eOverallType? OverallType { get { return (parameters == null) ? null : parameters.OverallType; } }
+        public eOverallType? OverallType { get { return RuleBook.OverallTypeBySubtype(Subtype); } }
         private string? description;
         public string? Description
         {
@@ -22,7 +22,7 @@ namespace GurpsSpace
                 description = value;
             }
         }
-        private eSize? size; 
+        private eSize? size;
         public eSize SizeVal { get { return size ?? eSize.None; } }
         public eSize? Size
         {
@@ -36,7 +36,7 @@ namespace GurpsSpace
             }
         }
         private eSubtype? subtype;
-        public eSubtype SubtypeVal { get { return subtype?? eSubtype.None; } }
+        public eSubtype SubtypeVal { get { return subtype ?? eSubtype.None; } }
         public eSubtype? Subtype
         {
             get { return subtype; }
@@ -62,7 +62,6 @@ namespace GurpsSpace
             }
         }
 
-        public bool? HasAtmosphere { get { return (parameters == null) ? null : parameters.HasAtmosphere; } }
         private double? atmosphericMass;
         public double? AtmosphericMass
         {
@@ -677,9 +676,9 @@ namespace GurpsSpace
             // refresh various parameters if the planet type has updated
 
             // set atmosphere to 1, or 0 if there is no atmosphere
-            if (HasAtmosphere == null)
+            if (parameters==null)
                 AtmosphericMass = null;
-            else if (HasAtmosphere == true)
+            else if (parameters!.HasAtmosphere == true)
                 AtmosphericMass = 1;
             else
                 AtmosphericMass = 0;

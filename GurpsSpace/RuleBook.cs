@@ -20,6 +20,30 @@ namespace GurpsSpace
         static public Dictionary<eSocietyType, SocietyTypeParameters> SocietyTypeParams;
         static public List<InstallationParameters> InstallationParams;
 
+        static public eOverallType? OverallTypeBySubtype(eSubtype? subtype)
+        {
+            if (subtype == null)
+                return null;
+
+            switch (subtype)
+            {
+                case eSubtype.Chthonian:
+                case eSubtype.Greenhouse:
+                case eSubtype.Sulphur:
+                case eSubtype.Ammonia:
+                    return eOverallType.Hostile;
+                case eSubtype.Hadean:
+                case eSubtype.Ice:
+                case eSubtype.Rock:
+                case eSubtype.AsteroidBelt:
+                case eSubtype.Ocean:
+                    return eOverallType.Barren;
+                case eSubtype.Garden:
+                    return eOverallType.Garden;
+                default:
+                    return eOverallType.None;
+            }
+        }
         static public IndexedTable1D<eOverallType> OverallType = new IndexedTable1D<eOverallType>(new eOverallType[]
         {
             eOverallType.Hostile, // 7 (as 7 or less is hostile)

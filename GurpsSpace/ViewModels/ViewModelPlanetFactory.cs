@@ -11,6 +11,57 @@ namespace GurpsSpace.PlanetCreation
     {
         private PlanetFactory planetFactory;
 
+        public string Name 
+        { 
+            get 
+            { 
+                return (planetFactory.Name ?? "tbc"); 
+            } 
+            set 
+            { 
+                planetFactory.Name = value; 
+                MemberUpdated(); 
+            } 
+        }
+        public string TypeString
+        {
+            get
+            {
+                if ((planetFactory.Size == null) || (planetFactory.Subtype == null))
+                    return "tbc";
+                if ((planetFactory.Size == eSize.None) || (planetFactory.Subtype == eSubtype.None))
+                    return "n/a";
+                if (planetFactory.Size == eSize.AsteroidBelt)
+                    return "Asteroid Belt (" + planetFactory.OverallType + ")";
+                else
+                    return planetFactory.Size + " " + planetFactory.Subtype + " (" + planetFactory.OverallType + ")";
+            }
+        }
+        public string ResourceValueString
+        {
+            get
+            {
+                if (planetFactory.ResourceValueCategory == null)
+                    return "tbc";
+                else
+                    return planetFactory.ResourceValueModifier.ToString() + " (" + planetFactory.ResourceValueCategory.ToString() + ")";
+            }
+        }
+        public string Description
+        {
+            get
+            {
+                return (planetFactory.Description ?? "tbc");
+            }
+            set
+            {
+                planetFactory.Description = value;
+                MemberUpdated();
+            }
+        }
+
+        public bool HasAtmosphere { get { return planetFactory.HasAtmosphere ?? false; } }
+
         private ViewModelList<ViewModelInstallation> installationsList;
         public ViewModelList<ViewModelInstallation> InstallationsList
         {

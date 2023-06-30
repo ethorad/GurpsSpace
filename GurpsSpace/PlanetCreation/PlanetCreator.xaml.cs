@@ -13,6 +13,7 @@ namespace GurpsSpace.PlanetCreation
     {
         public ViewModelPlanetFactory vmPlanetFactory;
         private PlanetFactory planetFactory;
+        public Planet Planet { get { return planetFactory.Planet; } }
 
 // disabling warnings on non-nullable fields not being set up in the constructor
 // This is because they are given values in the SetUp() call in the constructor but the compiler doesn't notice
