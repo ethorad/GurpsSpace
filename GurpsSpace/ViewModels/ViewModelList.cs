@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GurpsSpace.ViewModels
 {
-    internal class ViewModelList<T> : ViewModel where T : ViewModel
+    public class ViewModelList<T> : ViewModel where T : ViewModel
     {
         private ObservableCollection<T> items;
         public ObservableCollection<T> Items
@@ -24,6 +24,16 @@ namespace GurpsSpace.ViewModels
         public void Add(T newItem)
         {
             items.Add(newItem);
+            MemberUpdated();
+        }
+        public void Clear()
+        {
+            items.Clear();
+            MemberUpdated();
+        }
+        public void RemoveAt(int i)
+        {
+            items.RemoveAt(i);
             MemberUpdated();
         }
 

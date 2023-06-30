@@ -19,7 +19,7 @@
 
         <Label Grid.Row="0">The installations present are shown below:</Label>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=Installations}">
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=Items}">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Installation Type"/>

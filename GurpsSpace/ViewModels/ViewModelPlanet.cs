@@ -529,27 +529,8 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
-        public void AddInstallations(List<Installation> newInst)
-        {
-            foreach (Installation inst in newInst)
-                AddInstallations(inst);
-        }
-        public void AddInstallations(Installation inst)
-        {
-            installationsList.Add(inst);
-            planet.Installations.Add(inst);
-            MemberUpdated();
-        }
-        public void ClearInstallations(string instType)
-        {
-            for (int i = planet.Installations.Count - 1; i >= 0; i--)
-                if (planet.Installations[i].Type == instType)
-                {
-                    planet.Installations.RemoveAt(i);
-                    installationsList.Installations.RemoveAt(i);
-                }
-            MemberUpdated();
-        }
+
+
         public ViewModelInstallationList GetInstallations(string instType)
         {
             return new ViewModelInstallationList(planet.GetInstallations(instType));

@@ -11,10 +11,8 @@ namespace GurpsSpace.PlanetCreation
     /// </summary>
     public partial class PlanetCreator : Window
     {
-        public ViewModelPlanet vmPlanet;
-        public Planet Planet;
-        private IPlanetCreator randomiser;
-        private IPlanetCreator userInput;
+        public ViewModelPlanetFactory vmPlanetFactory;
+        private PlanetFactory planetFactory;
 
 // disabling warnings on non-nullable fields not being set up in the constructor
 // This is because they are given values in the SetUp() call in the constructor but the compiler doesn't notice
@@ -23,26 +21,24 @@ namespace GurpsSpace.PlanetCreation
         public PlanetCreator(Setting setting)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            Planet = new(setting);
+            planetFactory = new(setting, new RandomPlanet(), new UserPlanet());
             SetUp();
         }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public PlanetCreator(Planet p)
+        public PlanetCreator(Planet planet)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            Planet = p;
+            planetFactory = new(planet, new RandomPlanet(), new UserPlanet());
             SetUp();
         }
         private void SetUp()
         {
-            vmPlanet = new ViewModelPlanet(Planet);
-            randomiser = new RandomPlanet();
-            userInput = new UserPlanet();
+            vmPlanetFactory = new ViewModelPlanetFactory(planetFactory);
 
             InitializeComponent();
             SetUpInstallationGrid();
 
-            this.DataContext = vmPlanet;
+            this.DataContext = vmPlanetFactory;
         }
         private void SetUpInstallationGrid()
         {
@@ -150,159 +146,29 @@ namespace GurpsSpace.PlanetCreation
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
             string instType = RuleBook.InstallationParams[val].Type;
-            List<Installation>? lst = userInput.GetInstallation(vmPlanet.Planet, instType);
-            if (lst != null)
-            {
-                vmPlanet.ClearInstallations(instType);
-                vmPlanet.AddInstallations(lst);
-            }
+
+            vmPlanetFactory.SelectInstallation(instType);
+
         }
         private void btnRandInstallation_Click(object sender, RoutedEventArgs e)
         {
             int val = int.Parse(((Button)sender).Tag.ToString() ?? "");
             string instType = RuleBook.InstallationParams[val].Type;
-            List<Installation>? lst = randomiser.GetInstallation(vmPlanet.Planet, instType);
-            if (lst != null)
-            {
-                vmPlanet.ClearInstallations(instType);
-                vmPlanet.AddInstallations(lst);
-            }
+
+            vmPlanetFactory.RandomInstallation(instType);
         }
 
         private void btnRandom_Click(object sender, RoutedEventArgs e)
         {
             string val = ((Button)sender).Tag.ToString() ?? "";
-            SetParameter(val, randomiser);
+            vmPlanetFactory.RandomParameter(val);
         }
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
             string val = ((Button)sender).Tag.ToString() ?? "";
-            SetParameter(val, userInput);
+            vmPlanetFactory.SelectParameter(val);
         }
-        private void SetParameter(string param, IPlanetCreator pc)
-        {
-            switch (param)
-            {
-                case "Name":
-                    string? name = pc.GetName(vmPlanet.Planet);
-                    if (name != null)
-                        vmPlanet.Name = name;
-                    break;
-                case "Type":
-                    eSize? size;
-                    eSubtype? subtype;
-                    (size, subtype) = pc.GetSizeAndSubtype(vmPlanet.Planet);
-                    if (size != null)
-                        vmPlanet.Size = size ?? eSize.None;
-                    if (subtype != null)
-                        vmPlanet.Subtype = subtype ?? eSubtype.None;
-                    break;
-                case "ResourceValueCategory":
-                    eResourceValueCategory? res = pc.GetResourceValueCategory(vmPlanet.Planet);
-                    if (res != null)
-                        vmPlanet.ResourceValueCategory = res ?? eResourceValueCategory.Average;
-                    break;
-                case "AtmosphericMass":
-                    double? atmMass = pc.GetAtmosphericMass(vmPlanet.Planet);
-                    if (atmMass != null)
-                        vmPlanet.AtmosphericMass = atmMass ?? 0;
-                    break;
-                case "AtmosphericConditions":
-                    fAtmosphericConditions? cond;
-                    string? condDesc;
-                    (cond, condDesc) = pc.GetAtmosphericConditions(vmPlanet.Planet);
-                    if (cond != null)
-                        vmPlanet.AtmosphericConditions = cond ?? fAtmosphericConditions.None;
-                    if (condDesc != null)
-                        vmPlanet.AtmosphericDescription = condDesc ?? "tbc";
-                    break;
-                case "HydrographicCoverage":
-                    double? hydro = pc.GetHydrographicCoverage(vmPlanet.Planet);
-                    if (hydro != null)
-                        vmPlanet.HydrographicCoverage = hydro ?? 0;
-                    break;
-                case "AverageSurfaceTempK":
-                    int? tempK = pc.GetAverageSurfaceTempK(vmPlanet.Planet);
-                    if (tempK != null)
-                        vmPlanet.AverageSurfaceTempK = tempK ?? 0;
-                    break;
-                case "Density":
-                    double? density = pc.GetDensity(vmPlanet.Planet);
-                    if (density != null)
-                        vmPlanet.Density = density ?? 0;
-                    break;
-                case "Gravity":
-                    double? grav = pc.GetGravity(vmPlanet.Planet);
-                    if (grav != null)
-                        vmPlanet.Gravity = grav ?? 0;
-                    break;
-                case "SettlementType":
-                    eSettlementType? settType;
-                    int? colonyAge;
-                    bool? interstellar;
-                    (settType, colonyAge, interstellar) = pc.GetSettlementType(vmPlanet.Planet);
-                    if (settType != null)
-                    {
-                        vmPlanet.SettlementType = settType ?? eSettlementType.None;
-                        vmPlanet.ColonyAge = colonyAge ?? 0;
-                        vmPlanet.Interstellar = interstellar ?? true;
-                    }
-                    break;
-                case "Species":
-                    Species? s = pc.GetLocalSpecies(vmPlanet.Planet);
-                    if (s != null)
-                        vmPlanet.LocalSpecies = s;
-                    break;
-                case "TechLevel":
-                    int? tl;
-                    eTechLevelRelativity? adj;
-                    (tl, adj) = pc.GetLocalTechLevel(vmPlanet.Planet);
-                    if (tl != null)
-                        vmPlanet.LocalTechLevel = tl ?? 0;
-                    if (adj != null)
-                        vmPlanet.LocalTechLevelRelativity = adj ?? eTechLevelRelativity.Normal;
-                    break;
-                case "Population":
-                    double? pop = pc.GetPopulation(vmPlanet.Planet);
-                    if (pop != null)
-                        vmPlanet.Population = pop ?? 0;
-                    break;
-                case "WorldGovernance":
-                    eWorldUnityLevel? unity;
-                    fGovernmentSpecialConditions? specCond;
-                    (unity,specCond) = pc.GetWorldGovernance(vmPlanet.Planet);
-                    if (unity != null)
-                        vmPlanet.WorldUnityLevel = unity ?? eWorldUnityLevel.Diffuse;
-                    if (specCond != null)
-                        vmPlanet.GovernmentSpecialConditions = specCond ?? fGovernmentSpecialConditions.None;
-                    break;
-                case "SocietyType":
-                    eSocietyType? soc = pc.GetSocietyType(vmPlanet.Planet);
-                    if (soc != null)
-                        vmPlanet.SocietyType = soc ?? eSocietyType.Anarchy;
-                    break;
-                case "ControlRating":
-                    int? cr = pc.GetControlRating(vmPlanet.Planet);
-                    if (cr != null)
-                        vmPlanet.ControlRating = cr ?? 0;
-                    break;
-                case "TradeVolume":
-                    double? trade = pc.GetTradeVolume(vmPlanet.Planet);
-                    if (trade != null)
-                        vmPlanet.TradeVolume = trade ?? 0;
-                    break;
-                case "SpaceportClass":
-                    int? spacepostClass = pc.GetSpaceportClass(vmPlanet.Planet);
-                    if (spacepostClass != null)
-                        vmPlanet.SpaceportClass = spacepostClass ?? 0;
-                    break;
-                case "Installations":
-                    List<Installation>? newInst = pc.GetInstallations(vmPlanet.Planet);
-                    if (newInst != null)
-                        vmPlanet.InstallationsList = new ViewModelInstallationList(newInst);
-                    break;
-            }
-        }
+
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
@@ -311,7 +177,7 @@ namespace GurpsSpace.PlanetCreation
 
         private void btnViewInstallation_Click(object sender, RoutedEventArgs e)
         {
-            InstallationsList instWindow = new InstallationsList(new ViewModelInstallationList(Planet.Installations));
+            InstallationsList instWindow = new InstallationsList(vmPlanetFactory.InstallationsList);
             instWindow.ShowDialog();
         }
     }
