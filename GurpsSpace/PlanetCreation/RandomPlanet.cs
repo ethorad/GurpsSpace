@@ -10,13 +10,13 @@ namespace GurpsSpace.PlanetCreation
 {
     internal class RandomPlanet : IPlanetCreator
     {
-        public string? GetName(Planet p)
+        public string? GetName(PlanetFactory pf)
         {
             string name = "Randomia-" + DiceBag.Rand(1, 100);
             return name;
         }
 
-        public (eSize?, eSubtype?) GetSizeAndSubtype(Planet p)
+        public (eSize?, eSubtype?) GetSizeAndSubtype(PlanetFactory pf)
         {
             eSize size;
             eSubtype subtype;
@@ -40,31 +40,29 @@ namespace GurpsSpace.PlanetCreation
             return (size, subtype);
         }
 
-        public eResourceValueCategory? GetResourceValueCategory(Planet p)
+        public eResourceValueCategory? GetResourceValueCategory(PlanetFactory pf)
         {
-            if (p.IsPlanet == null)
+            if (pf.Parameters == null)
             {
                 MessageBox.Show("Need to have a planet type selected.");
                 return null;
             }
             int roll = DiceBag.Roll(3);
-            if (p.IsPlanet == true)
+            if (pf.IsPlanet == true)
                 return RuleBook.ResourceValueCategoryPlanet[roll];
             else
                 return RuleBook.ResourceValueCategoryAsteroidBelt[roll];
         }
 
-        public double? GetAtmosphericMass(Planet p)
+        public double? GetAtmosphericMass(PlanetFactory pf)
         {
-            if (p.Size == null || p.Subtype == null)
+            if (pf.Parameters == null)
             {
                 MessageBox.Show("Need to select a planet size and subtype first.");
                 return null;
             }
-            eSize size = p.Size ?? eSize.None;
-            eSubtype subtype = p.Subtype ?? eSubtype.None;
 
-            if (!RuleBook.PlanetParams.ContainsKey((size, subtype)) || !RuleBook.PlanetParams[(size, subtype)].HasAtmosphere)
+            if (!pf.Parameters.HasAtmosphere)
                 return 0;
 
             else
@@ -80,18 +78,15 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public (fAtmosphericConditions?, string?) GetAtmosphericConditions(Planet p)
+        public (fAtmosphericConditions?, string?) GetAtmosphericConditions(PlanetFactory pf)
         {
-            if (p.Size == null || p.Subtype == null)
+            if (pf.Parameters == null)
             {
                 MessageBox.Show("Need to select a planet size and subtype first.");
                 return (null, null);
             }
-            eSize size = p.Size ?? eSize.None;
-            eSubtype subtype = p.Subtype ?? eSubtype.None;
 
-
-            if (!RuleBook.PlanetParams.ContainsKey((size, subtype)) || !RuleBook.PlanetParams[(size, subtype)].HasAtmosphere)
+            if (!pf.Parameters.HasAtmosphere)
             {
                 return (fAtmosphericConditions.None, "None. ");
             }
@@ -102,36 +97,33 @@ namespace GurpsSpace.PlanetCreation
                 fAtmosphericConditions margCon = fAtmosphericConditions.None;
                 string margDesc = "";
 
-                (baseCon, baseDesc) = GetBaseAtmosphericConditions(p);
+                (baseCon, baseDesc) = GetBaseAtmosphericConditions(pf);
                 if ((baseCon & fAtmosphericConditions.Marginal) == fAtmosphericConditions.Marginal)
-                    (margCon, margDesc) = GetMarginalAtmosphericConditions(p);
+                    (margCon, margDesc) = GetMarginalAtmosphericConditions(pf);
 
                 return (baseCon | margCon, baseDesc + margDesc);
             }
 
         }
-        private (fAtmosphericConditions?, string?) GetBaseAtmosphericConditions(Planet p)
+        private (fAtmosphericConditions?, string?) GetBaseAtmosphericConditions(PlanetFactory pf)
         {
-            if (p.Size == null || p.Subtype == null)
+            if (pf.Parameters == null)
             {
                 MessageBox.Show("Need to select a planet size and subtype first.");
                 return (null, null);
             }
 
-            eSize size = p.Size ?? eSize.None;
-            eSubtype subtype = p.Subtype ?? eSubtype.None;
-
-            if (!RuleBook.PlanetParams.ContainsKey((size, subtype)) || !RuleBook.PlanetParams[(size, subtype)].HasAtmosphere)
+            if (!pf.Parameters.HasAtmosphere)
                 return (fAtmosphericConditions.None, "None");
 
             int roll = DiceBag.Roll(3);
-            if (roll <= RuleBook.PlanetParams[(size, subtype)].AtmosphereANumber)
-                return RuleBook.PlanetParams[(size, subtype)].AtmosphereA;
+            if (roll <= pf.Parameters.AtmosphereANumber)
+                return pf.Parameters.AtmosphereA;
             else
-                return RuleBook.PlanetParams[(size, subtype)].AtmosphereB;
+                return pf.Parameters.AtmosphereB;
 
         }
-        private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(Planet p)
+        private (fAtmosphericConditions, string) GetMarginalAtmosphericConditions(PlanetFactory pf)
         {
             int roll = DiceBag.Roll(3);
 
@@ -185,20 +177,17 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public double? GetHydrographicCoverage(Planet p)
+        public double? GetHydrographicCoverage(PlanetFactory pf)
         {
-            if (p.Size == null || p.Subtype == null)
+            if (pf.Parameters == null)
             {
                 MessageBox.Show("Need to select a planet size and subtype first.");
                 return null;
             }
-            eSize size = p.Size ?? eSize.None;
-            eSubtype subtype = p.Subtype ?? eSubtype.None;
 
-            PlanetParameters pp = RuleBook.PlanetParams[(size, subtype)];
             double cover = 0;
 
-            cover = ((double)(DiceBag.Roll(pp.HydroDice) + pp.HydroAdj)) * 0.1;
+            cover = ((double)(DiceBag.Roll(pf.Parameters.HydroDice) + pf.Parameters.HydroAdj)) * 0.1;
 
             // adjust by +/-5%
             if (cover > 0.01)
@@ -211,23 +200,26 @@ namespace GurpsSpace.PlanetCreation
             return cover;
         }
 
-        public int? GetAverageSurfaceTempK(Planet p)
+        public int? GetAverageSurfaceTempK(PlanetFactory pf)
         {
             // should really be all or none here, so could just check one of them
-            if (p.MinSurfaceTemperatureK == null ||
-                p.MaxSurfaceTemperatureK == null ||
-                p.StepSurfaceTemperatureK == null)
+            if (pf.MinSurfaceTemperatureK == null ||
+                pf.MaxSurfaceTemperatureK == null ||
+                pf.StepSurfaceTemperatureK == null)
                 return null;
 
-            int tempMin = (p.MinSurfaceTemperatureK ?? 0);
-            int tempStep = (p.StepSurfaceTemperatureK ?? 0);
+            int tempMin = (pf.MinSurfaceTemperatureK ?? 0);
+            int tempStep = (pf.StepSurfaceTemperatureK ?? 0);
             int tempK = tempMin + (DiceBag.Roll(3) - 3) * tempStep;
             return tempK;
         }
 
-        public double? GetDensity(Planet p)
+        public double? GetDensity(PlanetFactory pf)
         {
-            switch(p.CoreType)
+            if (pf.Parameters == null || pf.Size==eSize.AsteroidBelt)
+                return null;
+
+            switch(pf.CoreType)
             {
                 case eCoreType.Icy:
                     return RuleBook.DensityIcyCore[DiceBag.Roll(3)];
@@ -236,16 +228,16 @@ namespace GurpsSpace.PlanetCreation
                 case eCoreType.LargeIron:
                     return RuleBook.DensityLargeIronCore[DiceBag.Roll(3)];
             }
-            return p.Density;
+            return null;
         }
 
-        public double? GetGravity(Planet p)
+        public double? GetGravity(PlanetFactory pf)
         {
-            if (p.MinGravity == null || p.MaxGravity == null)
+            if (pf.Parameters == null || pf.Size == eSize.AsteroidBelt)
                 return null;
 
-            double minG = (p.MinGravity ?? 0);
-            double maxG = (p.MaxGravity ?? 0);
+            double minG = (pf.MinGravity ?? 0);
+            double maxG = (pf.MaxGravity ?? 0);
             int roll = DiceBag.Roll(2) - 2;
             int adj = DiceBag.Rand(-5, 5);
             double perc = (double)roll / 10 + (double)adj / 100;

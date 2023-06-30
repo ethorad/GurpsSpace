@@ -93,7 +93,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Aquasphere" IsEnabled="{Binding Path=HasLiquid, Mode=OneWay}">
+                    <GroupBox Header="Hydrosphere" IsEnabled="{Binding Path=HasHydrosphere, Mode=OneWay}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -135,19 +135,19 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">Average temperature</Label>
-                            <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=TempMin, Mode=OneWay}" Maximum="{Binding Path=TempMax, Mode=OneWay}" Value="{Binding Path=AverageSurfaceTempK, Mode=TwoWay}" TickFrequency="{Binding Path=TempStep, Mode=OneWay}" TickPlacement="BottomRight"/>
-                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=AverageSurfaceTempK, Mode=OneWay}" ContentStringFormat="0 K"/>
+                            <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=MinSurfaceTemperatureK, Mode=OneWay}" Maximum="{Binding Path=MinSurfaceTemperatureK, Mode=OneWay}" Value="{Binding Path=AverageSurfaceTemperatureK, Mode=TwoWay}" TickFrequency="{Binding Path=StepSurfaceTemperatureK, Mode=OneWay}" TickPlacement="BottomRight"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=AverageSurfaceTemperatureKString, Mode=OneWay}" ContentStringFormat="0 K"/>
                             <Button Grid.Row="0" Grid.Column="3" Tag="AverageSurfaceTempK" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Climate type</Label>
                             <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=ClimateTypeString, Mode=OneWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0">Blackbody temperature</Label>
-                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=BlackbodyTempK, Mode=OneWay}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=BlackbodyTemperatureKString, Mode=OneWay}"/>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Lithosphere" IsEnabled="{Binding Path=IsPlanet, Mode=OneWay}">
+                    <GroupBox Header="Lithosphere" IsEnabled="{Binding Path=HasLithosphere, Mode=OneWay}">
                         <Grid>
 
 

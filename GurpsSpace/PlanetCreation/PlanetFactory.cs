@@ -13,6 +13,7 @@ namespace GurpsSpace.PlanetCreation
         private Planet planet;
         public Planet Planet { get { return planet; } }
         private PlanetParameters? parameters;
+        public PlanetParameters? Parameters { get { return parameters; } }
 
         private IPlanetCreator randomiser;
         private IPlanetCreator userInput;
@@ -24,6 +25,7 @@ namespace GurpsSpace.PlanetCreation
         public eResourceValueCategory? ResourceValueCategory { get { return planet.ResourceValueCategory; } }
         public int? ResourceValueModifier { get { return planet.ResourceValueModifier; } }
         public string? Description { get { return planet.Description; } set { planet.Description = value; } }
+        public bool? IsPlanet { get { return planet.IsPlanet; } }
 
         public bool? HasAtmosphere { get { return (parameters == null) ? null : parameters.HasAtmosphere; } }
         public double? AtmosphericMass 
@@ -46,7 +48,7 @@ namespace GurpsSpace.PlanetCreation
         public double? AtmosphericPressure { get { return planet.AtmosphericPressure; } }
         public ePressureCategory? AtmosphericPressureCategory { get { return planet.AtmosphericPressureCategory; } }
 
-        public bool? HasLiquid
+        public bool? HasHydrosphere
         {
             get 
             {
@@ -71,7 +73,28 @@ namespace GurpsSpace.PlanetCreation
                 planet.HydrographicCoverage = value;
             }
         }
+        public eLiquid? LiquidType { get { return planet.LiquidType; } }
 
+        public int? MinSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MinSurfaceTemperatureK; } }
+        public int? MaxSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MaxSurfaceTemperatureK; } }
+        public int? StepSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.StepSurfaceTemperatureK; } }
+        public int? AverageSurfaceTemperatureK { get { return planet.AverageSurfaceTemperatureK; } }
+        public eClimateType? ClimateType { get { return planet.ClimateType; } }
+        public int? BlackbodyTemperatureK { get { return planet.BlackbodyTemperatureK; } }
+
+        public bool? HasLithosphere
+        {
+            get
+            {
+                if (planet.Size == null || planet.Size == eSize.None)
+                    return null;
+                else if (planet.Size == eSize.AsteroidBelt)
+                    return false;
+                else
+                    return true;
+            }
+        }
+        public eCoreType? CoreType { get { return planet.CoreType; } }
 
         public List<Installation> Installations { get { return planet.Installations; } }
 
@@ -156,9 +179,7 @@ namespace GurpsSpace.PlanetCreation
                     break;
 
                 case "AverageSurfaceTempK":
-                    int? tempK = pc.GetAverageSurfaceTempK(planet);
-                    if (tempK != null)
-                        planet.AverageSurfaceTempK = tempK ?? 0;
+                    SetAverageSurfaceTempK(pc);
                     break;
 
                 case "Density":
@@ -302,7 +323,12 @@ namespace GurpsSpace.PlanetCreation
                     planet.AtmosphericMass = 1;
 
                 if (HasLiquid == true)
+                {
                     planet.HydrographicCoverage = (MinimumHydrographicCoverage + MaximumHydrographicCoverage) / 2;
+                    planet.LiquidType = parameters.Liquid;
+                }
+
+                planet.AverageSurfaceTempK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
             }
 
         }
@@ -313,6 +339,11 @@ namespace GurpsSpace.PlanetCreation
                 planet.HydrographicCoverage = MinimumHydrographicCoverage;
             if (planet.HydrographicCoverage > MaximumHydrographicCoverage)
                 planet.HydrographicCoverage = MaximumHydrographicCoverage;
+
+            if (planet.AverageSurfaceTempK < MinSurfaceTemperatureK)
+                planet.AverageSurfaceTempK = MinSurfaceTemperatureK;
+            if (planet.AverageSurfaceTempK > MaxSurfaceTemperatureK)
+                planet.AverageSurfaceTempK = MaxSurfaceTemperatureK;
         }
 
         private void SetResourceValueCategory(IPlanetCreator pc)
@@ -331,6 +362,15 @@ namespace GurpsSpace.PlanetCreation
 
         private void SetAtmosphericConditions(IPlanetCreator pc)
         {
+            if (parameters == null)
+                return;
+
+            if (parameters.AtmosphereANumber > 18) // ie no choice
+            {
+                (planet.AtmosphericConditions, planet.AtmosphericDescription) = parameters.AtmosphereA;
+                return;
+            }
+
             fAtmosphericConditions? cond;
             string? condDesc;
             (cond, condDesc) = pc.GetAtmosphericConditions(planet);
@@ -346,6 +386,13 @@ namespace GurpsSpace.PlanetCreation
             if (hydro != null)
                 planet.HydrographicCoverage = hydro;
             CheckRanges();
+        }
+
+        private void SetAverageSurfaceTempK(IPlanetCreator pc)
+        {
+            int? tempK = pc.GetAverageSurfaceTempK(planet);
+            if (tempK != null)
+                planet.AverageSurfaceTempK = tempK ?? 0;
         }
 
 

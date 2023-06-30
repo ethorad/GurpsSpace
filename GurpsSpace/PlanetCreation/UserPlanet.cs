@@ -60,16 +60,14 @@ namespace GurpsSpace.PlanetCreation
 
         public (fAtmosphericConditions?, string?) GetAtmosphericConditions(Planet p)
         {
-            if (p.HasAtmosphericOptions == null)
-            {
-                MessageBox.Show("Need to select more fields first.");
+            if (!RuleBook.PlanetParams.ContainsKey((p.SizeVal, p.SubtypeVal)))
                 return (null, null);
-            }
-
-            if (p.HasAtmosphericOptions== false)
-                return RuleBook.PlanetParams[(p.SizeVal, p.SubtypeVal)].AtmosphereA;
 
             PlanetParameters pp = RuleBook.PlanetParams[(p.SizeVal, p.SubtypeVal)];
+
+            if (pp.AtmosphereANumber>18) // i.e. no choice
+                return RuleBook.PlanetParams[(p.SizeVal, p.SubtypeVal)].AtmosphereA;
+
             int? initial = null;
             if (p.AtmosphericDescription == pp.AtmosphereA.Item2)
                 initial = 0;

@@ -105,14 +105,14 @@ namespace GurpsSpace.PlanetCreation
             }
         }
 
-        public bool HasLiquid
+        public bool HasHydrosphere
         {
             get
             {
-                if (planetFactory.HasLiquid == null)
+                if (planetFactory.HasHydrosphere == null)
                     return false;
                 else
-                    return planetFactory.HasLiquid ?? false;
+                    return planetFactory.HasHydrosphere ?? false;
             }
         }
         public double MinimumHydrographicCoverage { get { return planetFactory.MinimumHydrographicCoverage ?? 0; } }
@@ -124,6 +124,63 @@ namespace GurpsSpace.PlanetCreation
             {
                 planetFactory.HydrographicCoverage = value;
                 MemberUpdated();
+            }
+        }
+        public string LiquidType
+        {
+            get
+            {
+                if (planetFactory.LiquidType == null)
+                    return "tbc";
+                else
+                    return planetFactory.LiquidType.ToString()!;
+            }
+        }
+
+        public int MinSurfaceTemperatureK { get { return planetFactory.MinSurfaceTemperatureK ?? 0; } }
+        public int MaxSurfaceTemperatureK { get { return planetFactory.MaxSurfaceTemperatureK ?? 0; } }
+        public int StepSurfaceTemperatureK { get { return planetFactory.StepSurfaceTemperatureK ?? 0; } }
+        public int AverageSurfaceTemperatureK { get { return planetFactory.AverageSurfaceTemperatureK ?? 0; } }
+        public string AverageSurfaceTemperatureKString
+        {
+            get
+            {
+                if (planetFactory.AverageSurfaceTemperatureK == null)
+                    return "tbc";
+                else
+                    return planetFactory.AverageSurfaceTemperatureK.ToString()! + " K";
+            }
+        }
+        public string ClimateTypeString
+        { 
+            get 
+            {
+                if (planetFactory.ClimateType == null)
+                    return "tbc";
+                else
+                    return planetFactory.ClimateType.ToString()!;
+            }
+        }
+        public string BlackbodyTemperatureKString 
+        { 
+            get 
+            {
+                if (planetFactory.BlackbodyTemperatureK == null)
+                    return "tbc";
+                else
+                    return planetFactory.BlackbodyTemperatureK.ToString()! + " K"; 
+            } 
+        }
+
+        public bool HasLithosphere { get { return planetFactory.HasLithosphere ?? false; } }
+        public string CoreTypeString
+        {
+            get
+            {
+                if (planetFactory.CoreType == null)
+                    return "tbc";
+                else
+                    return planetFactory.CoreType.ToString()!;
             }
         }
 

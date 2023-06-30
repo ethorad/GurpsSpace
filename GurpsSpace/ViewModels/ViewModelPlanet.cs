@@ -89,10 +89,6 @@ namespace GurpsSpace.PlanetCreation
                 return (planet.AtmosphericConditions.ToString()) ?? "tbc";
             }
         }
-        public bool HasAtmosphericOptions
-        {
-            get { return planet.HasAtmosphericOptions ?? false; }
-        }
         public fAtmosphericConditions AtmosphericConditions
         {
             set { planet.AtmosphericConditions = value; MemberUpdated(); }
@@ -129,18 +125,6 @@ namespace GurpsSpace.PlanetCreation
         }
 
         // Climate
-        public int TempMin
-        {
-            get { return (planet.MinSurfaceTemperatureK ?? 0); }
-        }   
-        public int TempMax
-        {
-            get { return (planet.MaxSurfaceTemperatureK ?? 0); }
-        }
-        public int TempStep
-        {
-            get { return (planet.StepSurfaceTemperatureK ?? 0); }
-        }
         public int AverageSurfaceTempK
         {
             get { return (planet.AverageSurfaceTempK ?? 0); }

@@ -2,8 +2,10 @@
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Security.Permissions;
 using System.Windows.Controls;
 
 namespace GurpsSpace
@@ -391,6 +393,34 @@ namespace GurpsSpace
             "Full facilities"       // 5
         }, 0);
 
+        static public double? BlackbodyAbsorption(Planet p)
+        {
+            if (!PlanetParams.ContainsKey((p.SizeVal, p.SubtypeVal)))
+                return null;
+
+            if (p.Subtype == eSubtype.Ocean || p.Subtype == eSubtype.Garden)
+            {
+                if (p.HydrographicCoverage == null)
+                    return null;
+                else if (p.HydrographicCoverage < 0.21)
+                    return 0.95;
+                else if (p.HydrographicCoverage < 0.51)
+                    return 0.92;
+                else if (p.HydrographicCoverage < 0.91)
+                    return 0.88;
+                else
+                    return 0.84;
+            }
+            else // not Ocean or Garden
+                return PlanetParams[(p.SizeVal, p.SubtypeVal)].BlackbodyAbsorption;
+        }
+        static public double? BlackbodyGreenhouse(Planet p)
+        {
+            if (!PlanetParams.ContainsKey((p.SizeVal, p.SubtypeVal)))
+                return null;
+            else
+                return PlanetParams[(p.SizeVal, p.SubtypeVal)].BlackbodyGreenhouse;
+        }
         static public ePressureCategory PressureCategory(double pressure)
         {
             switch (pressure)

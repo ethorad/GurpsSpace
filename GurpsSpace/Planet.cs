@@ -74,7 +74,6 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public bool? HasAtmosphericOptions { get { return (parameters == null) ? null : (parameters.AtmosphereANumber < 18); } }
         private fAtmosphericConditions? atmosphericConditions;
         public fAtmosphericConditions? AtmosphericConditions
         {
@@ -96,7 +95,6 @@ namespace GurpsSpace
         public bool IsBreathable { get { return ((AtmosphericMass > 0) && (!IsSuffocating) && (!IsToxic) && (!IsCorrosive)); } }
         
         public bool? HasLiquid { get { return (hydrographicCoverage == null) ? null : (hydrographicCoverage > 0); } }
-
         private double? hydrographicCoverage;
         public double? HydrographicCoverage
         {
@@ -109,18 +107,16 @@ namespace GurpsSpace
                 CheckRanges();
             }
         }
-        public eLiquid? LiquidType { get { return (parameters == null) ? null : parameters.Liquid; } }
+        private eLiquid? liquidType;
+        public eLiquid? LiquidType { get { return liquidType; } set { liquidType = value; } }
 
-        public int? MinSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MinSurfaceTemperatureK; } }
-        public int? MaxSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MaxSurfaceTemperatureK; } }
-        public int? StepSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.StepSurfaceTemperatureK; } }
-        private int? averageSurfaceTempK;
-        public int? AverageSurfaceTempK
+        private int? averageSurfaceTemperatureK;
+        public int? AverageSurfaceTemperatureK
         {
-            get { return averageSurfaceTempK; }
+            get { return averageSurfaceTemperatureK; }
             set
             {
-                averageSurfaceTempK = value;
+                averageSurfaceTemperatureK = value;
                 CheckRanges();
             }
         }
@@ -134,38 +130,30 @@ namespace GurpsSpace
                     return RuleBook.ClimateType(AverageSurfaceTempK ?? 0); // OK to use ?? as we know it isn't null here
             }
         }
-        public int? BlackbodyTempK
+        public int? BlackbodyTemperatureK
         {
             get
             {
+                double? absorption = RuleBook.BlackbodyAbsorption(this);
+                double? greenhouse = RuleBook.BlackbodyGreenhouse(this);
+
                 // check for values we need
-                if (parameters == null || AtmosphericMass == null || AverageSurfaceTempK == null)
+                if (absorption == null ||
+                    greenhouse == null ||
+                    AtmosphericMass == null || 
+                    AverageSurfaceTemperatureK == null)
                     return null;
                 // so can now use ?? on all nullable values
 
-                double absorption = (parameters == null) ? 0 : parameters.BlackbodyAbsorption;
-                double greenhouse = (parameters == null) ? 0 : parameters.BlackbodyGreenhouse;
-
-                if (Subtype == eSubtype.Ocean || Subtype == eSubtype.Garden)
-                {
-                    if (HydrographicCoverage < 0.21)
-                        absorption = 0.95;
-                    else if (HydrographicCoverage < 0.51)
-                        absorption = 0.92;
-                    else if (HydrographicCoverage < 0.91)
-                        absorption = 0.88;
-                    else
-                        absorption = 0.84;
-                }
-
-                double bbCorrection = absorption * (1 + (AtmosphericMass ?? 0) * greenhouse);
-                double bbTemp = (AverageSurfaceTempK ?? 0) / bbCorrection;
+                double bbCorrection = (absorption ?? 1) * (1 + (AtmosphericMass ?? 0) * (greenhouse ?? 1));
+                double bbTemp = (AverageSurfaceTemperatureK ?? 0) / bbCorrection;
 
                 return ((int)Math.Round(bbTemp, 0));
             }
         }
 
-        public eCoreType? CoreType { get { return (parameters == null) ? null : parameters.CoreType; } }
+        private eCoreType? coreType;
+        public eCoreType? CoreType { get { return coreType; } set { coreType = value; } }
         public double? MinDensity
         {
             get
@@ -626,12 +614,6 @@ namespace GurpsSpace
 
             // check that any values are still in the (min, max) range
 
-
-            if (AverageSurfaceTempK < MinSurfaceTemperatureK)
-                AverageSurfaceTempK = MinSurfaceTemperatureK;
-            if (AverageSurfaceTempK > MaxSurfaceTemperatureK)
-                AverageSurfaceTempK = MaxSurfaceTemperatureK;
-
             if (Density < MinDensity)
                 Density = MinDensity;
             if (Density > MaxDensity)
@@ -672,7 +654,6 @@ namespace GurpsSpace
             // refresh various parameters if the planet type has updated
 
             // set ranged inputs to be the midpoint
-            AverageSurfaceTempK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
             Density = Math.Round(((MinDensity + MaxDensity) ?? 0) / 2, 1);
             Gravity = Math.Round(((MinGravity + MaxGravity) ?? 0) / 2, 2);
         }
