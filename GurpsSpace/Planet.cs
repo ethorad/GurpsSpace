@@ -95,9 +95,8 @@ namespace GurpsSpace
         public bool IsMarginal { get { return ((AtmosphericConditions & fAtmosphericConditions.Marginal) == fAtmosphericConditions.Marginal); } }
         public bool IsBreathable { get { return ((AtmosphericMass > 0) && (!IsSuffocating) && (!IsToxic) && (!IsCorrosive)); } }
         
-        public bool? HasLiquid { get { return (parameters == null) ? null : !(parameters.Liquid == eLiquid.None); } }
-        public double? MinimumHydrographicCoverage { get { return (parameters == null) ? null : parameters.HydroMin; } }
-        public double? MaximumHydrographicCoverage { get { return (parameters == null) ? null : parameters.HydroMax; } }
+        public bool? HasLiquid { get { return (hydrographicCoverage == null) ? null : (hydrographicCoverage > 0); } }
+
         private double? hydrographicCoverage;
         public double? HydrographicCoverage
         {
@@ -626,10 +625,7 @@ namespace GurpsSpace
         {
 
             // check that any values are still in the (min, max) range
-            if (HydrographicCoverage < MinimumHydrographicCoverage)
-                HydrographicCoverage = MinimumHydrographicCoverage;
-            if (HydrographicCoverage > MaximumHydrographicCoverage)
-                HydrographicCoverage = MaximumHydrographicCoverage;
+
 
             if (AverageSurfaceTempK < MinSurfaceTemperatureK)
                 AverageSurfaceTempK = MinSurfaceTemperatureK;
@@ -675,28 +671,7 @@ namespace GurpsSpace
 
             // refresh various parameters if the planet type has updated
 
-            // set atmosphere to 1, or 0 if there is no atmosphere
-            if (parameters==null)
-                AtmosphericMass = null;
-            else if (parameters!.HasAtmosphere == true)
-                AtmosphericMass = 1;
-            else
-                AtmosphericMass = 0;
-
-            // if there's no choice over atmosphere, set it to the single option
-            // otherwise set as blank
-            if (HasAtmosphericOptions == null)
-            {
-                AtmosphericConditions = null;
-                AtmosphericDescription = null;
-            }
-            if (HasAtmosphericOptions == false)
-                (AtmosphericConditions, AtmosphericDescription) = RuleBook.PlanetParams[(SizeVal, SubtypeVal)].AtmosphereA;
-            else
-                (AtmosphericConditions, AtmosphericDescription) = (fAtmosphericConditions.None, "");
-
             // set ranged inputs to be the midpoint
-            HydrographicCoverage = (MinimumHydrographicCoverage + MaximumHydrographicCoverage) / 2;
             AverageSurfaceTempK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
             Density = Math.Round(((MinDensity + MaxDensity) ?? 0) / 2, 1);
             Gravity = Math.Round(((MinGravity + MaxGravity) ?? 0) / 2, 2);

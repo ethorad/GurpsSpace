@@ -118,14 +118,6 @@ namespace GurpsSpace.PlanetCreation
         {
             get { return planet.HasLiquid ?? false; }
         }
-        public double MinimumHydrographicCoverage
-        {
-            get { return (planet.MinimumHydrographicCoverage ?? 0); }
-        }
-        public double MaximumHydrographicCoverage
-        {
-            get { return (planet.MaximumHydrographicCoverage ?? 0); }
-        }
         public double HydrographicCoverage
         {
             get { return (planet.HydrographicCoverage ?? 0); }

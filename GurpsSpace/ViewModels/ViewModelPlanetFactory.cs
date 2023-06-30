@@ -61,6 +61,71 @@ namespace GurpsSpace.PlanetCreation
         }
 
         public bool HasAtmosphere { get { return planetFactory.HasAtmosphere ?? false; } }
+        public double AtmosphericMass
+        {
+            get
+            {
+                return planetFactory.AtmosphericMass ?? 0;
+            }
+            set
+            {
+                planetFactory.AtmosphericMass = value;
+                MemberUpdated();
+            }
+        }
+        public string AtmosphericConditionsString
+        {
+            get
+            {
+                if (planetFactory.AtmosphericConditions == null)
+                    return "tbc";
+                else
+                    return planetFactory.AtmosphericConditions.ToString()!;
+            }
+        }
+        public bool HasAtmosphericOptions { get { return (planetFactory.HasAtmosphericOptions ?? false); } }
+        public string AtmosphericDescription
+        {
+            get
+            {
+                if (planetFactory.AtmosphericDescription == null)
+                    return "tbc";
+                else
+                    return planetFactory.AtmosphericDescription;
+            }
+        }
+        public string AtmosphericPressureString
+        {
+            get
+            {
+                if (planetFactory.AtmosphericPressure == null)
+                    return "tbc";
+                else
+                    return (planetFactory.AtmosphericPressure ?? 0).ToString("N2") + " (" + planetFactory.AtmosphericPressureCategory.ToString() + ")";
+            }
+        }
+
+        public bool HasLiquid
+        {
+            get
+            {
+                if (planetFactory.HasLiquid == null)
+                    return false;
+                else
+                    return planetFactory.HasLiquid ?? false;
+            }
+        }
+        public double MinimumHydrographicCoverage { get { return planetFactory.MinimumHydrographicCoverage ?? 0; } }
+        public double MaximumHydrographicCoverage { get { return planetFactory.MaximumHydrographicCoverage ?? 0; } }
+        public double HydrographicCoverage
+        {
+            get { return planetFactory.HydrographicCoverage ?? 0; }
+            set
+            {
+                planetFactory.HydrographicCoverage = value;
+                MemberUpdated();
+            }
+        }
 
         private ViewModelList<ViewModelInstallation> installationsList;
         public ViewModelList<ViewModelInstallation> InstallationsList

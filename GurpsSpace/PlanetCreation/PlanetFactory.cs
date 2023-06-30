@@ -18,14 +18,60 @@ namespace GurpsSpace.PlanetCreation
         private IPlanetCreator userInput;
 
         public string? Name { get { return planet.Name; } set {  planet.Name = value; } }
-        public eSize? Size { get { return planet.Size; } set { planet.Size = value; } }
-        public eSubtype? Subtype { get { return planet.Subtype; } set { planet.Subtype = value; } }
+        public eSize? Size { get { return planet.Size; } }
+        public eSubtype? Subtype { get { return planet.Subtype; } }
         public eOverallType? OverallType { get { return planet.OverallType; } }
         public eResourceValueCategory? ResourceValueCategory { get { return planet.ResourceValueCategory; } }
         public int? ResourceValueModifier { get { return planet.ResourceValueModifier; } }
         public string? Description { get { return planet.Description; } set { planet.Description = value; } }
 
         public bool? HasAtmosphere { get { return (parameters == null) ? null : parameters.HasAtmosphere; } }
+        public double? AtmosphericMass 
+        { 
+            get 
+            { 
+                return planet.AtmosphericMass; 
+            } 
+            set
+            {
+                if (value < 0)
+                    planet.AtmosphericMass = 0;
+                else
+                    planet.AtmosphericMass = value;
+            }
+        }
+        public fAtmosphericConditions? AtmosphericConditions { get { return planet.AtmosphericConditions; } }
+        public bool? HasAtmosphericOptions { get { return (parameters == null) ? null : (parameters.AtmosphereANumber < 18); } }
+        public string? AtmosphericDescription { get { return planet.AtmosphericDescription; } }
+        public double? AtmosphericPressure { get { return planet.AtmosphericPressure; } }
+        public ePressureCategory? AtmosphericPressureCategory { get { return planet.AtmosphericPressureCategory; } }
+
+        public bool? HasLiquid
+        {
+            get 
+            {
+                return (parameters == null) ? null : (parameters.Liquid != eLiquid.None);
+            }
+        }
+        public double? MinimumHydrographicCoverage { get { return (parameters == null) ? null : parameters.HydroMin; } }
+        public double? MaximumHydrographicCoverage { get { return (parameters == null) ? null : parameters.HydroMax; } }
+        public double? HydrographicCoverage
+        {
+            get
+            {
+                return planet.HydrographicCoverage;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    if (value > 1) value = 1;
+                    if (value < 0) value = 0;
+                }
+                planet.HydrographicCoverage = value;
+            }
+        }
+
 
         public List<Installation> Installations { get { return planet.Installations; } }
 
@@ -94,31 +140,19 @@ namespace GurpsSpace.PlanetCreation
                     break;
 
                 case "ResourceValueCategory":
-                    eResourceValueCategory? res = pc.GetResourceValueCategory(planet);
-                    if (res != null)
-                        planet.ResourceValueCategory = res ?? eResourceValueCategory.Average;
+                    SetResourceValueCategory(pc);
                     break;
 
                 case "AtmosphericMass":
-                    double? atmMass = pc.GetAtmosphericMass(planet);
-                    if (atmMass != null)
-                        planet.AtmosphericMass = atmMass ?? 0;
+                    SetAtmosphericMass(pc);
                     break;
 
                 case "AtmosphericConditions":
-                    fAtmosphericConditions? cond;
-                    string? condDesc;
-                    (cond, condDesc) = pc.GetAtmosphericConditions(planet);
-                    if (cond != null)
-                        planet.AtmosphericConditions = cond ?? fAtmosphericConditions.None;
-                    if (condDesc != null)
-                        planet.AtmosphericDescription = condDesc ?? "tbc";
+                    SetAtmosphericConditions(pc);
                     break;
 
                 case "HydrographicCoverage":
-                    double? hydro = pc.GetHydrographicCoverage(planet);
-                    if (hydro != null)
-                        planet.HydrographicCoverage = hydro ?? 0;
+                    SetHydrographicCoverage(pc);
                     break;
 
                 case "AverageSurfaceTempK":
@@ -219,15 +253,99 @@ namespace GurpsSpace.PlanetCreation
             eSize? size;
             eSubtype? subtype;
             (size, subtype) = pc.GetSizeAndSubtype(planet);
+            bool change = false;
             if (size != null)
-                planet.Size = size ?? eSize.None;
+            {
+                if (planet.Size != size)
+                    change = true;
+                planet.Size = size;
+            }
             if (subtype != null)
-                planet.Subtype = subtype ?? eSubtype.None;
+            {
+                if (planet.Subtype != subtype)
+                    change = true;
+                planet.Subtype = subtype;
+            }
+            if (change)
+                PlanetTypeChanged();
+        }
+        private void PlanetTypeChanged()
+        {
 
             if (RuleBook.PlanetParams.ContainsKey((planet.SizeVal, planet.SubtypeVal)))
                 parameters = RuleBook.PlanetParams[(planet.SizeVal, planet.SubtypeVal)];
             else
                 parameters = null;
+
+            // want to basically refresh almost everything
+            // rather than going through everything nulling it
+            // just save the few parameters we want to keep and then get a new planet instance
+
+            string? name = planet.Name;
+            string? desc = planet.Description;
+            eSize? size = planet.Size;
+            eSubtype? subtype = planet.Subtype;
+
+            planet = new Planet(planet.Setting);
+            planet.Name = name;
+            planet.Description = desc;
+            planet.Size = size;
+            planet.Subtype = subtype;
+
+            // then check for any parameters where there's no choices
+            // or set numerics to the mid-point
+            if (parameters!=null)
+            {
+                if (HasAtmosphericOptions!=null && HasAtmosphericOptions == false)
+                    (planet.AtmosphericConditions, planet.AtmosphericDescription) = RuleBook.PlanetParams[(planet.SizeVal, planet.SubtypeVal)].AtmosphereA;
+                if (HasAtmosphere == true)
+                    planet.AtmosphericMass = 1;
+
+                if (HasLiquid == true)
+                    planet.HydrographicCoverage = (MinimumHydrographicCoverage + MaximumHydrographicCoverage) / 2;
+            }
+
+        }
+
+        private void CheckRanges()
+        {
+            if (planet.HydrographicCoverage < MinimumHydrographicCoverage)
+                planet.HydrographicCoverage = MinimumHydrographicCoverage;
+            if (planet.HydrographicCoverage > MaximumHydrographicCoverage)
+                planet.HydrographicCoverage = MaximumHydrographicCoverage;
+        }
+
+        private void SetResourceValueCategory(IPlanetCreator pc)
+        {
+            eResourceValueCategory? res = pc.GetResourceValueCategory(planet);
+            if (res != null)
+                planet.ResourceValueCategory = res;
+        }
+
+        private void SetAtmosphericMass(IPlanetCreator pc)
+        {
+            double? atmMass = pc.GetAtmosphericMass(planet);
+            if (atmMass != null)
+                planet.AtmosphericMass = atmMass;
+        }
+
+        private void SetAtmosphericConditions(IPlanetCreator pc)
+        {
+            fAtmosphericConditions? cond;
+            string? condDesc;
+            (cond, condDesc) = pc.GetAtmosphericConditions(planet);
+            if (cond != null)
+                planet.AtmosphericConditions = cond;
+            if (condDesc != null)
+                planet.AtmosphericDescription = condDesc;
+        }
+
+        private void SetHydrographicCoverage(IPlanetCreator pc)
+        {
+            double? hydro = pc.GetHydrographicCoverage(planet);
+            if (hydro != null)
+                planet.HydrographicCoverage = hydro;
+            CheckRanges();
         }
 
 
