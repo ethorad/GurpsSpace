@@ -9,7 +9,6 @@ namespace GurpsSpace
         private Setting setting;
         public Setting Setting { get { return setting; } set { setting = value; } }
 
-        private PlanetParameters? parameters;
         private string? name;
         public string? Name { get { return name; } set { name = value; } }
         public eOverallType? OverallType { get { return RuleBook.OverallTypeBySubtype(Subtype); } }
@@ -191,17 +190,16 @@ namespace GurpsSpace
             }
         }
 
+        private double? pressureFactor;
+        public double? PressureFactor { get { return pressureFactor; } set { pressureFactor = value; } }
         public double? AtmosphericPressure
         {
             get
             {
-                if (parameters == null || AtmosphericMass == null || Gravity == null)
+                if (pressureFactor == null || AtmosphericMass == null || Gravity == null)
                     return null;
                 else
-                {
-                    double pressureFac = (parameters == null) ? 0 : parameters.PressureFactor;
-                    return (AtmosphericMass ?? 0) * pressureFac * (Gravity ?? 0);
-                }
+                    return (AtmosphericMass ?? 0) * pressureFactor * (Gravity ?? 0);
             }
         }
         public ePressureCategory? AtmosphericPressureCategory 
@@ -278,17 +276,7 @@ namespace GurpsSpace
         }
 
         private eSettlementType? settlementType;
-        public eSettlementType? SettlementType
-        {
-            get { return settlementType; }
-            set
-            {
-                bool change = (settlementType != value);
-                settlementType = value;
-                if (change)
-                    SettlementTypeChanged();
-            }
-        }
+        public eSettlementType? SettlementType { get { return settlementType; } set { settlementType = value; } }
         public bool? HasSettlement 
         {
             get

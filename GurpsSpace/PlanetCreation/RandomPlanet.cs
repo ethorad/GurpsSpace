@@ -479,7 +479,7 @@ namespace GurpsSpace.PlanetCreation
 
             int roll = DiceBag.Roll(3);
 
-            roll += Math.Min(10, (p.LocalTechLevel ?? 0));
+            roll += Math.Min(10, (pf.LocalTechLevel ?? 0));
 
             if (pf.Interstellar == false)
                 return RuleBook.SocietyTypeAnarchy[roll];

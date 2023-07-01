@@ -95,7 +95,7 @@ namespace GurpsSpace.PlanetCreation
             throw new NotImplementedException();
         }
 
-        public int? GetAverageSurfaceTempK(PlanetFactory pf)
+        public int? GetAverageSurfaceTemperatureK(PlanetFactory pf)
         { 
             throw new NotImplementedException(); 
         }
@@ -349,7 +349,7 @@ namespace GurpsSpace.PlanetCreation
             int minRoll = 10 + 5 * affinityMod;
 
             // should be an affinity score
-            int roll = 10 + (p.AffinityScore ?? 0) * affinityMod + ageInDecades; // assuming a roll of 10
+            int roll = 10 + (pf.AffinityScore ?? 0) * affinityMod + ageInDecades; // assuming a roll of 10
 
             // effective decades of growth is the difference between the roll and the min
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
@@ -362,13 +362,13 @@ namespace GurpsSpace.PlanetCreation
 
             string question = "Enter the colony population below. ";
             question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulationValue.ToString("N0") + ". ";
-            question += "After " + p.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
+            question += "After " + pf.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
             string currPop;
-            if (p.Population == null)
+            if (pf.Population == null)
                 currPop = "";
             else
-                currPop = (p.Population ?? 0).ToString("N0");
+                currPop = (pf.Population ?? 0).ToString("N0");
             InputString inDiag = new InputString(question, currPop, true);
             if (inDiag.ShowDialog() == true)
             {
@@ -617,7 +617,7 @@ namespace GurpsSpace.PlanetCreation
                 // no interstellar trade if uncontacted
                 return 0;
 
-            string question = "Enter the trade volume as a percentage of the total economic volume ($" + (p.EconomicVolume ?? 0).ToString("N0") + "). ";
+            string question = "Enter the trade volume as a percentage of the total economic volume ($" + (pf.EconomicVolume ?? 0).ToString("N0") + "). ";
             switch (pf.SettlementType)
             {
                 case eSettlementType.Homeworld:
@@ -635,7 +635,7 @@ namespace GurpsSpace.PlanetCreation
             if (inDiag.ShowDialog() == true)
             {
                 double prop = double.Parse(inDiag.Answer, NumberStyles.AllowThousands) / 100;
-                double trade = prop * (p.EconomicVolume ?? 0);
+                double trade = prop * (pf.EconomicVolume ?? 0);
                 trade = RuleBook.RoundToSignificantFigures(trade, 2);
                 return trade;
             }

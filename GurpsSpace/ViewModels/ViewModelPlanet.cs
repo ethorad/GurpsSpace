@@ -127,8 +127,8 @@ namespace GurpsSpace.PlanetCreation
         // Climate
         public int AverageSurfaceTempK
         {
-            get { return (planet.AverageSurfaceTempK ?? 0); }
-            set { planet.AverageSurfaceTempK = value; MemberUpdated(); }
+            get { return (planet.AverageSurfaceTemperatureK ?? 0); }
+            set { planet.AverageSurfaceTemperatureK = value; MemberUpdated(); }
         }
         public string ClimateTypeString
         {
@@ -136,7 +136,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public int BlackbodyTempK
         {
-            get { return (planet.BlackbodyTempK ?? 0); }
+            get { return (planet.BlackbodyTemperatureK ?? 0); }
         }
 
         // Lithosphere
@@ -150,26 +150,11 @@ namespace GurpsSpace.PlanetCreation
                     return planet.CoreType.ToString()!; 
             }
         }
-        public double MinDensity
-        {
-            get { return (planet.MinDensity ?? 0); }
-        }
-        public double MaxDensity
-        {
-            get { return (planet.MaxDensity ?? 0); }
-        }
+
         public double Density
         {
             get { return (planet.Density ?? 0); }
             set { planet.Density = value; MemberUpdated(); }
-        }
-        public double MinGravity
-        {
-            get { return (planet.MinGravity ?? 0); }
-        }
-        public double MaxGravity
-        {
-            get { return (planet.MaxGravity ?? 0); }
         }
         public double Gravity
         {

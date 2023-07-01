@@ -140,7 +140,15 @@ namespace GurpsSpace.PlanetCreation
         public int MinSurfaceTemperatureK { get { return planetFactory.MinSurfaceTemperatureK ?? 0; } }
         public int MaxSurfaceTemperatureK { get { return planetFactory.MaxSurfaceTemperatureK ?? 0; } }
         public int StepSurfaceTemperatureK { get { return planetFactory.StepSurfaceTemperatureK ?? 0; } }
-        public int AverageSurfaceTemperatureK { get { return planetFactory.AverageSurfaceTemperatureK ?? 0; } }
+        public int AverageSurfaceTemperatureK
+        { 
+            get { return planetFactory.AverageSurfaceTemperatureK ?? 0; }
+            set 
+            { 
+                planetFactory.AverageSurfaceTemperatureK = value;
+                MemberUpdated();
+            }
+        }
         public string AverageSurfaceTemperatureKString
         {
             get
@@ -188,7 +196,7 @@ namespace GurpsSpace.PlanetCreation
         public double Density
         {
             get { return planetFactory.Density ?? 0; }
-            set { planetFactory.Density = value; }
+            set { planetFactory.Density = value; MemberUpdated(); }
         }
         public string DensityString
         {
@@ -207,7 +215,7 @@ namespace GurpsSpace.PlanetCreation
         public double Gravity
         {
             get { return planetFactory.Gravity ?? 0; }
-            set { planetFactory.Gravity = value; }
+            set { planetFactory.Gravity = value; MemberUpdated(); }
         }
         public string GravityString
         {
@@ -249,6 +257,34 @@ namespace GurpsSpace.PlanetCreation
             {
                 planetFactory.SettlementType = value;
                 MemberUpdated();
+            }
+        }
+        public string SettlementTypeString
+        {
+            get
+            {
+                if (planetFactory.SettlementType == null)
+                    return "tbc";
+
+                string res = planetFactory.SettlementType.ToString() ?? "tbc";
+                if (planetFactory.SettlementType == eSettlementType.Colony)
+                {
+                    if (planetFactory.ColonyAge == null)
+                        res += " (age tbc)";
+                    else
+                        res += " (" + (planetFactory.ColonyAge ?? 0).ToString("N0") + " years old)";
+                }
+                if (planetFactory.SettlementType == eSettlementType.Homeworld)
+                {
+                    if (planetFactory.Interstellar != null)
+                    {
+                        if (planetFactory.Interstellar ?? false)
+                            res += " (Interstellar)";
+                        else
+                            res += " (Uncontacted)";
+                    }
+                }
+                return res;
             }
         }
         public bool HasSettlement { get { return planetFactory.HasSettlement ?? false; } }

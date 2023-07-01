@@ -80,7 +80,7 @@ namespace GurpsSpace.PlanetCreation
         public int? MinSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MinSurfaceTemperatureK; } }
         public int? MaxSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.MaxSurfaceTemperatureK; } }
         public int? StepSurfaceTemperatureK { get { return (parameters == null) ? null : parameters.StepSurfaceTemperatureK; } }
-        public int? AverageSurfaceTemperatureK { get { return planet.AverageSurfaceTemperatureK; } }
+        public int? AverageSurfaceTemperatureK { get { return planet.AverageSurfaceTemperatureK; } set { planet.AverageSurfaceTemperatureK = value; } }
         public eClimateType? ClimateType { get { return planet.ClimateType; } }
         public int? BlackbodyTemperatureK { get { return planet.BlackbodyTemperatureK; } }
 
@@ -234,7 +234,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public void RandomInstallation(string instType)
         {
-            List<Installation>? lst = randomiser.GetInstallation(planet, instType);
+            List<Installation>? lst = randomiser.GetInstallation(this, instType);
             if (lst != null)
             {
                 clearInstallations(instType);
@@ -311,57 +311,38 @@ namespace GurpsSpace.PlanetCreation
                     break;
 
                 case "TechLevel":
-                    int? tl;
-                    eTechLevelRelativity? adj;
-                    (tl, adj) = pc.GetLocalTechLevel(planet);
-                    if (tl != null)
-                        planet.LocalTechLevel = tl ?? 0;
-                    if (adj != null)
-                        planet.LocalTechLevelRelativity = adj ?? eTechLevelRelativity.Normal;
+                    SetLocalTechLevel(pc);
                     break;
 
                 case "Population":
-                    double? pop = pc.GetPopulation(planet);
-                    if (pop != null)
-                        planet.Population = pop ?? 0;
+                    SetPopulation(pc);
                     break;
 
                 case "WorldGovernance":
-                    eWorldUnityLevel? unity;
-                    fGovernmentSpecialConditions? specCond;
-                    (unity, specCond) = pc.GetWorldGovernance(planet);
-                    if (unity != null)
-                        planet.WorldUnityLevel = unity ?? eWorldUnityLevel.Diffuse;
-                    if (specCond != null)
-                        planet.GovernmentSpecialConditions = specCond ?? fGovernmentSpecialConditions.None;
+                    SetWorldGovernance(pc);
                     break;
 
                 case "SocietyType":
-                    eSocietyType? soc = pc.GetSocietyType(planet);
-                    if (soc != null)
-                        planet.SocietyType = soc ?? eSocietyType.Anarchy;
+                    SetSocietyType(pc);
                     break;
+
                 case "ControlRating":
-                    int? cr = pc.GetControlRating(planet);
-                    if (cr != null)
-                        planet.ControlRating = cr ?? 0;
+                    SetControlRating(pc);
                     break;
+
                 case "TradeVolume":
-                    double? trade = pc.GetTradeVolume(planet);
-                    if (trade != null)
-                        planet.TradeVolume = trade ?? 0;
+                    SetTradeVolume(pc);
                     break;
+
                 case "SpaceportClass":
-                    int? spacepostClass = pc.GetSpaceportClass(planet);
-                    if (spacepostClass != null)
-                        planet.SpaceportClass = spacepostClass ?? 0;
+                    SetSpaceportClass(pc);
                     break;
             }
         }
 
         private void SetName(IPlanetCreator pc)
         {
-            string? name = pc.GetName(planet);
+            string? name = pc.GetName(this);
             if (name != null)
                 planet.Name = name;
         }
@@ -370,7 +351,7 @@ namespace GurpsSpace.PlanetCreation
         {
             eSize? size;
             eSubtype? subtype;
-            (size, subtype) = pc.GetSizeAndSubtype(planet);
+            (size, subtype) = pc.GetSizeAndSubtype(this);
             bool change = false;
             if (size != null)
             {
@@ -428,6 +409,8 @@ namespace GurpsSpace.PlanetCreation
                     planet.LiquidType = parameters.Liquid;
                 }
 
+                planet.PressureFactor = parameters.PressureFactor;
+
                 planet.AverageSurfaceTemperatureK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
                 planet.Density = (MinDensity+MaxDensity) / 2;
                 planet.Gravity = (MaxGravity+MinGravity) / 2;
@@ -460,14 +443,14 @@ namespace GurpsSpace.PlanetCreation
 
         private void SetResourceValueCategory(IPlanetCreator pc)
         {
-            eResourceValueCategory? res = pc.GetResourceValueCategory(planet);
+            eResourceValueCategory? res = pc.GetResourceValueCategory(this);
             if (res != null)
                 planet.ResourceValueCategory = res;
         }
 
         private void SetAtmosphericMass(IPlanetCreator pc)
         {
-            double? atmMass = pc.GetAtmosphericMass(planet);
+            double? atmMass = pc.GetAtmosphericMass(this);
             if (atmMass != null)
                 planet.AtmosphericMass = atmMass;
         }
@@ -485,7 +468,7 @@ namespace GurpsSpace.PlanetCreation
 
             fAtmosphericConditions? cond;
             string? condDesc;
-            (cond, condDesc) = pc.GetAtmosphericConditions(planet);
+            (cond, condDesc) = pc.GetAtmosphericConditions(this);
             if (cond != null)
                 planet.AtmosphericConditions = cond;
             if (condDesc != null)
@@ -494,7 +477,7 @@ namespace GurpsSpace.PlanetCreation
 
         private void SetHydrographicCoverage(IPlanetCreator pc)
         {
-            double? hydro = pc.GetHydrographicCoverage(planet);
+            double? hydro = pc.GetHydrographicCoverage(this);
             if (hydro != null)
                 planet.HydrographicCoverage = hydro;
             CheckRanges();
@@ -542,6 +525,61 @@ namespace GurpsSpace.PlanetCreation
                 planet.LocalSpecies = s;
         }
 
+        private void SetLocalTechLevel(IPlanetCreator pc)
+        {
+            int? tl;
+            eTechLevelRelativity? adj;
+            (tl, adj) = pc.GetLocalTechLevel(this);
+            if (tl != null)
+                planet.LocalTechLevel = tl ?? 0;
+            if (adj != null)
+                planet.LocalTechLevelRelativity = adj ?? eTechLevelRelativity.Normal;
+        }
 
+        private void SetPopulation(IPlanetCreator pc)
+        {
+            double? pop = pc.GetPopulation(this);
+            if (pop != null)
+                planet.Population = pop ?? 0;
+        }
+
+        private void SetWorldGovernance(IPlanetCreator pc)
+        {
+            eWorldUnityLevel? unity;
+            fGovernmentSpecialConditions? specCond;
+            (unity, specCond) = pc.GetWorldGovernance(this);
+            if (unity != null)
+                planet.WorldUnityLevel = unity ?? eWorldUnityLevel.Diffuse;
+            if (specCond != null)
+                planet.GovernmentSpecialConditions = specCond ?? fGovernmentSpecialConditions.None;
+        }
+
+        private void SetSocietyType(IPlanetCreator pc)
+        {
+            eSocietyType? soc = pc.GetSocietyType(this);
+            if (soc != null)
+                planet.SocietyType = soc ?? eSocietyType.Anarchy;
+        }
+
+        private void SetControlRating(IPlanetCreator pc)
+        {
+            int? cr = pc.GetControlRating(this);
+            if (cr != null)
+                planet.ControlRating = cr ?? 0;
+        }
+
+        private void SetTradeVolume(IPlanetCreator pc)
+        {
+            double? trade = pc.GetTradeVolume(this);
+            if (trade != null)
+                planet.TradeVolume = trade ?? 0;
+        }
+
+        private void SetSpaceportClass(IPlanetCreator pc)
+        {
+            int? spacepostClass = pc.GetSpaceportClass(this);
+            if (spacepostClass != null)
+                planet.SpaceportClass = spacepostClass ?? 0;
+        }
     }
 }
