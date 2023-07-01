@@ -200,7 +200,7 @@ namespace GurpsSpace.PlanetCreation
             return cover;
         }
 
-        public int? GetAverageSurfaceTempK(PlanetFactory pf)
+        public int? GetAverageSurfaceTemperatureK(PlanetFactory pf)
         {
             // should really be all or none here, so could just check one of them
             if (pf.MinSurfaceTemperatureK == null ||
@@ -250,7 +250,7 @@ namespace GurpsSpace.PlanetCreation
             return grav;
         }
 
-        public (eSettlementType?, int?, bool?) GetSettlementType(Planet p)
+        public (eSettlementType?, int?, bool?) GetSettlementType(PlanetFactory pf)
         {
             eSettlementType settType = eSettlementType.None;
             int colonyAge = 0;
@@ -282,33 +282,33 @@ namespace GurpsSpace.PlanetCreation
             return (settType, colonyAge, interstellar);
         }
 
-        public Species? GetLocalSpecies(Planet p)
+        public Species? GetLocalSpecies(PlanetFactory pf)
         {
-            int numSpecies = p.Setting.Species.Count;
+            int numSpecies = pf.Setting.Species.Count;
             int randNum = DiceBag.Rand(0, numSpecies - 1);
-            return p.Setting.Species[randNum];
+            return pf.Setting.Species[randNum];
         }
 
-        public (int?, eTechLevelRelativity?) GetLocalTechLevel(Planet p)
+        public (int?, eTechLevelRelativity?) GetLocalTechLevel(PlanetFactory pf)
         {
             int roll = DiceBag.Roll(3);
 
-            if (p.SettlementType == null || p.Habitability==null)
+            if (pf.SettlementType == null || pf.Habitability==null || pf.Interstellar==null)
                 return (null, null);
 
             // -10 if uncontacted homeworld
-            if (p.SettlementType == eSettlementType.Homeworld && (!p.Interstellar ?? true))
+            if (pf.SettlementType == eSettlementType.Homeworld && (!pf.Interstellar ?? true))
                 roll -= 10;
 
-            if ((p.Habitability >= 4 && p.Habitability <= 6) &&
-                (p.SettlementType == eSettlementType.Colony || p.SettlementType == eSettlementType.Homeworld))
+            if ((pf.Habitability >= 4 && pf.Habitability <= 6) &&
+                (pf.SettlementType == eSettlementType.Colony || pf.SettlementType == eSettlementType.Homeworld))
                 roll += 1;
 
-            if ((p.Habitability <=3) &&
-                (p.SettlementType == eSettlementType.Colony || p.SettlementType == eSettlementType.Homeworld))
+            if ((pf.Habitability <=3) &&
+                (pf.SettlementType == eSettlementType.Colony || pf.SettlementType == eSettlementType.Homeworld))
                 roll += 2;
 
-            if (p.SettlementType == eSettlementType.Outpost)
+            if (pf.SettlementType == eSettlementType.Outpost)
                 roll += 3;
 
             string res = RuleBook.TechLevelTable[roll];
@@ -316,7 +316,7 @@ namespace GurpsSpace.PlanetCreation
             // could try and read the return strings from that table, however would be complex as a few different formats
             // since there's not many return values, easier just to do a switch on them
 
-            int tl = p.Setting.TechLevel;
+            int tl = pf.Setting.TechLevel;
             eTechLevelRelativity adj = eTechLevelRelativity.Normal;
 
             switch (res)
@@ -325,23 +325,23 @@ namespace GurpsSpace.PlanetCreation
                     tl = Math.Max(0, DiceBag.Roll(3) - 12);
                     break;
                 case "Standard -3":
-                    tl = p.Setting.TechLevel - 3;
+                    tl = pf.Setting.TechLevel - 3;
                     break;
                 case "Standard -2":
-                    tl = p.Setting.TechLevel-2;
+                    tl = pf.Setting.TechLevel-2;
                     break;
                 case "Standard -1":
-                    tl = p.Setting.TechLevel-1;
+                    tl = pf.Setting.TechLevel-1;
                     break;
                 case "Standard (Delayed)":
-                    tl = p.Setting.TechLevel;
+                    tl = pf.Setting.TechLevel;
                     adj = eTechLevelRelativity.Delayed;
                     break;
                 case "Standard":
-                    tl = p.Setting.TechLevel;
+                    tl = pf.Setting.TechLevel;
                     break;
                 case "Standard (Advanced)":
-                    tl = p.Setting.TechLevel;
+                    tl = pf.Setting.TechLevel;
                     adj = eTechLevelRelativity.Advanced;
                     break;
             }
@@ -349,35 +349,35 @@ namespace GurpsSpace.PlanetCreation
             return (tl, adj);
         }
 
-        public double? GetPopulation(Planet p)
+        public double? GetPopulation(PlanetFactory pf)
         {
-            switch (p.SettlementType)
+            switch (pf.SettlementType)
             {
                 case eSettlementType.Homeworld:
-                    return GetPopulationHomeworld(p);
+                    return GetPopulationHomeworld(pf);
                 case eSettlementType.Colony:
-                    return GetPopulationColony(p);
+                    return GetPopulationColony(pf);
                 case eSettlementType.Outpost:
-                    return GetPopulationOutpost(p);
+                    return GetPopulationOutpost(pf);
                 default:
-                    return 0;
+                    return null;
             }
         }
-        private double? GetPopulationHomeworld(Planet p)
+        private double? GetPopulationHomeworld(PlanetFactory pf)
         {
-            if (p.CarryingCapacity == null)
+            if (pf.CarryingCapacity == null)
                 return null;
 
             double proportion;
-            if (p.LocalTechLevel <= 4)
+            if (pf.LocalTechLevel <= 4)
                 proportion = ((double)DiceBag.Roll(2) + 3) / 10;
             else
                 proportion = 10 / (double)DiceBag.Roll(2);
-            double pop = proportion * (p.CarryingCapacity ?? 0);
+            double pop = proportion * (pf.CarryingCapacity ?? 0);
             pop = RuleBook.RoundToSignificantFigures(pop, 2);
             return pop;
         }
-        private double? GetPopulationColony(Planet p)
+        private double? GetPopulationColony(PlanetFactory pf)
         {
             // rather than using the table directly, instead calculating based on the box on page 93
             // each race has a starting colony size, a growth rate, and an affinity multiplier
@@ -388,33 +388,29 @@ namespace GurpsSpace.PlanetCreation
             // LN(affinitymult) / LN(1+growth) gives how many years of growth is equal to the affinity multiplier
             // and this figure / 10 is how many rows on the table from each +1 to affinity
 
-            if (p.LocalSpecies == null)
-                return null;
-            if (p.ColonyAge == null)
-                return null;
-            if (p.AffinityScore == null)
+            if (pf.LocalSpecies == null || pf.ColonyAge == null || pf.AffinityScore == null || pf.CarryingCapacity == null)
                 return null;
 
-            Species s = p.LocalSpecies;
+            Species s = pf.LocalSpecies;
 
-            int ageInDecades = (p.ColonyAge??0) / 10;
+            int ageInDecades = (pf.ColonyAge ?? 0) / 10;
             int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
-            int roll = DiceBag.Roll(3) + (p.AffinityScore ?? 0) * affinityMod + ageInDecades;
+            int roll = DiceBag.Roll(3) + (pf.AffinityScore ?? 0) * affinityMod + ageInDecades;
 
             // effective decades of growth is the difference between the roll and the min
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
-            // then calculate the population
+            // then calculate the population, capped at carrying capacity
             double population = s.StartingColonyPopulationValue * Math.Pow(1 + s.AnnualGrowthRateValue, effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
-            if (population > s.CarryingCapacity(p))
-                population = s.CarryingCapacity(p);
+            if (population > pf.CarryingCapacity)
+                population = pf.CarryingCapacity ?? 0;
 
             return population;
         }
-        private double? GetPopulationOutpost(Planet p)
+        private double? GetPopulationOutpost(PlanetFactory pf)
         {
             int roll = DiceBag.Roll(3);
             double population = RuleBook.OutpostPopulation[roll];
@@ -424,7 +420,7 @@ namespace GurpsSpace.PlanetCreation
             return population;
         }
 
-        public (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(Planet p)
+        public (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(PlanetFactory pf)
         {
             int roll;
             eWorldUnityLevel unity;
@@ -432,12 +428,12 @@ namespace GurpsSpace.PlanetCreation
             fGovernmentSpecialConditions specCond = fGovernmentSpecialConditions.None;
             fGovernmentSpecialConditions secondCond = fGovernmentSpecialConditions.None;
 
-            if (p.LocalTechLevel<=7)
+            if (pf.LocalTechLevel<=7)
                 roll = DiceBag.Roll(1);
             else
                 roll = DiceBag.Roll(2);
 
-            switch(p.PopulationRating)
+            switch(pf.PopulationRating)
             {
                 case <= 4:
                     roll += 4;
@@ -461,7 +457,7 @@ namespace GurpsSpace.PlanetCreation
                 {
                     roll = DiceBag.Roll(3);
                     (specCond, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
-                } while (p.LocalTechLevel <= 7 && specCond == fGovernmentSpecialConditions.Cyberocracy);
+                } while (pf.LocalTechLevel <= 7 && specCond == fGovernmentSpecialConditions.Cyberocracy);
 
                 if (hasSecond && DiceBag.Roll(1) <= 3)
                 {
@@ -469,26 +465,26 @@ namespace GurpsSpace.PlanetCreation
                     {
                         roll = DiceBag.Roll(3);
                         (secondCond, hasSecond) = RuleBook.GovernmentSpecialConditions[roll];
-                    } while (p.LocalTechLevel <= 7 && secondCond == fGovernmentSpecialConditions.Cyberocracy);
+                    } while (pf.LocalTechLevel <= 7 && secondCond == fGovernmentSpecialConditions.Cyberocracy);
                 }
             }
 
             return (unity, specCond | secondCond);
         }
 
-        public eSocietyType? GetSocietyType(Planet p)
+        public eSocietyType? GetSocietyType(PlanetFactory pf)
         {
-            if (p.LocalTechLevel == null || p.Interstellar == null)
+            if (pf.LocalTechLevel == null || pf.Interstellar == null)
                 return null;
 
             int roll = DiceBag.Roll(3);
 
             roll += Math.Min(10, (p.LocalTechLevel ?? 0));
 
-            if (p.Interstellar == false)
+            if (pf.Interstellar == false)
                 return RuleBook.SocietyTypeAnarchy[roll];
 
-            switch (p.Setting.SocietyType)
+            switch (pf.Setting.SocietyType)
             {
                 case eSettingSocietyType.Anarchy:
                     return RuleBook.SocietyTypeAnarchy[roll];
@@ -501,49 +497,49 @@ namespace GurpsSpace.PlanetCreation
                 case eSettingSocietyType.Empire:
                     return RuleBook.SocietyTypeEmpire[roll];
                 default:
-                    return RuleBook.SocietyTypeAnarchy[roll];
+                    return null;
             }
         }
 
-        public int? GetControlRating(Planet p)
+        public int? GetControlRating(PlanetFactory pf)
         {
-            if (p.SocietyType == null)
+            if (pf.SocietyType == null)
                 return null;
 
-            int minCR = RuleBook.SocietyTypeParams[(p.SocietyType??0)].MinControlRating;
-            int maxCR = RuleBook.SocietyTypeParams[(p.SocietyType ?? 0)].MaxControlRating;
+            int minCR = RuleBook.SocietyTypeParams[(pf.SocietyType??0)].MinControlRating;
+            int maxCR = RuleBook.SocietyTypeParams[(pf.SocietyType ?? 0)].MaxControlRating;
 
             // adjust for any special conditions
             // see Campaigns p510 for details
 
-            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Cyberocracy) ||
-                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Meritocracy) ||
-                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Oligarchy) ||
-                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Socialist))
+            if (pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Cyberocracy) ||
+                pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Meritocracy) ||
+                pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Oligarchy) ||
+                pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Socialist))
             {
                 if (minCR < 3) minCR = 3;
                 if (maxCR < minCR) maxCR = minCR;
             }
-            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Bureaucracy) ||
-                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.MilitaryGovernment) ||
-                p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Subjugated))
+            if (pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Bureaucracy) ||
+                pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.MilitaryGovernment) ||
+                pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Subjugated))
             {
                 if (minCR < 4) minCR = 4;
                 if (maxCR < minCR) maxCR = minCR;
             }
-            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Sanctuary))
+            if (pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Sanctuary))
             {
                 if (maxCR > 4) maxCR = 4;
                 if (minCR > maxCR) minCR = maxCR;
             }
-            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Colony))
+            if (pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Colony))
             {
                 // strictly reads like it should be 1 CR below parent
                 // here I'm just reducing min and max by 1
                 minCR--;
                 maxCR--;
             }
-            if (p.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Utopia))
+            if (pf.HasGovernmentSpecialCondition(fGovernmentSpecialConditions.Utopia))
             {
                 // rulebook says the CR seems low
                 // here I'm just reducing min and max by 2
@@ -557,7 +553,7 @@ namespace GurpsSpace.PlanetCreation
             return DiceBag.Rand(minCR, maxCR);
         }
 
-        public double? GetTradeVolume(Planet p)
+        public double? GetTradeVolume(PlanetFactory pf)
         {
             // For trade volume between worlds use:
             // T = K * V1 * V2 / D
@@ -574,44 +570,47 @@ namespace GurpsSpace.PlanetCreation
             // If colony, then higher trade volume, say 30%-70%
             // If outpost then virtually all trade volume, say 80%-100%
 
-            if (p.Interstellar == null || p.EconomicVolume == null)
+            if (pf.Interstellar == null || pf.EconomicVolume == null)
                 return null;
 
             double tradeProp = 0;
 
-            if (!(p.Interstellar ?? true))
+            if (pf.Interstellar == false)
                 tradeProp = 0;
-            else if (p.SettlementType == eSettlementType.Homeworld)
+            else if (pf.SettlementType == eSettlementType.Homeworld)
                 tradeProp = ((double)DiceBag.Rand(1, 4)) * 0.1;
-            else if (p.SettlementType == eSettlementType.Colony)
+            else if (pf.SettlementType == eSettlementType.Colony)
                 tradeProp = ((double)DiceBag.Rand(3, 7)) * 0.1;
-            else if (p.SettlementType == eSettlementType.Outpost)
+            else if (pf.SettlementType == eSettlementType.Outpost)
                 tradeProp = ((double)DiceBag.Rand(8, 10)) * 0.1;
 
-            double trade = tradeProp * (p.EconomicVolume ?? 0);
+            double trade = tradeProp * (pf.EconomicVolume ?? 0);
             trade = RuleBook.RoundToSignificantFigures(trade, 2);
             return trade;
         }
 
-        public int? GetSpaceportClass(Planet p)
+        public int? GetSpaceportClass(PlanetFactory pf)
         {
+            if (pf.TradeVolume == null || pf.PopulationRating == null)
+                return null;
+
             // check for class V
-            if (p.TradeVolume > RuleBook.TradeForSpaceportV ||
-                (p.PopulationRating >= 6 && DiceBag.Roll(3) <= p.PopulationRating + 2))
+            if (pf.TradeVolume > RuleBook.TradeForSpaceportV ||
+                (pf.PopulationRating >= 6 && DiceBag.Roll(3) <= pf.PopulationRating + 2))
                 return 5;
 
             // check for class IV
-            else if (p.TradeVolume > RuleBook.TradeForSpaceportIV ||
-                (p.PopulationRating >= 6 && DiceBag.Roll(3) <= p.PopulationRating + 5))
+            else if (pf.TradeVolume > RuleBook.TradeForSpaceportIV ||
+                (pf.PopulationRating >= 6 && DiceBag.Roll(3) <= pf.PopulationRating + 5))
                 return 4;
 
             // check for class III
-            else if (p.TradeVolume > RuleBook.TradeForSpaceportIII ||
-                DiceBag.Roll(3) <= p.PopulationRating + 8)
+            else if (pf.TradeVolume > RuleBook.TradeForSpaceportIII ||
+                DiceBag.Roll(3) <= pf.PopulationRating + 8)
                 return 3;
 
             // check for class II
-            else if (DiceBag.Roll(3) <= p.Population + 7)
+            else if (DiceBag.Roll(3) <= pf.Population + 7)
                 return 2;
 
             // check for class I
@@ -624,13 +623,13 @@ namespace GurpsSpace.PlanetCreation
 
         }
 
-        public List<Installation>? GetInstallations(Planet p)
+        public List<Installation>? GetInstallations(PlanetFactory pf)
         {
             List<Installation> lst = new List<Installation>();
 
             foreach (InstallationParameters instParam in RuleBook.InstallationParams)
             {
-                CheckInstallation(p, lst, instParam);
+                CheckInstallation(pf, lst, instParam);
             }
 
             // prison only if the only other installations are naval and patrol bases
@@ -655,9 +654,9 @@ namespace GurpsSpace.PlanetCreation
             return lst;
 
         }
-        private bool CheckInstallation(Planet p, List<Installation> lst, InstallationParameters instParam)
+        private bool CheckInstallation(PlanetFactory pf, List<Installation> lst, InstallationParameters instParam)
         {
-            if (!instParam.IsValidInstallation(p))
+            if (!instParam.IsValidInstallation(pf.Planet))
                 return false;
 
             int startCount = lst.Count; // used to check if any were added
@@ -668,7 +667,7 @@ namespace GurpsSpace.PlanetCreation
             {
                 added = false;
                 int roll = DiceBag.Roll(3);
-                int target = instParam.TargetNumber(p, count);
+                int target = instParam.TargetNumber(pf.Planet, count);
                 if (roll <= target)
                 {
                     instParam.SetWeight(DiceBag.Rand(0, instParam.MaxWeight)); // in case there's multiple options
@@ -684,20 +683,20 @@ namespace GurpsSpace.PlanetCreation
             } while (added && count < instParam.MaxCount);
 
             if (count > 0 && instParam.HasSecond && instParam.SecondInstallation != null)
-                CheckInstallation(p, lst, instParam.SecondInstallation);
+                CheckInstallation(pf, lst, instParam.SecondInstallation);
 
             return (lst.Count > startCount);
 
         }
 
-        public List<Installation>? GetInstallation(Planet p, string installationType)
+        public List<Installation>? GetInstallation(PlanetFactory pf, string installationType)
         {
             List<Installation> lst = new List<Installation>();
             InstallationParameters instParam = RuleBook.InstallationParams[0];
             foreach (InstallationParameters ip in RuleBook.InstallationParams)
                 if (ip.Type== installationType)
                     instParam = ip;
-            CheckInstallation(p, lst, instParam);
+            CheckInstallation(pf, lst, instParam);
             return lst;
         }
     }

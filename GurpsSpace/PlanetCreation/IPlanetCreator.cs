@@ -14,7 +14,7 @@ namespace GurpsSpace.PlanetCreation
 
         double? GetHydrographicCoverage(PlanetFactory pf);
 
-        int? GetAverageSurfaceTempK(PlanetFactory pf);
+        int? GetAverageSurfaceTemperatureK(PlanetFactory pf);
 
         double? GetDensity(PlanetFactory pf);
 

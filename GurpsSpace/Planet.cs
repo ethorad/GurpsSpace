@@ -24,30 +24,10 @@ namespace GurpsSpace
         }
         private eSize? size;
         public eSize SizeVal { get { return size ?? eSize.None; } }
-        public eSize? Size
-        {
-            get { return size; }
-            set
-            {
-                bool change = (size != value);
-                size = value;
-                if (change)
-                    PlanetTypeChanged();
-            }
-        }
+        public eSize? Size { get { return size; } set { size = value; } }
         private eSubtype? subtype;
         public eSubtype SubtypeVal { get { return subtype ?? eSubtype.None; } }
-        public eSubtype? Subtype
-        {
-            get { return subtype; }
-            set
-            {
-                bool change = (subtype != value);
-                subtype = value;
-                if (change)
-                    PlanetTypeChanged();
-            }
-        }
+        public eSubtype? Subtype { get { return subtype; } set { subtype = value; } }
 
         public bool? IsPlanet
         {
@@ -124,10 +104,10 @@ namespace GurpsSpace
         {
             get
             {
-                if (AverageSurfaceTempK == null)
+                if (AverageSurfaceTemperatureK == null)
                     return null;
                 else
-                    return RuleBook.ClimateType(AverageSurfaceTempK ?? 0); // OK to use ?? as we know it isn't null here
+                    return RuleBook.ClimateType(AverageSurfaceTemperatureK ?? 0); // OK to use ?? as we know it isn't null here
             }
         }
         public int? BlackbodyTemperatureK
@@ -154,40 +134,7 @@ namespace GurpsSpace
 
         private eCoreType? coreType;
         public eCoreType? CoreType { get { return coreType; } set { coreType = value; } }
-        public double? MinDensity
-        {
-            get
-            {
-                switch (CoreType ?? eCoreType.None) // so falls to default if null
-                {
-                    case eCoreType.Icy:
-                        return RuleBook.DensityIcyCore[0];
-                    case eCoreType.SmallIron:
-                        return RuleBook.DensitySmallIronCore[0];
-                    case eCoreType.LargeIron:
-                        return RuleBook.DensityLargeIronCore[0];
-                    default:
-                        return null;
-                }
-            }
-        }
-        public double? MaxDensity
-        {
-            get
-            {
-                switch (CoreType ?? eCoreType.None) // so falls to default if null
-                {
-                    case eCoreType.Icy:
-                        return RuleBook.DensityIcyCore[20];
-                    case eCoreType.SmallIron:
-                        return RuleBook.DensitySmallIronCore[20];
-                    case eCoreType.LargeIron:
-                        return RuleBook.DensityLargeIronCore[20];
-                    default:
-                        return 0;
-                }
-            }
-        }
+
         private double? density;
         public double? Density
         {
@@ -196,34 +143,6 @@ namespace GurpsSpace
             {
                 density = value;
                 CheckRanges();
-            }
-        }
-        public double? MinGravity
-        {
-            get
-            {
-                // check for values we need
-                if (parameters == null || BlackbodyTempK == null || Density == null)
-                    return null;
-                // so can now use ?? on all nullable values
-
-                double minSizeFactor = (parameters == null) ? 0 : parameters.MinSizeFactor;
-                double minG = Math.Sqrt((double)(BlackbodyTempK ?? 0) * (Density ?? 0)) * minSizeFactor;
-                return Math.Round(minG, 2);
-            }
-        }
-        public double? MaxGravity
-        {
-            get
-            {
-                // check for values we need
-                if (parameters == null || BlackbodyTempK == null || Density == null)
-                    return null;
-                // so can now use ?? on all nullable values
-
-                double maxSizeFactor = (parameters == null) ? 0 : parameters.MaxSizeFactor;
-                double maxG = Math.Sqrt((double)(BlackbodyTempK ?? 0) * (Density ?? 0)) * maxSizeFactor;
-                return Math.Round(maxG, 2);
             }
         }
         private double? gravity;
@@ -581,14 +500,16 @@ namespace GurpsSpace
             Description=p.Description;
             Size = p.Size;
             Subtype = p.Subtype;
+            CoreType = p.CoreType;
             AtmosphericMass = p.AtmosphericMass;
             AtmosphericConditions = p.AtmosphericConditions;
             AtmosphericDescription = p.AtmosphericDescription;
             HydrographicCoverage = p.HydrographicCoverage;
-            AverageSurfaceTempK = p.AverageSurfaceTempK;
+            LiquidType = p.LiquidType;
+            AverageSurfaceTemperatureK = p.AverageSurfaceTemperatureK;
             Density = p.Density;
             Gravity = p.Gravity;
-            LocalSpecies =p.LocalSpecies; // don't need to copy this since aren't going to edit the species here
+            LocalSpecies = p.LocalSpecies; // don't need to copy this since aren't going to edit the species here
             LocalTechLevel = p.LocalTechLevel;
             LocalTechLevelRelativity = p.LocalTechLevelRelativity;
             ResourceValueCategory = p.ResourceValueCategory;
@@ -614,15 +535,7 @@ namespace GurpsSpace
 
             // check that any values are still in the (min, max) range
 
-            if (Density < MinDensity)
-                Density = MinDensity;
-            if (Density > MaxDensity)
-                Density = MaxDensity;
 
-            if (Gravity < MinGravity)
-                Gravity = MinGravity;
-            if (Gravity > MaxGravity)
-                Gravity = MaxGravity;
 
             if (ControlRating < MinControlRating ||
                 ControlRating > MaxControlRating)
@@ -639,30 +552,6 @@ namespace GurpsSpace
                     lst.Add(inst);
             }
             return lst;
-        }
-
-
-        private void PlanetTypeChanged()
-        {
-            // update the parameters
-            if (RuleBook.PlanetParams.ContainsKey((SizeVal, SubtypeVal)))
-                parameters = RuleBook.PlanetParams[(SizeVal, SubtypeVal)];
-            else
-                parameters = null;
-            CheckRanges();
-
-            // refresh various parameters if the planet type has updated
-
-            // set ranged inputs to be the midpoint
-            Density = Math.Round(((MinDensity + MaxDensity) ?? 0) / 2, 1);
-            Gravity = Math.Round(((MinGravity + MaxGravity) ?? 0) / 2, 2);
-        }
-
-        private void SettlementTypeChanged()
-        {
-            ColonyAge = 0;
-            Interstellar = true;
-            Population = 0;
         }
 
     }

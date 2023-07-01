@@ -183,6 +183,217 @@ namespace GurpsSpace.PlanetCreation
                     return planetFactory.CoreType.ToString()!;
             }
         }
+        public double MinDensity { get { return planetFactory.MinDensity ?? 0; } }
+        public double MaxDensity { get { return planetFactory.MaxDensity ?? 0; } }
+        public double Density
+        {
+            get { return planetFactory.Density ?? 0; }
+            set { planetFactory.Density = value; }
+        }
+        public string DensityString
+        {
+            get
+            {
+                if (planetFactory.Size == eSize.AsteroidBelt)
+                    return "n/a";
+                else if (planetFactory.Density == null)
+                    return "tbc";
+                else
+                    return Math.Round(planetFactory.Density ?? 0, 2).ToString();
+            }
+        }
+        public double MinGravity { get { return planetFactory.MinGravity ?? 0; } }
+        public double MaxGravity { get { return planetFactory.MaxGravity ?? 0; } }
+        public double Gravity
+        {
+            get { return planetFactory.Gravity ?? 0; }
+            set { planetFactory.Gravity = value; }
+        }
+        public string GravityString
+        {
+            get
+            {
+                if (planetFactory.Size == eSize.AsteroidBelt)
+                    return "n/a";
+                else if (planetFactory.Gravity == null)
+                    return "tbc";
+                else
+                    return Math.Round(planetFactory.Gravity ?? 0, 2).ToString();
+            }
+        }
+        public string DiameterString
+        {
+            get
+            {
+                if (planetFactory.DiameterEarths == null)
+                    return "tbc";
+                else
+                    return (planetFactory.DiameterEarths ?? 0).ToString("N2") + " Earths (" + (planetFactory.DiameterMiles ?? 0).ToString("N0") + " Miles)";
+            }
+        }
+        public string MassString
+        {
+            get
+            {
+                if (planetFactory.Mass == null)
+                    return "tbc";
+                else
+                    return (planetFactory.Mass ?? 0).ToString("N2") + " Earths";
+            }
+        }
+
+        public eSettlementType SettlementType
+        {
+            get { return planetFactory.SettlementType ?? eSettlementType.None; }
+            set
+            {
+                planetFactory.SettlementType = value;
+                MemberUpdated();
+            }
+        }
+        public bool HasSettlement { get { return planetFactory.HasSettlement ?? false; } }
+        public string LocalSpeciesName
+        {
+            get
+            {
+                if (planetFactory.LocalSpecies == null)
+                    return "tbc";
+                else
+                    return planetFactory.LocalSpecies.Name!;
+            }
+        }
+        public string AffinityScoreString
+        {
+            get
+            {
+                if (planetFactory.AffinityScore == null)
+                    return "tbc";
+                else
+                {
+                    // if affinity score is not null, then resources and habitability are both not null
+                    string res = (planetFactory.AffinityScore ?? 0).ToString("N0");
+                    res += " (Resources: " + (planetFactory.ResourceValueModifier ?? 0).ToString("N0") + ", ";
+                    res += "Habitability: " + (planetFactory.Habitability ?? 0).ToString("N0") + ")";
+                    return res;
+                }
+            }
+        }
+        public string LocalTechLevelString
+        {
+            get
+            {
+                if (planetFactory.LocalTechLevel == null || planetFactory.LocalTechLevelRelativity == null)
+                    return "tbc";
+                else
+                {
+                    string TLval = "TL" + (planetFactory.LocalTechLevel ?? 0).ToString("N0");
+                    string AgeDesc = "(" + planetFactory.LocalTechLevelAge;
+                    if (planetFactory.LocalTechLevelRelativity == eTechLevelRelativity.Delayed)
+                    {
+                        TLval += "-1";
+                        AgeDesc += " - Delayed";
+                    }
+                    if (planetFactory.LocalTechLevelRelativity == eTechLevelRelativity.Advanced)
+                    {
+                        TLval += "+1";
+                        AgeDesc += " - Advanced";
+                    }
+                    AgeDesc += ")";
+                    return TLval + " " + AgeDesc;
+                }
+            }
+        }
+
+        public string CarryingCapacityString
+        {
+            get 
+            {
+                if (planetFactory.CarryingCapacity == null)
+                    return "tbc";
+                else
+                    return (planetFactory.CarryingCapacity??0).ToString("N0"); 
+            } 
+        }
+        public string PopulationString
+        {
+            get
+            {
+                if (planetFactory.Population == null)
+                    return "tbc";
+                else
+                    return (planetFactory.Population ?? 0).ToString("N0") + " (PR " + (planetFactory.PopulationRating ?? 0).ToString("N0") + ")";
+            }
+        }
+
+        public string WorldUnityString
+        {
+            get
+            {
+                if (planetFactory.WorldUnityLevel == null)
+                    return "tbc";
+                else
+                    return planetFactory.WorldUnityLevel.ToString()!;
+            }
+        }
+        public string SocietyTypeString
+        {
+            get
+            {
+                if (planetFactory.SocietyType == null)
+                    return "tbc";
+                string res = planetFactory.SocietyType.ToString()!;
+                if (planetFactory.GovernmentSpecialConditions != null
+                    && planetFactory.GovernmentSpecialConditions != fGovernmentSpecialConditions.None)
+                    res += " (" + planetFactory.GovernmentSpecialConditions.ToString() + ")";
+                return res;
+            }
+        }
+        public string ControlRatingString
+        {
+            get
+            {
+                if (planetFactory.ControlRating == null)
+                    return "tbc";
+                else
+                    return "CR " + planetFactory.ControlRating.ToString() + " (" + RuleBook.ControlRatings[planetFactory.ControlRating ?? 0] + ")";
+            }
+        }
+        public string IncomePerCapitaString
+        {
+            get
+            {
+                if (planetFactory.IncomePerCapita == null)
+                    return "tbc";
+                else
+                    return "$" + (planetFactory.IncomePerCapita ?? 0).ToString("N0") + " (" + planetFactory.WealthLevel + ")";
+            }
+        }
+        public string EconomicVolumeString
+        {
+            get
+            {
+                if (planetFactory.EconomicVolume == null)
+                    return "tbc";
+                else
+                    return "$" + (planetFactory.EconomicVolume ?? 0).ToString("N0");
+            }
+        }
+        public string TradeVolumeString
+        {
+            get
+            {
+                if (planetFactory.TradeVolume == null)
+                    return "tbc";
+                else if (planetFactory.Interstellar == true)
+                    return "$" + (planetFactory.TradeVolume ?? 0).ToString("N0");
+                else if (planetFactory.Interstellar == false)
+                    return "Uncontacted";
+                else
+                    return "tbc";
+            }
+        }
+
+
 
         private ViewModelList<ViewModelInstallation> installationsList;
         public ViewModelList<ViewModelInstallation> InstallationsList

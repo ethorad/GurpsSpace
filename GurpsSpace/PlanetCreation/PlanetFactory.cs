@@ -15,10 +15,12 @@ namespace GurpsSpace.PlanetCreation
         private PlanetParameters? parameters;
         public PlanetParameters? Parameters { get { return parameters; } }
 
+        public Setting Setting { get { return planet.Setting; } }
+
         private IPlanetCreator randomiser;
         private IPlanetCreator userInput;
 
-        public string? Name { get { return planet.Name; } set {  planet.Name = value; } }
+        public string? Name { get { return planet.Name; } set { planet.Name = value; } }
         public eSize? Size { get { return planet.Size; } }
         public eSubtype? Subtype { get { return planet.Subtype; } }
         public eOverallType? OverallType { get { return planet.OverallType; } }
@@ -28,12 +30,12 @@ namespace GurpsSpace.PlanetCreation
         public bool? IsPlanet { get { return planet.IsPlanet; } }
 
         public bool? HasAtmosphere { get { return (parameters == null) ? null : parameters.HasAtmosphere; } }
-        public double? AtmosphericMass 
-        { 
-            get 
-            { 
-                return planet.AtmosphericMass; 
-            } 
+        public double? AtmosphericMass
+        {
+            get
+            {
+                return planet.AtmosphericMass;
+            }
             set
             {
                 if (value < 0)
@@ -50,7 +52,7 @@ namespace GurpsSpace.PlanetCreation
 
         public bool? HasHydrosphere
         {
-            get 
+            get
             {
                 return (parameters == null) ? null : (parameters.Liquid != eLiquid.None);
             }
@@ -95,7 +97,117 @@ namespace GurpsSpace.PlanetCreation
             }
         }
         public eCoreType? CoreType { get { return planet.CoreType; } }
+        public double? MinDensity
+        {
+            get
+            {
+                switch (CoreType ?? eCoreType.None) // so falls to default if null
+                {
+                    case eCoreType.Icy:
+                        return RuleBook.DensityIcyCore[0];
+                    case eCoreType.SmallIron:
+                        return RuleBook.DensitySmallIronCore[0];
+                    case eCoreType.LargeIron:
+                        return RuleBook.DensityLargeIronCore[0];
+                    default:
+                        return null;
+                }
+            }
+        }
+        public double? MaxDensity
+        {
+            get
+            {
+                switch (CoreType ?? eCoreType.None) // so falls to default if null
+                {
+                    case eCoreType.Icy:
+                        return RuleBook.DensityIcyCore[20];
+                    case eCoreType.SmallIron:
+                        return RuleBook.DensitySmallIronCore[20];
+                    case eCoreType.LargeIron:
+                        return RuleBook.DensityLargeIronCore[20];
+                    default:
+                        return null;
+                }
+            }
+        }
+        public double? Density { get { return planet.Density; } set { planet.Density = value; } }
+        public double? MinGravity
+        {
+            get
+            {
+                // check for values we need
+                if (parameters == null || planet.BlackbodyTemperatureK == null || planet.Density == null)
+                    return null;
+                // so can now use ?? on all nullable values
 
+                double minSizeFactor = (parameters == null) ? 0 : parameters.MinSizeFactor;
+                double minG = Math.Sqrt((double)(planet.BlackbodyTemperatureK ?? 0) * (Density ?? 0)) * minSizeFactor;
+                return Math.Round(minG, 2);
+            }
+        }
+        public double? MaxGravity
+        {
+            get
+            {
+                // check for values we need
+                if (parameters == null || planet.BlackbodyTemperatureK == null || planet.Density == null)
+                    return null;
+                // so can now use ?? on all nullable values
+
+                double maxSizeFactor = (parameters == null) ? 0 : parameters.MaxSizeFactor;
+                double maxG = Math.Sqrt((double)(planet.BlackbodyTemperatureK ?? 0) * (Density ?? 0)) * maxSizeFactor;
+                return Math.Round(maxG, 2);
+            }
+        }
+        public double? Gravity { get { return planet.Gravity; } set { planet.Gravity = value; } }
+        public double? DiameterEarths { get { return planet.DiameterEarths; } }
+        public double? DiameterMiles { get { return planet.DiameterMiles; } }
+        public double? Mass { get { return planet.Mass; } }
+
+        public eSettlementType? SettlementType
+        {
+            get { return planet.SettlementType; }
+            set
+            {
+                planet.SettlementType = value;
+                if (planet.SettlementType == null || planet.SettlementType == eSettlementType.None)
+                {
+                    planet.LocalSpecies = null;
+                    planet.LocalTechLevel = null;
+                    planet.LocalTechLevelRelativity = null;
+                }
+            }
+        }
+        public int? ColonyAge { get { return planet.ColonyAge; } }
+        public bool? Interstellar { get { return planet.Interstellar; } }
+        public bool? HasSettlement { get { return planet.HasSettlement; } }
+        public Species? LocalSpecies { get { return planet.LocalSpecies; } }
+        public int? Habitability { get { return planet.Habitability; } }
+        public int? AffinityScore { get { return planet.AffinityScore; } }
+        public int? LocalTechLevel { get { return planet.LocalTechLevel; } }
+        public string? LocalTechLevelAge { get { return planet.LocalTechLevelAge; } }
+        public eTechLevelRelativity? LocalTechLevelRelativity { get { return planet.LocalTechLevelRelativity; } }
+
+        public double? CarryingCapacity { get { return planet.CarryingCapacity; } }
+        public double? Population { get { return planet.Population; } }
+        public int? PopulationRating { get { return planet.PopulationRating; } }
+
+        public eWorldUnityLevel? WorldUnityLevel { get { return planet.WorldUnityLevel; } }
+        public eSocietyType? SocietyType { get { return planet.SocietyType; } }
+        public fGovernmentSpecialConditions? GovernmentSpecialConditions { get { return planet.GovernmentSpecialConditions; } }
+        public bool HasGovernmentSpecialCondition(fGovernmentSpecialConditions cond)
+        {
+            return planet.HasGovernmentSpecialCondition(cond);
+        }
+        public int? ControlRating { get { return planet.ControlRating; } }
+
+        public int? IncomePerCapita { get { return planet.IncomePerCapita; } }
+        public eWealthLevel? WealthLevel { get { return planet.WealthLevel; } }
+        public double? EconomicVolume { get { return planet.EconomicVolume; } }
+        public double? TradeVolume { get { return planet.TradeVolume; } }
+
+        public int? SpaceportClass { get { return planet.SpaceportClass; } }
         public List<Installation> Installations { get { return planet.Installations; } }
 
         internal PlanetFactory(Setting s, IPlanetCreator rnd, IPlanetCreator usr)
@@ -113,7 +225,7 @@ namespace GurpsSpace.PlanetCreation
 
         public void SelectInstallation(string instType)
         {
-            List<Installation>? lst = userInput.GetInstallation(planet, instType);
+            List<Installation>? lst = userInput.GetInstallation(this, instType);
             if (lst != null)
             {
                 clearInstallations(instType);
@@ -179,38 +291,23 @@ namespace GurpsSpace.PlanetCreation
                     break;
 
                 case "AverageSurfaceTempK":
-                    SetAverageSurfaceTempK(pc);
+                    SetAverageSurfaceTemperatureK(pc);
                     break;
 
                 case "Density":
-                    double? density = pc.GetDensity(planet);
-                    if (density != null)
-                        planet.Density = density ?? 0;
+                    SetDensity(pc);
                     break;
 
                 case "Gravity":
-                    double? grav = pc.GetGravity(planet);
-                    if (grav != null)
-                        planet.Gravity = grav ?? 0;
+                    SetGravity(pc);
                     break;
 
                 case "SettlementType":
-                    eSettlementType? settType;
-                    int? colonyAge;
-                    bool? interstellar;
-                    (settType, colonyAge, interstellar) = pc.GetSettlementType(planet);
-                    if (settType != null)
-                    {
-                        planet.SettlementType = settType ?? eSettlementType.None;
-                        planet.ColonyAge = colonyAge ?? 0;
-                        planet.Interstellar = interstellar ?? true;
-                    }
+                    SetSettlementType(pc);
                     break;
 
                 case "Species":
-                    Species? s = pc.GetLocalSpecies(planet);
-                    if (s != null)
-                        planet.LocalSpecies = s;
+                    SetLocalSpecies(pc);
                     break;
 
                 case "TechLevel":
@@ -313,22 +410,27 @@ namespace GurpsSpace.PlanetCreation
             planet.Size = size;
             planet.Subtype = subtype;
 
+
             // then check for any parameters where there's no choices
             // or set numerics to the mid-point
             if (parameters!=null)
             {
+                planet.CoreType = parameters.CoreType;
+
                 if (HasAtmosphericOptions!=null && HasAtmosphericOptions == false)
                     (planet.AtmosphericConditions, planet.AtmosphericDescription) = RuleBook.PlanetParams[(planet.SizeVal, planet.SubtypeVal)].AtmosphereA;
                 if (HasAtmosphere == true)
                     planet.AtmosphericMass = 1;
 
-                if (HasLiquid == true)
+                if (HasHydrosphere == true)
                 {
                     planet.HydrographicCoverage = (MinimumHydrographicCoverage + MaximumHydrographicCoverage) / 2;
                     planet.LiquidType = parameters.Liquid;
                 }
 
-                planet.AverageSurfaceTempK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
+                planet.AverageSurfaceTemperatureK = (MinSurfaceTemperatureK + MaxSurfaceTemperatureK) / 2;
+                planet.Density = (MinDensity+MaxDensity) / 2;
+                planet.Gravity = (MaxGravity+MinGravity) / 2;
             }
 
         }
@@ -340,10 +442,20 @@ namespace GurpsSpace.PlanetCreation
             if (planet.HydrographicCoverage > MaximumHydrographicCoverage)
                 planet.HydrographicCoverage = MaximumHydrographicCoverage;
 
-            if (planet.AverageSurfaceTempK < MinSurfaceTemperatureK)
-                planet.AverageSurfaceTempK = MinSurfaceTemperatureK;
-            if (planet.AverageSurfaceTempK > MaxSurfaceTemperatureK)
-                planet.AverageSurfaceTempK = MaxSurfaceTemperatureK;
+            if (planet.AverageSurfaceTemperatureK < MinSurfaceTemperatureK)
+                planet.AverageSurfaceTemperatureK = MinSurfaceTemperatureK;
+            if (planet.AverageSurfaceTemperatureK > MaxSurfaceTemperatureK)
+                planet.AverageSurfaceTemperatureK = MaxSurfaceTemperatureK;
+
+            if (planet.Density < MinDensity)
+                planet.Density = MinDensity;
+            if (planet.Density > MaxDensity)
+                planet.Density = MaxDensity;
+
+            if (planet.Gravity < MinGravity)
+                planet.Gravity = MinGravity;
+            if (planet.Gravity > MaxGravity)
+                planet.Gravity = MaxGravity;
         }
 
         private void SetResourceValueCategory(IPlanetCreator pc)
@@ -388,11 +500,46 @@ namespace GurpsSpace.PlanetCreation
             CheckRanges();
         }
 
-        private void SetAverageSurfaceTempK(IPlanetCreator pc)
+        private void SetAverageSurfaceTemperatureK(IPlanetCreator pc)
         {
-            int? tempK = pc.GetAverageSurfaceTempK(planet);
+            int? tempK = pc.GetAverageSurfaceTemperatureK(this);
             if (tempK != null)
-                planet.AverageSurfaceTempK = tempK ?? 0;
+                planet.AverageSurfaceTemperatureK = tempK ?? 0;
+        }
+
+        private void SetDensity(IPlanetCreator pc)
+        {
+            double? density = pc.GetDensity(this);
+            if (density != null)
+                planet.Density = density ?? 0;
+        }
+
+        private void SetGravity(IPlanetCreator pc)
+        {
+            double? grav = pc.GetGravity(this);
+            if (grav != null)
+                planet.Gravity = grav ?? 0;
+        }
+
+        private void SetSettlementType(IPlanetCreator pc)
+        {
+            eSettlementType? settType;
+            int? age;
+            bool? stellar;
+            (settType, age, stellar) = pc.GetSettlementType(this);
+            if (settType != null)
+            {
+                planet.SettlementType = settType;
+                planet.ColonyAge = age;
+                planet.Interstellar = stellar;
+            }
+        }
+
+        private void SetLocalSpecies(IPlanetCreator pc)
+        {
+            Species? s = pc.GetLocalSpecies(this);
+            if (s != null)
+                planet.LocalSpecies = s;
         }
 
 
