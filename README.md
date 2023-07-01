@@ -32,7 +32,7 @@ The Campaigns rulebook gives CR ranges for each society type.  There isn't howev
 
 The government special conditions can also have an impact on the CR ranges.  I've applied these as far as possible.  The "Colony" special condition suggests that CR should be 1 less than the parent's CR.  However, without a parent settlement set up and linked, I've just reduced the minimum and maximum CRs by 1 instead.
 
-For utopia, the rulebook states the CR "seems" low.  I've treated this as a reduction of 1 to both minimum and maximum.  It's up to the GM how to structure the utopia in practice.
+For utopia, the rulebook states the CR "seems" low.  I've treated this as a reduction of 2 to both minimum and maximum.  It's up to the GM how to structure the utopia in practice.
 
 ### Trade volume
 Strictly the trade volume for a planet should be calculated by reference to its various trade routes to other planets, as set out on GURPS Space page 95.  However, at this stage I haven't coded up the ability to link worlds with trade routes.  As such, user input trade volume just asks for what proportion of the total economic value to use as the trade volume.  For random trade volume I use the below to generate the proportion of total economic value:
