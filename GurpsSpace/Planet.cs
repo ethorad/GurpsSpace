@@ -41,6 +41,16 @@ namespace GurpsSpace
             }
         }
 
+        public bool? HasAtmosphere
+        {
+            get
+            {
+                if (atmosphericMass == null)
+                    return null;
+                else
+                    return atmosphericMass > 0;
+            }
+        }
         private double? atmosphericMass;
         public double? AtmosphericMass
         {
@@ -50,7 +60,6 @@ namespace GurpsSpace
                 if (value < 0)
                     value = 0;
                 atmosphericMass = value;
-                CheckRanges();
             }
         }
         private fAtmosphericConditions? atmosphericConditions;
@@ -83,7 +92,6 @@ namespace GurpsSpace
                 if (value < 0) value = 0;
                 if (value > 1) value = 1;
                 hydrographicCoverage = value;
-                CheckRanges();
             }
         }
         private eLiquid? liquidType;
@@ -93,11 +101,7 @@ namespace GurpsSpace
         public int? AverageSurfaceTemperatureK
         {
             get { return averageSurfaceTemperatureK; }
-            set
-            {
-                averageSurfaceTemperatureK = value;
-                CheckRanges();
-            }
+            set { averageSurfaceTemperatureK = value; }
         }
         public eClimateType? ClimateType
         {
@@ -138,21 +142,13 @@ namespace GurpsSpace
         public double? Density
         {
             get { return density; }
-            set
-            {
-                density = value;
-                CheckRanges();
-            }
+            set { density = value; }
         }
         private double? gravity;
         public double? Gravity
         {
             get { return gravity; }
-            set
-            {
-                gravity = value;
-                CheckRanges();
-            }
+            set { gravity = value; }
         }
         public double? DiameterEarths
         {
@@ -342,7 +338,7 @@ namespace GurpsSpace
         public fGovernmentSpecialConditions? GovernmentSpecialConditions
         {
             get { return governmentSpecialConditions; }
-            set { governmentSpecialConditions = value; CheckRanges(); }
+            set { governmentSpecialConditions = value; }
         }
         public bool HasGovernmentSpecialCondition(fGovernmentSpecialConditions flag)
         {
@@ -355,27 +351,7 @@ namespace GurpsSpace
         public eSocietyType? SocietyType
         {
             get { return societyType; }
-            set { societyType = value; CheckRanges(); }
-        }
-        public int? MinControlRating 
-        {
-            get
-            {
-                if (SocietyType == null)
-                    return null;
-                else
-                    return RuleBook.SocietyTypeParams[(SocietyType ?? eSocietyType.Anarchy)].MinControlRating;
-            }
-        }
-        public int? MaxControlRating
-        {
-            get
-            {
-                if (SocietyType == null)
-                    return null;
-                else
-                    return RuleBook.SocietyTypeParams[(SocietyType ?? eSocietyType.Anarchy)].MaxControlRating;
-            }
+            set { societyType = value; }
         }
         private int? controlRating;
         public int? ControlRating 
@@ -474,61 +450,44 @@ namespace GurpsSpace
         {
             this.setting = setting;
             Installations = new List<Installation>();
-            CheckRanges();
         }
 
-        // disabling this check as the non-nullable fields all get set in the various set properties
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Planet(Planet p)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             // creates a copy of p
-            Setting = p.Setting; // don't need to copy this since not editing the setting
-            Name = p.Name;
-            Description=p.Description;
-            Size = p.Size;
-            Subtype = p.Subtype;
-            CoreType = p.CoreType;
-            AtmosphericMass = p.AtmosphericMass;
-            AtmosphericConditions = p.AtmosphericConditions;
-            AtmosphericDescription = p.AtmosphericDescription;
-            HydrographicCoverage = p.HydrographicCoverage;
-            LiquidType = p.LiquidType;
-            AverageSurfaceTemperatureK = p.AverageSurfaceTemperatureK;
-            Density = p.Density;
-            Gravity = p.Gravity;
-            LocalSpecies = p.LocalSpecies; // don't need to copy this since aren't going to edit the species here
-            LocalTechLevel = p.LocalTechLevel;
-            LocalTechLevelRelativity = p.LocalTechLevelRelativity;
-            ResourceValueCategory = p.ResourceValueCategory;
-            SettlementType = p.SettlementType;
-            Interstellar = p.Interstellar;
-            ColonyAge = p.ColonyAge;
-            Population = p.Population;
-            WorldUnityLevel = p.WorldUnityLevel;
-            GovernmentSpecialConditions = p.GovernmentSpecialConditions;
-            SocietyType = p.SocietyType;
-            ControlRating = p.ControlRating;
-            TradeVolume = p.TradeVolume;
-            SpaceportClass = p.SpaceportClass;
+            setting = p.Setting; // don't need to copy this since not editing the setting
+            name = p.Name;
+            description=p.Description;
+            size = p.Size;
+            subtype = p.Subtype;
+            coreType = p.CoreType;
+            atmosphericMass = p.AtmosphericMass;
+            atmosphericConditions = p.AtmosphericConditions;
+            atmosphericDescription = p.AtmosphericDescription;
+            hydrographicCoverage = p.HydrographicCoverage;
+            liquidType = p.LiquidType;
+            averageSurfaceTemperatureK = p.AverageSurfaceTemperatureK;
+            density = p.Density;
+            gravity = p.Gravity;
+            localSpecies = p.LocalSpecies; // don't need to copy this since aren't going to edit the species here
+            localTechLevel = p.LocalTechLevel;
+            localTechLevelRelativity = p.LocalTechLevelRelativity;
+            resourceValueCategory = p.ResourceValueCategory;
+            settlementType = p.SettlementType;
+            interstellar = p.Interstellar;
+            colonyAge = p.ColonyAge;
+            population = p.Population;
+            worldUnityLevel = p.WorldUnityLevel;
+            governmentSpecialConditions = p.GovernmentSpecialConditions;
+            societyType = p.SocietyType;
+            controlRating = p.ControlRating;
+            tradeVolume = p.TradeVolume;
+            spaceportClass = p.SpaceportClass;
             Installations = new List<Installation>(); // copy this so we don't edit the origial's installation list
             foreach (Installation inst in p.Installations)
             {
                 Installations.Add(new Installation(inst.Type, inst.Subtype, inst.PR));
             }
-        }
-
-        private void CheckRanges()
-        {
-
-            // check that any values are still in the (min, max) range
-
-
-
-            if (ControlRating < MinControlRating ||
-                ControlRating > MaxControlRating)
-                ControlRating = (MinControlRating + MaxControlRating) / 2;
-
         }
 
         public List<Installation> GetInstallations(string instType)
