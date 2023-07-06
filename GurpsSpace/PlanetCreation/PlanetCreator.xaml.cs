@@ -182,9 +182,5 @@ namespace GurpsSpace.PlanetCreation
             instWindow.ShowDialog();
         }
 
-        private void btnTest_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(vmPlanetFactory.InstallationsList.Count.ToString());
-        }
     }
 }

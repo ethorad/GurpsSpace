@@ -200,8 +200,11 @@ namespace GurpsSpace
         }
 
 
-        public virtual double CarryingCapacity(Planet p)
+        public virtual double? CarryingCapacity(Planet p)
         {
+            if (p.Habitability == null || p.LocalTechLevel == null)
+                return null;
+
             if (p.Habitability <= 3 && p.LocalTechLevel <= 7)
                 return 0;
             else
