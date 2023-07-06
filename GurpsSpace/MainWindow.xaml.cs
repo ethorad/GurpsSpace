@@ -37,6 +37,15 @@ namespace GurpsSpace
                 cmbPlanets.SelectedIndex = cmbPlanets.Items.Count - 1;
             }
         }
+        private void btnRandomPlanet(object sender, RoutedEventArgs e)
+        {
+            PlanetCreator creator = new PlanetCreator(s, true);
+            if (creator.ShowDialog()==true)
+            {
+                vmSetting.Add(creator.Planet);
+                cmbPlanets.SelectedIndex = cmbPlanets.Items.Count - 1;
+            }
+        }
         private void btnEditPlanet(object sender, RoutedEventArgs e)
         {
             // take a copy of the selected planet, and only replace it if we clicked OK
@@ -65,6 +74,9 @@ namespace GurpsSpace
                 cmbSpecies.SelectedIndex = cmbSpecies.Items.Count - 1;
             }
         }
+        private void btnRandomSpecies(object sender, RoutedEventArgs e)
+        {
+        }
         private void btnEditSpecies(object sender, RoutedEventArgs e)
         {
             // take a copy of the selected species, and only replace it if we clicked OK
@@ -84,18 +96,17 @@ namespace GurpsSpace
             vmSetting.Remove(selected.Species);
         }
 
+
         private void btnTestClick(object sender, RoutedEventArgs e)
         {
             string question = "Some really long text which will wrap over the line.  This is so that we can test that the " +
                 "wrapping functionality in the string input dialog box is working correctly.  I should perhaps have copied " +
                 "the lorem ipsum text rather than writing my own, but there we go.  This is probably long enough ...";
             InputString testDiag = new InputString(question);
-            if (testDiag.ShowDialog()==true)
+            if (testDiag.ShowDialog() == true)
             {
                 MessageBox.Show(testDiag.Answer);
             }
         }
-
-
     }
 }

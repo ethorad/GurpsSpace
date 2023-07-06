@@ -19,18 +19,22 @@ namespace GurpsSpace.PlanetCreation
 // This is because they are given values in the SetUp() call in the constructor but the compiler doesn't notice
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public PlanetCreator(Setting setting)
+        public PlanetCreator(Setting setting, bool fullRandom = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             planetFactory = new(setting, new RandomPlanet(), new UserPlanet());
             SetUp();
+            if (fullRandom)
+                vmPlanetFactory!.FullRandom(); // not null, as gets set in SetUp()
         }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public PlanetCreator(Planet planet)
+        public PlanetCreator(Planet planet, bool fullRandom = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             planetFactory = new(planet, new RandomPlanet(), new UserPlanet());
             SetUp();
+            if (fullRandom)
+                vmPlanetFactory!.FullRandom(); // not null, as gets set in SetUp()
         }
         private void SetUp()
         {
@@ -182,5 +186,9 @@ namespace GurpsSpace.PlanetCreation
             instWindow.ShowDialog();
         }
 
+        private void btnFullRandom_Click(object sender, RoutedEventArgs e)
+        {
+            vmPlanetFactory.FullRandom();
+        }
     }
 }

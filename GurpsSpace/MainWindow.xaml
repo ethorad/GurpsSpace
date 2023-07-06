@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GurpsSpace"
         mc:Ignorable="d"
-        Title="GURPS Space" Width="400" SizeToContent="Height">
+        Title="GURPS Space" Width="500" SizeToContent="Height">
 
 
     <StackPanel Orientation="Vertical">
@@ -60,6 +60,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Click="btnCreateSpecies">New</Button>
+                <Button Click="btnRandomSpecies">Rand</Button>
                 <Button Click="btnEditSpecies">Edit</Button>
                 <Button Click="btnDeleteSpecies">Delete</Button>
             </WrapPanel>
@@ -75,6 +76,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Click="btnCreatePlanet">New</Button>
+                <Button Click="btnRandomPlanet">Rand</Button>
                 <Button Click="btnEditPlanet">Edit</Button>
                 <Button Click="btnDeletePlanet">Delete</Button>
             </WrapPanel>

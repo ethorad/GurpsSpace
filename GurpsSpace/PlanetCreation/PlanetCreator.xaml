@@ -372,6 +372,7 @@
         </TabControl>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+            <Button Click="btnFullRandom_Click">Random</Button>
             <Button IsCancel="true">Cancel</Button>
             <Button Click="btnOK_Click">OK</Button>
         </StackPanel>

@@ -262,6 +262,29 @@ namespace GurpsSpace.PlanetCreation
             SetParameter(param, randomiser);
         }
 
+        public void FullRandom()
+        {
+            SetName(randomiser);
+            SetType(randomiser);
+            SetResourceValueCategory(randomiser);
+            SetAtmosphericMass(randomiser);
+            SetAtmosphericConditions(randomiser);
+            SetHydrographicCoverage(randomiser);
+            SetAverageSurfaceTemperatureK(randomiser);
+            SetDensity(randomiser);
+            SetGravity(randomiser);
+            SetSettlementType(randomiser);
+            SetLocalSpecies(randomiser);
+            SetLocalTechLevel(randomiser);
+            SetPopulation(randomiser);
+            SetWorldGovernance(randomiser);
+            SetSocietyType(randomiser);
+            SetControlRating(randomiser);
+            SetTradeVolume(randomiser);
+            SetSpaceportClass(randomiser);
+            SetInstallations(randomiser);
+        }
+
         private void SetParameter(string param, IPlanetCreator pc)
         {
             switch (param)

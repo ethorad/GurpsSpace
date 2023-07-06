@@ -518,5 +518,11 @@ namespace GurpsSpace.PlanetCreation
                 UpdateInstallationList();
             MemberUpdated();
         }
+        public void FullRandom()
+        {
+            planetFactory.FullRandom();
+            UpdateInstallationList();
+            MemberUpdated();
+        }
     }
 }
