@@ -19,6 +19,8 @@ namespace GurpsSpace.PlanetCreation
             installationsList = new ViewModelInstallationList(planet.Installations);
         }
 
+        public override string SummaryType { get { return TypeString; } }
+
         // Basic information
         public Setting Setting
         {

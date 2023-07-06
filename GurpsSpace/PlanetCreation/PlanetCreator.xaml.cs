@@ -181,5 +181,10 @@ namespace GurpsSpace.PlanetCreation
             InstallationsList instWindow = new InstallationsList(vmPlanetFactory.InstallationsList);
             instWindow.ShowDialog();
         }
+
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(vmPlanetFactory.InstallationsList.Count.ToString());
+        }
     }
 }

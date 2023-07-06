@@ -11,6 +11,8 @@ namespace GurpsSpace.ViewModels
 {
     internal class ViewModelSetting : ViewModel
     {
+        public override string SummaryType { get { return Name; } }
+
         private Setting setting;
         private ViewModelList<ViewModelPlanet> planetList;
         public ViewModelList<ViewModelPlanet> PlanetList { get { return  planetList; } }

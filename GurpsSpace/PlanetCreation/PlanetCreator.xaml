@@ -374,6 +374,7 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <Button IsCancel="true">Cancel</Button>
             <Button Click="btnOK_Click">OK</Button>
+            <Button Click="btnTest_Click">Test</Button>
         </StackPanel>
 
 

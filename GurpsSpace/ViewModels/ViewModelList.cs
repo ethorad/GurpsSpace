@@ -16,11 +16,9 @@ namespace GurpsSpace.ViewModels
             get { return items; }
         }
         public int Count { get { return items.Count; } }
-        //public void Add(Planet planet)
-        //{
-        //    items.Add(new T(planet));
-        //    MemberUpdated();
-        //}
+
+        public override string SummaryType { get { return items.Count.ToString(); } }
+
         public void Add(T newItem)
         {
             items.Add(newItem);
@@ -42,17 +40,28 @@ namespace GurpsSpace.ViewModels
             items = new ObservableCollection<T>(itemLst);
             MemberUpdated();
         }
-        //public ViewModelList(List<Planet> planetLst)
-        //{
-        //    items = new ObservableCollection<T>();
-        //    foreach (Planet planet in planetLst)
-        //        items.Add(new T(planet));
-        //    MemberUpdated();
-        //}
+
         public ViewModelList()
         {
             items = new ObservableCollection<T>();
             MemberUpdated();
         }
+
+        public string this[string typeToSummarise]
+        {
+            get
+            {
+                if (typeToSummarise == "all")
+                    return Items.Count.ToString();
+
+                int count = 0;
+
+                foreach (ViewModel vm in Items)
+                    if (vm.SummaryType == typeToSummarise)
+                        count++;
+                return count.ToString();
+            }
+        }
+
     }
 }

@@ -11,6 +11,8 @@ namespace GurpsSpace.PlanetCreation
     {
         private PlanetFactory planetFactory;
 
+        public override string SummaryType { get { return TypeString; } }
+
         public string Name 
         { 
             get 
@@ -256,6 +258,7 @@ namespace GurpsSpace.PlanetCreation
             set
             {
                 planetFactory.SettlementType = value;
+                UpdateInstallationList();
                 MemberUpdated();
             }
         }
@@ -429,7 +432,39 @@ namespace GurpsSpace.PlanetCreation
             }
         }
 
+        public string SpaceportClassString
+        {
+            get
+            {
+                if (planetFactory.SpaceportClass == null)
+                    return "tbc";
 
+                string classNum = "";
+                switch (planetFactory.SpaceportClass)
+                {
+                    case 0:
+                        classNum = "0";
+                        break;
+                    case 1:
+                        classNum = "I";
+                        break;
+                    case 2:
+                        classNum = "II";
+                        break;
+                    case 3:
+                        classNum = "III";
+                        break;
+                    case 4:
+                        classNum = "IV";
+                        break;
+                    case 5:
+                        classNum = "V";
+                        break;
+                }
+
+                return "Class " + classNum + " (" + RuleBook.SpaceportName[(planetFactory.SpaceportClass ?? 0)] + ")";
+            }
+        }
 
         private ViewModelList<ViewModelInstallation> installationsList;
         public ViewModelList<ViewModelInstallation> InstallationsList
@@ -472,11 +507,15 @@ namespace GurpsSpace.PlanetCreation
         public void SelectParameter(string param)
         {
             planetFactory.SelectParameter(param);
+            if (param == "Installations")
+                UpdateInstallationList();
             MemberUpdated();
         }
         public void RandomParameter(string param)
         {
             planetFactory.RandomParameter(param);
+            if (param == "Installations")
+                UpdateInstallationList();
             MemberUpdated();
         }
     }

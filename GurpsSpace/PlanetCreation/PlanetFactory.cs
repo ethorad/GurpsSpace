@@ -337,6 +337,10 @@ namespace GurpsSpace.PlanetCreation
                 case "SpaceportClass":
                     SetSpaceportClass(pc);
                     break;
+
+                case "Installations":
+                    SetInstallations(pc);
+                    break;
             }
         }
 
@@ -512,9 +516,26 @@ namespace GurpsSpace.PlanetCreation
             (settType, age, stellar) = pc.GetSettlementType(this);
             if (settType != null)
             {
+                bool change = false;
+                if (settType != planet.SettlementType)
+                    change = true;
                 planet.SettlementType = settType;
                 planet.ColonyAge = age;
                 planet.Interstellar = stellar;
+
+                if (change)
+                {
+                    planet.LocalSpecies = null;
+                    planet.LocalTechLevel = null;
+                    planet.LocalTechLevelRelativity = null;
+                    planet.Population= null;
+                    planet.WorldUnityLevel = null;
+                    planet.SocietyType = null;
+                    planet.GovernmentSpecialConditions = null;
+                    planet.ControlRating = null;
+                    Installations.Clear();
+
+                }
             }
         }
 
@@ -580,6 +601,13 @@ namespace GurpsSpace.PlanetCreation
             int? spacepostClass = pc.GetSpaceportClass(this);
             if (spacepostClass != null)
                 planet.SpaceportClass = spacepostClass ?? 0;
+        }
+
+        private void SetInstallations(IPlanetCreator pc)
+        {
+            List<Installation>? lst = pc.GetInstallations(this);
+            if (lst!=null)
+                planet.Installations = lst;
         }
     }
 }

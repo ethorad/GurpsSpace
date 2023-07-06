@@ -123,10 +123,10 @@ namespace GurpsSpace
                 // check for values we need
                 if (absorption == null ||
                     greenhouse == null ||
-                    AtmosphericMass == null || 
                     AverageSurfaceTemperatureK == null)
                     return null;
                 // so can now use ?? on all nullable values
+                // haven't checked for atmospheric mass being null, as that's OK for planets with no atmosphere
 
                 double bbCorrection = (absorption ?? 1) * (1 + (AtmosphericMass ?? 0) * (greenhouse ?? 1));
                 double bbTemp = (AverageSurfaceTemperatureK ?? 0) / bbCorrection;
