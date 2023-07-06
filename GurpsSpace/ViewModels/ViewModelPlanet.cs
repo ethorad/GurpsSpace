@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using GurpsSpace.ViewModels;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -16,7 +17,11 @@ namespace GurpsSpace.PlanetCreation
         public ViewModelPlanet(Planet p)
         {
             planet = p;
-            installationsList = new ViewModelInstallationList(planet.Installations);
+            installationsList = new ViewModelList<ViewModelInstallation>();
+            foreach (Installation inst in planet.Installations)
+            {
+                installationsList.Add(new ViewModelInstallation(inst));
+            }
         }
 
         public override string SummaryType { get { return TypeString; } }
@@ -479,24 +484,30 @@ namespace GurpsSpace.PlanetCreation
 
             }
         }
-        private ViewModelInstallationList installationsList;
-        public ViewModelInstallationList InstallationsList
+        private ViewModelList<ViewModelInstallation> installationsList;
+        public ViewModelList<ViewModelInstallation> InstallationsList
         {
             get { return installationsList; }
             set
             {
                 installationsList = value;
                 planet.Installations.Clear();
-                foreach (ViewModelInstallation vmInst in installationsList.Installations)
+                foreach (ViewModelInstallation vmInst in installationsList.Items)
                     planet.Installations.Add(vmInst.Installation);
                 MemberUpdated();
             }
         }
 
 
-        public ViewModelInstallationList GetInstallations(string instType)
+        public ViewModelList<ViewModelInstallation> GetInstallations(string instType)
         {
-            return new ViewModelInstallationList(planet.GetInstallations(instType));
+            ViewModelList<ViewModelInstallation> vmLst = new ViewModelList<ViewModelInstallation>();
+            List<Installation> instLst = planet.GetInstallations(instType);
+            foreach (Installation inst in instLst)
+            {
+                vmLst.Add(new ViewModelInstallation(inst));
+            }
+            return vmLst;
         }
     }
 }
