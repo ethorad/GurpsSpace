@@ -29,6 +29,8 @@ namespace GurpsSpace.PlanetCreation
 
         public bool HasPopulationRating { get { return MaxPR > 0; } }
 
+        public override string SummaryType { get { return Type; } }
+
         public ViewModelInstallationParameters(InstallationParameters installationParameters)
         {
             this.installationParameters = installationParameters;

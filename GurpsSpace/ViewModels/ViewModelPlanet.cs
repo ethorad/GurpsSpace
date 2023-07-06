@@ -19,6 +19,8 @@ namespace GurpsSpace.PlanetCreation
             installationsList = new ViewModelInstallationList(planet.Installations);
         }
 
+        public override string SummaryType { get { return TypeString; } }
+
         // Basic information
         public Setting Setting
         {
@@ -75,7 +77,7 @@ namespace GurpsSpace.PlanetCreation
         // Atmosphere
         public bool HasAtmosphere
         {
-            get { return planet.HasAtmosphere ?? false; }
+            get { return (planet.AtmosphericMass ?? 0) > 0; }
         }
         public double AtmosphericMass
         {
@@ -88,10 +90,6 @@ namespace GurpsSpace.PlanetCreation
             {
                 return (planet.AtmosphericConditions.ToString()) ?? "tbc";
             }
-        }
-        public bool HasAtmosphericOptions
-        {
-            get { return planet.HasAtmosphericOptions ?? false; }
         }
         public fAtmosphericConditions AtmosphericConditions
         {
@@ -118,14 +116,6 @@ namespace GurpsSpace.PlanetCreation
         {
             get { return planet.HasLiquid ?? false; }
         }
-        public double MinimumHydrographicCoverage
-        {
-            get { return (planet.MinimumHydrographicCoverage ?? 0); }
-        }
-        public double MaximumHydrographicCoverage
-        {
-            get { return (planet.MaximumHydrographicCoverage ?? 0); }
-        }
         public double HydrographicCoverage
         {
             get { return (planet.HydrographicCoverage ?? 0); }
@@ -137,22 +127,10 @@ namespace GurpsSpace.PlanetCreation
         }
 
         // Climate
-        public int TempMin
-        {
-            get { return (planet.MinSurfaceTemperatureK ?? 0); }
-        }   
-        public int TempMax
-        {
-            get { return (planet.MaxSurfaceTemperatureK ?? 0); }
-        }
-        public int TempStep
-        {
-            get { return (planet.StepSurfaceTemperatureK ?? 0); }
-        }
         public int AverageSurfaceTempK
         {
-            get { return (planet.AverageSurfaceTempK ?? 0); }
-            set { planet.AverageSurfaceTempK = value; MemberUpdated(); }
+            get { return (planet.AverageSurfaceTemperatureK ?? 0); }
+            set { planet.AverageSurfaceTemperatureK = value; MemberUpdated(); }
         }
         public string ClimateTypeString
         {
@@ -160,7 +138,7 @@ namespace GurpsSpace.PlanetCreation
         }
         public int BlackbodyTempK
         {
-            get { return (planet.BlackbodyTempK ?? 0); }
+            get { return (planet.BlackbodyTemperatureK ?? 0); }
         }
 
         // Lithosphere
@@ -174,26 +152,11 @@ namespace GurpsSpace.PlanetCreation
                     return planet.CoreType.ToString()!; 
             }
         }
-        public double MinDensity
-        {
-            get { return (planet.MinDensity ?? 0); }
-        }
-        public double MaxDensity
-        {
-            get { return (planet.MaxDensity ?? 0); }
-        }
+
         public double Density
         {
             get { return (planet.Density ?? 0); }
             set { planet.Density = value; MemberUpdated(); }
-        }
-        public double MinGravity
-        {
-            get { return (planet.MinGravity ?? 0); }
-        }
-        public double MaxGravity
-        {
-            get { return (planet.MaxGravity ?? 0); }
         }
         public double Gravity
         {
@@ -529,27 +492,8 @@ namespace GurpsSpace.PlanetCreation
                 MemberUpdated();
             }
         }
-        public void AddInstallations(List<Installation> newInst)
-        {
-            foreach (Installation inst in newInst)
-                AddInstallations(inst);
-        }
-        public void AddInstallations(Installation inst)
-        {
-            installationsList.Add(inst);
-            planet.Installations.Add(inst);
-            MemberUpdated();
-        }
-        public void ClearInstallations(string instType)
-        {
-            for (int i = planet.Installations.Count - 1; i >= 0; i--)
-                if (planet.Installations[i].Type == instType)
-                {
-                    planet.Installations.RemoveAt(i);
-                    installationsList.Installations.RemoveAt(i);
-                }
-            MemberUpdated();
-        }
+
+
         public ViewModelInstallationList GetInstallations(string instType)
         {
             return new ViewModelInstallationList(planet.GetInstallations(instType));

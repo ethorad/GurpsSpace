@@ -5,40 +5,40 @@ namespace GurpsSpace.PlanetCreation
 {
     internal interface IPlanetCreator
     {
-        string? GetName(Planet p);
-        (eSize?, eSubtype?) GetSizeAndSubtype(Planet p);
-        eResourceValueCategory? GetResourceValueCategory(Planet p);
+        string? GetName(PlanetFactory pf);
+        (eSize?, eSubtype?) GetSizeAndSubtype(PlanetFactory pf);
+        eResourceValueCategory? GetResourceValueCategory(PlanetFactory pf);
 
-        double? GetAtmosphericMass(Planet p);
-        (fAtmosphericConditions?, string?) GetAtmosphericConditions(Planet p);
+        double? GetAtmosphericMass(PlanetFactory pf);
+        (fAtmosphericConditions?, string?) GetAtmosphericConditions(PlanetFactory pf);
 
-        double? GetHydrographicCoverage(Planet p);
+        double? GetHydrographicCoverage(PlanetFactory pf);
 
-        int? GetAverageSurfaceTempK(Planet p);
+        int? GetAverageSurfaceTemperatureK(PlanetFactory pf);
 
-        double? GetDensity(Planet p);
+        double? GetDensity(PlanetFactory pf);
 
-        double? GetGravity(Planet p);
+        double? GetGravity(PlanetFactory pf);
 
-        (eSettlementType?, int?, bool?) GetSettlementType(Planet p);
+        (eSettlementType?, int?, bool?) GetSettlementType(PlanetFactory pf);
 
-        Species? GetLocalSpecies(Planet p);
+        Species? GetLocalSpecies(PlanetFactory pf);
 
-        (int?, eTechLevelRelativity?) GetLocalTechLevel(Planet p);
+        (int?, eTechLevelRelativity?) GetLocalTechLevel(PlanetFactory pf);
 
-        double? GetPopulation(Planet p);
+        double? GetPopulation(PlanetFactory pf);
 
-        (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(Planet p);
+        (eWorldUnityLevel?, fGovernmentSpecialConditions?) GetWorldGovernance(PlanetFactory pf);
 
-        eSocietyType? GetSocietyType(Planet p);
+        eSocietyType? GetSocietyType(PlanetFactory pf);
 
-        int? GetControlRating(Planet p);
+        int? GetControlRating(PlanetFactory pf);
 
-        double? GetTradeVolume(Planet p);
+        double? GetTradeVolume(PlanetFactory pf);
 
-        int? GetSpaceportClass(Planet p);
+        int? GetSpaceportClass(PlanetFactory pf);
 
-        List<Installation>? GetInstallations(Planet p);
-        List<Installation>? GetInstallation(Planet p, string installationType);
+        List<Installation>? GetInstallations(PlanetFactory pf);
+        List<Installation>? GetInstallation(PlanetFactory pf, string installationType);
     }
 }

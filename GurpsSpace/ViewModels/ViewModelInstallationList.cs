@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace GurpsSpace.PlanetCreation
 {
@@ -32,12 +33,12 @@ namespace GurpsSpace.PlanetCreation
         {
             get
             {
-                if (typeToSummarise=="all")
+                if (typeToSummarise == "all")
                     return Installations.Count.ToString();
 
                 int count = 0;
-                foreach(ViewModelInstallation inst in Installations)
-                    if (inst.Type==typeToSummarise)
+                foreach (ViewModelInstallation inst in Installations)
+                    if (inst.Type == typeToSummarise)
                         count++;
                 return count.ToString();
             }
@@ -46,7 +47,7 @@ namespace GurpsSpace.PlanetCreation
         public ViewModelInstallationList(List<ViewModelInstallation> instLst)
         {
             installations = new ObservableCollection<ViewModelInstallation>(instLst);
-            MemberUpdated() ;
+            MemberUpdated();
         }
         public ViewModelInstallationList(List<Installation> instLst)
         {
@@ -58,8 +59,10 @@ namespace GurpsSpace.PlanetCreation
         public ViewModelInstallationList()
         {
             installations = new ObservableCollection<ViewModelInstallation>();
-            MemberUpdated() ;
+            MemberUpdated();
         }
+
+        public override string SummaryType { get { return Installations.Count.ToString(); } }
 
 
 

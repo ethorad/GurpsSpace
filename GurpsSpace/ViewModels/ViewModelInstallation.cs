@@ -23,8 +23,9 @@ namespace GurpsSpace.PlanetCreation
         public string Type { get { return installation.Type; } }
         public string Subtype { get { return installation.Subtype; } }
         public string Name { get { return installation.Name; } }
-
         public int PR { get { return installation.PR; } }
+
+        public override string SummaryType { get { return Type; } }
 
         public string PRstring { get { return (PR == 0) ? "n/a" : PR.ToString("N0"); } }
     }

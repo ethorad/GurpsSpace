@@ -3,11 +3,11 @@ using System.ComponentModel;
 
 namespace GurpsSpace
 {
-    public class ViewModel : INotifyPropertyChanged
+    public abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ViewModel() { }
+        public abstract string SummaryType { get; }
 
         protected void MemberUpdated(string property="")
         {

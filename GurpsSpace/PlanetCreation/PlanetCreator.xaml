@@ -93,7 +93,7 @@
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Aquasphere" IsEnabled="{Binding Path=HasLiquid, Mode=OneWay}">
+                    <GroupBox Header="Hydrosphere" IsEnabled="{Binding Path=HasHydrosphere, Mode=OneWay}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -135,19 +135,19 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Row="0" Grid.Column="0">Average temperature</Label>
-                            <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=TempMin, Mode=OneWay}" Maximum="{Binding Path=TempMax, Mode=OneWay}" Value="{Binding Path=AverageSurfaceTempK, Mode=TwoWay}" TickFrequency="{Binding Path=TempStep, Mode=OneWay}" TickPlacement="BottomRight"/>
-                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=AverageSurfaceTempK, Mode=OneWay}" ContentStringFormat="0 K"/>
+                            <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding Path=MinSurfaceTemperatureK, Mode=OneWay}" Maximum="{Binding Path=MinSurfaceTemperatureK, Mode=OneWay}" Value="{Binding Path=AverageSurfaceTemperatureK, Mode=TwoWay}" TickFrequency="{Binding Path=StepSurfaceTemperatureK, Mode=OneWay}" TickPlacement="BottomRight"/>
+                            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=AverageSurfaceTemperatureKString, Mode=OneWay}" ContentStringFormat="0 K"/>
                             <Button Grid.Row="0" Grid.Column="3" Tag="AverageSurfaceTempK" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Climate type</Label>
                             <Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=ClimateTypeString, Mode=OneWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0">Blackbody temperature</Label>
-                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=BlackbodyTempK, Mode=OneWay}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=BlackbodyTemperatureKString, Mode=OneWay}"/>
                         </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Lithosphere" IsEnabled="{Binding Path=IsPlanet, Mode=OneWay}">
+                    <GroupBox Header="Lithosphere" IsEnabled="{Binding Path=HasLithosphere, Mode=OneWay}">
                         <Grid>
 
 
@@ -171,12 +171,12 @@
 
                             <Label Grid.Row="1" Grid.Column="0">Density</Label>
                             <Slider Grid.Row="1" Grid.Column="1" Minimum="{Binding Path=MinDensity, Mode=OneWay}" Maximum="{Binding Path=MaxDensity, Mode=OneWay}" Value="{Binding Path=Density,Mode=TwoWay}" TickFrequency="0.1" TickPlacement="BottomRight" IsSnapToTickEnabled="true"/>
-                            <Label Grid.Row="1" Grid.Column="2" Content="{Binding Path=Density, Mode=OneWay}" ContentStringFormat="N1"/>
+                            <Label Grid.Row="1" Grid.Column="2" Content="{Binding Path=DensityString, Mode=OneWay}" />
                             <Button Grid.Row="1" Grid.Column="3" Tag="Density" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="2" Grid.Column="0">Gravity</Label>
                             <Slider Grid.Row="2" Grid.Column="1" Minimum="{Binding Path=MinGravity, Mode=OneWay}" Maximum="{Binding Path=MaxGravity, Mode=OneWay}" Value="{Binding Path=Gravity,Mode=TwoWay}" TickFrequency="0.05" TickPlacement="BottomRight" IsSnapToTickEnabled="false"/>
-                            <Label Grid.Row="2" Grid.Column="2" Content="{Binding Path=Gravity, Mode=OneWay}" ContentStringFormat="N2"/>
+                            <Label Grid.Row="2" Grid.Column="2" Content="{Binding Path=GravityString, Mode=OneWay}" />
                             <Button Grid.Row="2" Grid.Column="3" Tag="Gravity" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="3" Grid.Column="0">Diameter</Label>
@@ -251,7 +251,7 @@
                             <Button Grid.Row="0" Grid.Column="3" Tag="Species" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="1" Grid.Column="0">Affinity</Label>
-                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="{Binding Path=AffinityString, Mode=OneWay}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Content="{Binding Path=AffinityScoreString, Mode=OneWay}"/>
 
                             <Label Grid.Row="2" Grid.Column="0">Local Tech Level</Label>
                             <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=LocalTechLevelString, Mode=OneWay}"/>
@@ -259,7 +259,7 @@
                             <Button Grid.Row="2" Grid.Column="3" Tag="TechLevel" Click="btnRandom_Click">Rand</Button>
 
                             <Label Grid.Row="3" Grid.Column="0">Carrying Capacity</Label>
-                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=CarryingCapacity, Mode=OneWay}" ContentStringFormat="N0"/>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=CarryingCapacityString, Mode=OneWay}" ContentStringFormat="N0"/>
 
                             <Label Grid.Row="4" Grid.Column="0">Population</Label>
                             <Label Grid.Row="4" Grid.Column="1" Content="{Binding Path=PopulationString, Mode=OneWay}" ContentStringFormat="N0"/>
@@ -285,8 +285,6 @@
 
                             <Label Grid.Row="0" Grid.Column="0">World Unity</Label>
                             <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=WorldUnityString, Mode=OneWay}"/>
-                            
-
                             <Button Grid.Row="0" Grid.Column="2" Tag="WorldGovernance" Click="btnSelect_Click">Select</Button>
                             <Button Grid.Row="0" Grid.Column="3" Tag="WorldGovernance" Click="btnRandom_Click">Rand</Button>
 

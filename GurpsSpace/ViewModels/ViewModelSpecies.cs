@@ -8,6 +8,8 @@ namespace GurpsSpace.SpeciesCreation
 {
     public class ViewModelSpecies : ViewModel
     {
+        public override string SummaryType { get { return Name ?? "tbc"; } }
+
         private Species species;
         public Species Species
         { 
