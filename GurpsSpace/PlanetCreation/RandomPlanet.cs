@@ -394,7 +394,7 @@ namespace GurpsSpace.PlanetCreation
             Species s = pf.LocalSpecies;
 
             int ageInDecades = (pf.ColonyAge ?? 0) / 10;
-            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
+            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplier??1) / Math.Log(1 + (s.StartingColonyPopulation ?? 0)) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
             int roll = DiceBag.Roll(3) + (pf.AffinityScore ?? 0) * affinityMod + ageInDecades;
@@ -403,7 +403,7 @@ namespace GurpsSpace.PlanetCreation
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
             // then calculate the population, capped at carrying capacity
-            double population = s.StartingColonyPopulationValue * Math.Pow(1 + s.AnnualGrowthRateValue, effectiveDecadesOfGrowth * 10);
+            double population = (s.StartingColonyPopulation ?? 0) * Math.Pow(1 + (s.StartingColonyPopulation ?? 0), effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
             if (population > pf.CarryingCapacity)
                 population = pf.CarryingCapacity ?? 0;

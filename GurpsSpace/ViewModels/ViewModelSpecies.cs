@@ -104,7 +104,7 @@ namespace GurpsSpace.SpeciesCreation
                 if (species.StartingColonyPopulation == null)
                     return "tbc";
                 else
-                    return species.StartingColonyPopulationValue.ToString("N0");
+                    return (species.StartingColonyPopulation ?? 0).ToString("N0");
             }
         }
         public double? AnnualGrowthRate
@@ -119,7 +119,7 @@ namespace GurpsSpace.SpeciesCreation
                 if (species.AnnualGrowthRate == null)
                     return "tbc";
                 else
-                    return (species.AnnualGrowthRateValue * 100).ToString("N1") + "%";
+                    return ((species.StartingColonyPopulation ?? 0) * 100).ToString("N1") + "%";
             }
         }
         public double? AffinityMultiplier
@@ -134,7 +134,7 @@ namespace GurpsSpace.SpeciesCreation
                 if (species.AffinityMultiplier == null)
                     return "tbc";
                 else
-                    return species.AffinityMultiplierValue.ToString("N2");
+                    return (species.StartingColonyPopulation ?? 0).ToString("N2");
             }
         }
 

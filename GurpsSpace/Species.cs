@@ -71,21 +71,18 @@ namespace GurpsSpace
             get { return startingColonyPopulation; }
             set { startingColonyPopulation = value; }
         }
-        public double StartingColonyPopulationValue { get { return startingColonyPopulation ?? 0; } }
         protected double? annualGrowthRate;
         public double? AnnualGrowthRate 
         { 
             get { return annualGrowthRate; }
             set { annualGrowthRate = value;}
         }
-        public double AnnualGrowthRateValue { get { return annualGrowthRate ?? 0; } }
         protected double? affinityMultiplier;
         public double? AffinityMultiplier
         { 
             get { return affinityMultiplier; }
             set {  affinityMultiplier = value;}
         }
-        public double AffinityMultiplierValue { get { return affinityMultiplier ?? 1; } }
 
 
         public Species(Setting setting)
