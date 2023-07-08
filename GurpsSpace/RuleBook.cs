@@ -1,4 +1,5 @@
-﻿using GurpsSpace.PlanetCreation;
+﻿using GurpsSpace.Helpers;
+using GurpsSpace.PlanetCreation;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace GurpsSpace
         static public Dictionary<int, TechLevelParameters> TechLevelParams;
         static public Dictionary<eSocietyType, SocietyTypeParameters> SocietyTypeParams;
         static public List<InstallationParameters> InstallationParams;
+        static public Dictionary<eTrait, TraitParameters> TraitParams;
 
         static public eOverallType? OverallTypeBySubtype(eSubtype? subtype)
         {
@@ -393,6 +395,23 @@ namespace GurpsSpace
             "Full facilities"       // 5
         }, 0);
 
+        static public IndexedTable1D<eLifeChemistry> LifeChemistry = new IndexedTable1D<eLifeChemistry>(new eLifeChemistry[]
+        {
+            eLifeChemistry.Hydrogen,                // 5
+            eLifeChemistry.Ammonia,                 // 6
+            eLifeChemistry.Ammonia,                 // 7
+            eLifeChemistry.Hydrocarbon,             // 8
+            eLifeChemistry.Water,                   // 9
+            eLifeChemistry.Water,                   // 10
+            eLifeChemistry.Water,                   // 11
+            eLifeChemistry.Chlorine,                // 12
+            eLifeChemistry.SiliconSulphuricAcid,    // 13
+            eLifeChemistry.SiliconLiquidSulphur,    // 14
+            eLifeChemistry.SiliconLiquidRock,       // 15
+            eLifeChemistry.Plasma,                  // 16
+            eLifeChemistry.Exotica                  // 17
+        }, 5);
+
         static public double? BlackbodyAbsorption(Planet p)
         {
             if (!PlanetParams.ContainsKey((p.SizeVal, p.SubtypeVal)))
@@ -443,6 +462,7 @@ namespace GurpsSpace
                     return ePressureCategory.Superdense;
             }
         }
+
         static public int KtoC(int k)
         {
             // convert Kelvin to Celsius
@@ -534,7 +554,8 @@ namespace GurpsSpace
             SetUpSocietyTypeParameters();
             InstallationParams = new List<InstallationParameters>();
             SetUpInstallationParameters();
-
+            TraitParams = new Dictionary<eTrait, TraitParameters>();
+            SetUpTraitParameters();
         }
 
         static private void SetUpPlanetParameters()
@@ -907,6 +928,26 @@ namespace GurpsSpace
                 );
             InstallationParams.Add(InstallationParameters.Create("Prison", 10, -1, 0)
                 .SetPopDice(1, -3));
+        }
+
+        static private void SetUpTraitParameters()
+        {
+            TraitParameters tp;
+
+            tp = new TraitParameters(eTrait.IncreasedConsumption, "Increased consumption", "", 0, -10, 0);
+            tp.BannedTraits.Add(eTrait.ReducedConsumption);
+            tp.BannedTraits.Add(eTrait.DoesntEatOrDrink);
+            TraitParams.Add(tp.Trait, tp);
+
+            tp = new TraitParameters(eTrait.ReducedConsumption, "Reduced consumption", "", 0, 2, 4);
+            tp.BannedTraits.Add(eTrait.IncreasedConsumption);
+            tp.BannedTraits.Add(eTrait.DoesntEatOrDrink);
+            TraitParams.Add(tp.Trait, tp);
+
+            tp = new TraitParameters(eTrait.DoesntEatOrDrink, "Doesn't eat or drink", "", 10, 0, 0);
+            tp.BannedTraits.Add(eTrait.IncreasedConsumption);
+            tp.BannedTraits.Add(eTrait.ReducedConsumption);
+            TraitParams.Add(tp.Trait, tp);
         }
 
     }

@@ -89,6 +89,28 @@
             </Grid>
 
         </GroupBox>
+
+        <GroupBox Header="New">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" >Chemistry</Label>
+                <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Content="{Binding Path=LifeChemistryString, Mode=OneWay}" />
+                <Button Grid.Row="0" Grid.Column="2" Tag="LifeChemistry" Click="btnSelect_Click">Select</Button>
+                <Button Grid.Row="0" Grid.Column="3" Tag="LifeChemistry" Click="btnRandom_Click">Rand</Button>
+
+            </Grid>
+        </GroupBox>
         <StackPanel Orientation="Horizontal">
             <Button IsCancel="true">Cancel</Button>
             <Button Click="btnOK_Click">OK</Button>

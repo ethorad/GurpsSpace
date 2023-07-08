@@ -81,6 +81,16 @@ namespace GurpsSpace.SpeciesCreation
                     return (speciesFactory.AffinityMultiplier ?? 0).ToString("N2");
             }
         }
+        public string LifeChemistryString
+        {
+            get
+            {
+                if (speciesFactory.LifeChemistry == null)
+                    return "tbc";
+                else
+                    return speciesFactory.LifeChemistry.ToString()!;
+            }
+        }
 
         public void RandomParameter(string param)
         {

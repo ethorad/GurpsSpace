@@ -81,5 +81,37 @@ namespace GurpsSpace.SpeciesCreation
             else
                 return null;
         }
+
+        public eLifeChemistry? GetLifeChemistry(SpeciesFactory sf)
+        {
+            List<(int, string, string)> options = new List<(int, string, string)>();
+            List<int> vals = ((int[])Enum.GetValues(typeof(eLifeChemistry))).ToList<int>();
+            int? startVal = null;
+
+            string question = "Select the chemical basis of this species";
+
+            options.Add(((int)eLifeChemistry.Hydrogen, "Hydrogen based", "Frozen worlds below -250F / -155C or Gas Giants."));
+            options.Add(((int)eLifeChemistry.Ammonia, "Ammonia based", "Frozen worlds between -100F / -75C and -30F / -35C."));
+            options.Add(((int)eLifeChemistry.Hydrocarbon, "Hydrocarbon based", "Cool to Cold worlds."));
+            options.Add(((int)eLifeChemistry.Water, "Water based", "Cold to Hot worlds."));
+            options.Add(((int)eLifeChemistry.Chlorine, "Chlorine based", "Cold to Tropical worlds"));
+            options.Add(((int)eLifeChemistry.SiliconSulphuricAcid, "Silicon/Sulphuric Acid based", "Warm to Infernal worlds between 50F / 10C and 600F / 315C."));
+            options.Add(((int)eLifeChemistry.SiliconLiquidSulphur, "Silicon/Liquid Sulphur based", "Infernal worlds between 250F / 120C and 750F / 400C."));
+            options.Add(((int)eLifeChemistry.SiliconLiquidRock, "Silicon/Liquid Rock based", "Infernal worlds above 2500F / 1400F, or mantle."));
+            options.Add(((int)eLifeChemistry.Plasma, "Plasma based", "Infernal worlds or stars above 4000F / 2200C."));
+            options.Add(((int)eLifeChemistry.Exotica, "Exotica life", "For example nebula-dwelling life, machine life, magnetic life."));
+
+            if (sf.LifeChemistry != null)
+                for (int i = 0; i < options.Count; i++)
+                    if (vals[i] == (int)(sf.LifeChemistry ?? 0))
+                        startVal = i;
+
+            InputRadio radioDiag = new InputRadio(question, options, startVal);
+            if (radioDiag.ShowDialog() == true)
+                return (eLifeChemistry)radioDiag.Answer.Item1;
+            else // clicked cancel
+                return null;
+
+        }
     }
 }

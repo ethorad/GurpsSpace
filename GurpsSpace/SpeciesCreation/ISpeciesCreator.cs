@@ -19,5 +19,7 @@ namespace GurpsSpace.SpeciesCreation
         double? GetAnnualGrowthRate(SpeciesFactory sf);
 
         double? GetAffinityMultiplier(SpeciesFactory sf);
+
+        eLifeChemistry? GetLifeChemistry(SpeciesFactory sf);
     }
 }

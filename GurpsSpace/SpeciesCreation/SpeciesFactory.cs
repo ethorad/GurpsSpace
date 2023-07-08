@@ -29,6 +29,8 @@ namespace GurpsSpace.SpeciesCreation
         public int? ReducedConsumption { get { return species.ReducedConsumption; } }
         public int? IncreasedConsumption { get { return species.IncreasedConsumption; } }
 
+        public eLifeChemistry? LifeChemistry { get { return species.LifeChemistry; } }
+
         internal SpeciesFactory(Setting s, ISpeciesCreator rnd, ISpeciesCreator usr)
         {
             species = new Species(s);
@@ -59,6 +61,7 @@ namespace GurpsSpace.SpeciesCreation
             SetStartingColonyPopulation(randomiser);
             SetAnnualGrowthRate(randomiser);
             SetAffinityMultiplier(randomiser);
+            SetLifeChemistry(randomiser);
         }
 
         private void SetParameter(string param, ISpeciesCreator sc)
@@ -82,6 +85,9 @@ namespace GurpsSpace.SpeciesCreation
                     break;
                 case "AffinityMultiplier":
                     SetAffinityMultiplier(sc);
+                    break;
+                case "LifeChemistry":
+                    SetLifeChemistry(sc);
                     break;
             }
         }
@@ -131,6 +137,13 @@ namespace GurpsSpace.SpeciesCreation
             double? mult = sc.GetAffinityMultiplier(this);
             if (mult != null)
                 species.AffinityMultiplier = mult;
+        }
+
+        private void SetLifeChemistry(ISpeciesCreator sc)
+        {
+            eLifeChemistry? lifeChem = sc.GetLifeChemistry(this);
+            if (lifeChem != null)
+                species.LifeChemistry = lifeChem;
         }
     }
 }

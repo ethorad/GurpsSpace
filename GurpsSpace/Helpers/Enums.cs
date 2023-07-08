@@ -186,4 +186,25 @@ namespace GurpsSpace
         Omnivore,
         Carnivore
     }
+
+    public enum eLifeChemistry
+    {
+        Hydrogen,
+        Ammonia,
+        Hydrocarbon,
+        Water,
+        Chlorine,
+        SiliconSulphuricAcid,
+        SiliconLiquidSulphur,
+        SiliconLiquidRock,
+        Plasma,
+        Exotica
+    }
+
+    public enum eTrait
+    {
+        IncreasedConsumption,
+        ReducedConsumption,
+        DoesntEatOrDrink
+    }
 }

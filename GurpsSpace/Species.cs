@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace GurpsSpace
@@ -83,11 +84,20 @@ namespace GurpsSpace
             get { return affinityMultiplier; }
             set {  affinityMultiplier = value;}
         }
+        protected eLifeChemistry? lifeChemistry;
+        public eLifeChemistry? LifeChemistry 
+        { 
+            get { return lifeChemistry; }
+            set { lifeChemistry = value; }
+        }
+
+        public List<Trait> Traits;
 
 
         public Species(Setting setting)
         {
             this.setting = setting;
+            Traits = new List<Trait>();
         }
         public Species(Setting setting, string name, string description,
             eSpeciesDiet diet, int consumption, bool doesNotEatOrDrink,
@@ -102,6 +112,7 @@ namespace GurpsSpace
             this.startingColonyPopulation = startingColonyPopulation;
             this.annualGrowthRate = annualGrowthRate;
             this.affinityMultiplier = affinityMultiplier;
+            Traits = new List<Trait>();
         }
         public Species(Setting s, string name) : this(s, name, "A generic species",
             eSpeciesDiet.Omnivore, 0, false,
@@ -196,7 +207,6 @@ namespace GurpsSpace
             return hab;
         }
 
-
         public virtual double? CarryingCapacity(Planet p)
         {
             if (p.Habitability == null || p.LocalTechLevel == null)
@@ -268,6 +278,37 @@ namespace GurpsSpace
                 return 10;
             else
                 return 1;
+        }
+
+        public bool HasTrait(eTrait trait)
+        {
+            foreach (Trait t in Traits)
+                if (t.TraitType == trait)
+                    return true;
+
+            return false;
+        }
+        public void RemoveTrait(eTrait traitToRemove)
+        {
+            for (int i=Traits.Count-1; i>=0; i--)
+                if (Traits[i].TraitType== traitToRemove)
+                    Traits.RemoveAt(i);
+        }
+        public Trait AddTrait(eTrait traitToAdd)
+        {
+            // remove the trait if it already exists
+            RemoveTrait(traitToAdd);
+
+            // then add it
+            Trait t = new Trait(traitToAdd, "");
+            Traits.Add(t);
+
+            // remove any banned traits
+            foreach (eTrait bannedTrait in RuleBook.TraitParams[traitToAdd].BannedTraits)
+                RemoveTrait(bannedTrait);
+
+            // return the added trait so it can be further amended
+            return t;
         }
 
     }

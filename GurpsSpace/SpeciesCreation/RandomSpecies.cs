@@ -135,5 +135,11 @@ namespace GurpsSpace.SpeciesCreation
 
             return 1 + (double)DiceBag.Roll(3) / 10;
         }
+
+        public eLifeChemistry? GetLifeChemistry(SpeciesFactory sf)
+        {
+            int roll = DiceBag.Roll(3);
+            return RuleBook.LifeChemistry[roll];
+        }
     }
 }
