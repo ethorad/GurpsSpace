@@ -13,20 +13,24 @@ namespace GurpsSpace.SpeciesCreation
         public Species Species { get { return speciesFactory.Species; } }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public SpeciesCreator(Setting s)
+        public SpeciesCreator(Setting s, bool fullRandom = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             speciesFactory = new SpeciesFactory(s, new RandomSpecies(), new UserSpecies());
             vmSpeciesFactory = new ViewModelSpeciesFactory(speciesFactory);
+            if (fullRandom)
+                vmSpeciesFactory.FullRandom();
             InitializeComponent();
             this.DataContext = vmSpeciesFactory;
         }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public SpeciesCreator(Species s)
+        public SpeciesCreator(Species s, bool fullRandom = false)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             speciesFactory = new SpeciesFactory(s, new RandomSpecies(), new UserSpecies());
             vmSpeciesFactory = new ViewModelSpeciesFactory(speciesFactory);
+            if (fullRandom)
+                vmSpeciesFactory.FullRandom();
             InitializeComponent();
             this.DataContext = vmSpeciesFactory;
         }

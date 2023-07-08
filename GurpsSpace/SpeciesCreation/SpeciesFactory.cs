@@ -51,6 +51,16 @@ namespace GurpsSpace.SpeciesCreation
             SetParameter(param, randomiser);
         }
 
+        public void FullRandom()
+        {
+            SetName(randomiser);
+            SetDiet(randomiser);
+            SetConsumption(randomiser);
+            SetStartingColonyPopulation(randomiser);
+            SetAnnualGrowthRate(randomiser);
+            SetAffinityMultiplier(randomiser);
+        }
+
         private void SetParameter(string param, ISpeciesCreator sc)
         {
             switch (param)

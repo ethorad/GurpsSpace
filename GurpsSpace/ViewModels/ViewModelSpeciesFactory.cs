@@ -92,5 +92,10 @@ namespace GurpsSpace.SpeciesCreation
             speciesFactory.SelectParameter(param);
             MemberUpdated();
         }
+        public void FullRandom()
+        {
+            speciesFactory.FullRandom();
+            MemberUpdated();
+        }
     }
 }
