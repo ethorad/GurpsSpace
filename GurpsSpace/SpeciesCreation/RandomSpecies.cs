@@ -8,12 +8,12 @@ namespace GurpsSpace.SpeciesCreation
 {
     internal class RandomSpecies : ISpeciesCreator
     {
-        public string? GetName(Species s)
+        public string? GetName(SpeciesFactory sf)
         {
             return "Randomish-" + DiceBag.Rand(1, 100);
         }
 
-        public eSpeciesDiet? GetDiet(Species s)
+        public eSpeciesDiet? GetDiet(SpeciesFactory sf)
         {
             int n = DiceBag.Rand(0, 2);
             switch (n)
@@ -29,7 +29,7 @@ namespace GurpsSpace.SpeciesCreation
             return null;
         }
 
-        public (int?, bool?) GetConsumption(Species s)
+        public (int?, bool?) GetConsumption(SpeciesFactory sf)
         {
             // have come up with some random rules for consumption stats
             // 10% = doesn't eat or drink
@@ -89,7 +89,7 @@ namespace GurpsSpace.SpeciesCreation
 
         }
 
-        public double? GetStartingColonyPopulation(Species s)
+        public double? GetStartingColonyPopulation(SpeciesFactory sf)
         {
             // want to choose a random number from say 1,000 to 100,000
             // human average of 10,000 in the middle
@@ -121,14 +121,14 @@ namespace GurpsSpace.SpeciesCreation
 
         }
 
-        public double? GetAnnualGrowthRate(Species s)
+        public double? GetAnnualGrowthRate(SpeciesFactory sf)
         {
             // human is 2.3%
             // choose a random number between 0.5% and 5.0%
             return Math.Round((double)DiceBag.Rand(5, 50) / 10 / 100, 3);
         }
 
-        public double? GetAffinityMultiplier(Species s)
+        public double? GetAffinityMultiplier(SpeciesFactory sf)
         {
             // assume a value between 1 + 3d/10 gives a value from 1.3 to 2.8 centered around 2
             // and 2 is the Human default

@@ -345,7 +345,7 @@ namespace GurpsSpace.PlanetCreation
             Species s = pf.LocalSpecies;
 
             int ageInDecades = (pf.ColonyAge ?? 0) / 10;
-            int affinityMod = (int)Math.Round(Math.Log(s.AffinityMultiplierValue) / Math.Log(1 + s.AnnualGrowthRateValue) / 10, 0);
+            int affinityMod = (int)Math.Round(Math.Log((s.StartingColonyPopulation ?? 0)) / Math.Log(1 + (s.StartingColonyPopulation ?? 0)) / 10, 0);
             int minRoll = 10 + 5 * affinityMod;
 
             // should be an affinity score
@@ -355,13 +355,13 @@ namespace GurpsSpace.PlanetCreation
             int effectiveDecadesOfGrowth = Math.Max(0, roll - minRoll);
 
             // then calculate the population
-            double population = s.StartingColonyPopulationValue * Math.Pow(1 + s.AnnualGrowthRateValue, effectiveDecadesOfGrowth * 10);
+            double population = (s.StartingColonyPopulation ?? 0) * Math.Pow(1 + (s.StartingColonyPopulation ?? 0), effectiveDecadesOfGrowth * 10);
             population = RuleBook.RoundToSignificantFigures(population, 2);
             if (population > pf.CarryingCapacity)
                 population = pf.CarryingCapacity ?? 0;
 
             string question = "Enter the colony population below. ";
-            question += "For a " + s.Name + " colony, the minimum size is " + s.StartingColonyPopulationValue.ToString("N0") + ". ";
+            question += "For a " + s.Name + " colony, the minimum size is " + (s.StartingColonyPopulation ?? 0).ToString("N0") + ". ";
             question += "After " + pf.ColonyAge + " years of growth, this is expected to have reached " + population.ToString("N0") + ". ";
 
             string currPop;

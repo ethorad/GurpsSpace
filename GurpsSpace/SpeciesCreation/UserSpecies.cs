@@ -8,12 +8,12 @@ namespace GurpsSpace.SpeciesCreation
 {
     internal class UserSpecies : ISpeciesCreator
     {
-        public string? GetName(Species s)
+        public string? GetName(SpeciesFactory sf)
         {
             throw new NotImplementedException();
         }
 
-        public eSpeciesDiet? GetDiet(Species s)
+        public eSpeciesDiet? GetDiet(SpeciesFactory sf)
         {
             List<(int, string, string)> options = new List<(int, string, string)>();
             options.Add(((int)eSpeciesDiet.Herbivore, "Herbivore", "Eats plants."));
@@ -23,7 +23,7 @@ namespace GurpsSpace.SpeciesCreation
             string question = "Select the species' diet type.";
 
             int? initial = null;
-            switch (s.Diet)
+            switch (sf.Diet)
             {
                 case eSpeciesDiet.Herbivore: initial = 0; break;
                 case eSpeciesDiet.Carnivore: initial = 1; break;
@@ -39,9 +39,9 @@ namespace GurpsSpace.SpeciesCreation
 
         }
 
-        public (int?, bool?) GetConsumption(Species s)
+        public (int?, bool?) GetConsumption(SpeciesFactory sf)
         {
-            SelectConsumption selectConsumption = new SelectConsumption(s);
+            SelectConsumption selectConsumption = new SelectConsumption(sf.Species);
             if (selectConsumption.ShowDialog()==true)
             {
                 int? consumption = selectConsumption.Consumption;
@@ -51,31 +51,31 @@ namespace GurpsSpace.SpeciesCreation
             return (null, null);
         }
 
-        public double? GetStartingColonyPopulation(Species s)
+        public double? GetStartingColonyPopulation(SpeciesFactory sf)
         {
             string question = "Enter the population size used to start a new colony.  Human default is 10,000.";
-            InputString input = new InputString(question,s.StartingColonyPopulation.ToString()??"",true);
+            InputString input = new InputString(question, sf.StartingColonyPopulation.ToString() ?? "", true);
             if (input.ShowDialog() == true)
                 return double.Parse(input.Answer);
             else
                 return null;
         }
 
-        public double? GetAnnualGrowthRate(Species s)
+        public double? GetAnnualGrowthRate(SpeciesFactory sf)
         {
             string question = "Enter the annual percentage increase in population size.  Human default is 2.3%.";
-            InputString input = new InputString(question, s.AnnualGrowthRate.ToString() ?? "", true);
+            InputString input = new InputString(question, sf.AnnualGrowthRate.ToString() ?? "", true);
             if (input.ShowDialog() == true)
                 return double.Parse(input.Answer) / 100;
             else
                 return null;
         }
 
-        public double? GetAffinityMultiplier(Species s)
+        public double? GetAffinityMultiplier(SpeciesFactory sf)
         {
             string question = "Enter the multiplier to population for each +1 in planetary affinity.";
             question += "\r\nHuman default is 2, which doubles the population for each +1.";
-            InputString input = new InputString(question, s.AffinityMultiplier.ToString() ?? "", true);
+            InputString input = new InputString(question, sf.AffinityMultiplier.ToString() ?? "", true);
             if (input.ShowDialog() == true)
                 return double.Parse(input.Answer);
             else

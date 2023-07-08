@@ -8,16 +8,16 @@ namespace GurpsSpace.SpeciesCreation
 {
     internal interface ISpeciesCreator
     {
-        string? GetName(Species s);
+        string? GetName(SpeciesFactory sf);
 
-        eSpeciesDiet? GetDiet(Species s);
+        eSpeciesDiet? GetDiet(SpeciesFactory sf);
 
-        (int?, bool?) GetConsumption(Species s);
+        (int?, bool?) GetConsumption(SpeciesFactory sf);
 
-        double? GetStartingColonyPopulation(Species s);
+        double? GetStartingColonyPopulation(SpeciesFactory sf);
 
-        double? GetAnnualGrowthRate(Species s);
+        double? GetAnnualGrowthRate(SpeciesFactory sf);
 
-        double? GetAffinityMultiplier(Species s);
+        double? GetAffinityMultiplier(SpeciesFactory sf);
     }
 }

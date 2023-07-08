@@ -76,6 +76,12 @@ namespace GurpsSpace
         }
         private void btnRandomSpecies(object sender, RoutedEventArgs e)
         {
+            SpeciesCreator creator = new SpeciesCreator(s, true);
+            if (creator.ShowDialog() == true)
+            {
+                vmSetting.Add(creator.Species);
+                cmbSpecies.SelectedIndex = cmbSpecies.Items.Count - 1;
+            }
         }
         private void btnEditSpecies(object sender, RoutedEventArgs e)
         {
