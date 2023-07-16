@@ -53,41 +53,42 @@ namespace GurpsSpace.SpeciesCreation
                 MemberUpdated();
             }
         }
-        public int? Consumption
+        public int Consumption
         {
-            get { return species.Consumption; }
-            set { species.Consumption = value; MemberUpdated(); }
-        }
-        public int? ReducedConsumption
-        {
-            get { return species.ReducedConsumption; }
-            set { species.ReducedConsumption = value; MemberUpdated(); }
-        }
-        public int? IncreasedConsumption
-        {
-            get { return species.IncreasedConsumption; }
-            set { species.IncreasedConsumption = value; MemberUpdated(); }
-        }
-        public bool? DoesNotEatOrDrink
-        {
-            get { return species.DoesNotEatOrDrink; }
-            set
+            get { return species.GetTraitLevel(eTrait.IncreasedConsumption)-species.GetTraitLevel(eTrait.ReducedConsumption); }
+            set 
             {
-                species.DoesNotEatOrDrink = value; MemberUpdated() ;
+                if (value > 0)
+                {
+                    species.AddTrait(eTrait.IncreasedConsumption, value);
+                }
+                else if (value<0)
+                {
+                    species.AddTrait(eTrait.ReducedConsumption, -value);
+                }
+                else // value == 0
+                {
+                    species.RemoveTrait(eTrait.IncreasedConsumption);
+                    species.RemoveTrait(eTrait.ReducedConsumption);
+                    species.RemoveTrait(eTrait.DoesntEatOrDrink);
+                }
+                MemberUpdated();
             }
+        }
+        public bool DoesNotEatOrDrink
+        {
+            get { return species.HasTrait(eTrait.DoesntEatOrDrink); }
         }
         public string ConsumptionString
         {
             get
             {
-                if (species.Consumption == null || species.DoesNotEatOrDrink == null)
-                    return "tbc";
-                else if (species.DoesNotEatOrDrink ?? false)
+                if (species.HasTrait(eTrait.DoesntEatOrDrink))
                     return "Doesn't eat or drink";
-                else if (species.ReducedConsumption > 0)
-                    return "Reduced (" + species.ReducedConsumption.ToString() + ")";
-                else if (species.IncreasedConsumption > 0)
-                    return "Increased (" + species.IncreasedConsumption.ToString() + ")";
+                else if (species.HasTrait(eTrait.ReducedConsumption))
+                    return "Reduced (" + species.GetTraitLevel(eTrait.ReducedConsumption).ToString() + ")";
+                else if (species.HasTrait(eTrait.IncreasedConsumption))
+                    return "Increased (" + species.GetTraitLevel(eTrait.IncreasedConsumption).ToString() + ")";
                 else // so both zero
                     return "Normal";
             }

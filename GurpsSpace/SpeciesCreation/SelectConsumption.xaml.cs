@@ -59,8 +59,8 @@ namespace GurpsSpace.SpeciesCreation
 
         public SelectConsumption(Species s)
         {
-            consumption = s.Consumption ?? 0;
-            doesNotEatOrDrink = s.DoesNotEatOrDrink ?? false;
+            consumption = s.GetTraitLevel(eTrait.IncreasedConsumption) - s.GetTraitLevel(eTrait.ReducedConsumption);
+            doesNotEatOrDrink = s.HasTrait(eTrait.DoesntEatOrDrink);
             InitializeComponent();
             this.DataContext = this;
         }

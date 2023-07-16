@@ -39,14 +39,12 @@ namespace GurpsSpace.SpeciesCreation
         {
             get
             {
-                if (speciesFactory.Consumption == null || speciesFactory.DoesNotEatOrDrink == null)
-                    return "tbc";
-                else if (speciesFactory.DoesNotEatOrDrink ?? false)
+                if (speciesFactory.HasTrait(eTrait.DoesntEatOrDrink))
                     return "Doesn't eat or drink";
-                else if (speciesFactory.ReducedConsumption > 0)
-                    return "Reduced (" + speciesFactory.ReducedConsumption.ToString() + ")";
-                else if (speciesFactory.IncreasedConsumption > 0)
-                    return "Increased (" + speciesFactory.IncreasedConsumption.ToString() + ")";
+                else if (speciesFactory.GetTraitLevel(eTrait.ReducedConsumption) > 0)
+                    return "Reduced (" + speciesFactory.GetTraitLevel(eTrait.ReducedConsumption).ToString() + ")";
+                else if (speciesFactory.GetTraitLevel(eTrait.IncreasedConsumption) > 0)
+                    return "Increased (" + speciesFactory.GetTraitLevel(eTrait.IncreasedConsumption).ToString() + ")";
                 else // so both zero
                     return "Normal";
             }

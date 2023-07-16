@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Data;
+using System.Windows.Media.Animation;
 
 namespace GurpsSpace
 {
@@ -15,57 +17,7 @@ namespace GurpsSpace
         public string? Description { get { return description; } set { description = value; } }
         protected eSpeciesDiet? diet;
         public eSpeciesDiet? Diet { get { return diet; } set { diet = value; } }
-        protected int? consumption;
-        public int? Consumption
-        { 
-            get { return consumption; }
-            set 
-            {
-                consumption = value;
-                if (value == null) // if this is null, also null out doesn't eat or drink
-                    doesNotEatOrDrink = null;
-                else if (value != 0) // if this is non-zero, then does not eat or drink has to be false
-                    doesNotEatOrDrink = false;
-            }
 
-        }
-        public int? IncreasedConsumption
-        { 
-            get 
-            { 
-                if (consumption == null) 
-                    return null;
-                if (consumption > 0)
-                    return consumption;
-                return 0;
-            }
-            set { consumption = value; }
-        }
-        public int? ReducedConsumption
-        {
-            get
-            {
-                if (consumption == null)
-                    return null;
-                if (consumption < 0)
-                    return -consumption;
-                return 0;
-            }
-            set { consumption = -value; }
-        }
-        protected bool? doesNotEatOrDrink;
-        public bool? DoesNotEatOrDrink 
-        { 
-            get { return doesNotEatOrDrink; }
-            set
-            {
-                doesNotEatOrDrink = value;
-                if (value == null)
-                    consumption = null; // if this is null, also null out consumption
-                if (value == true)
-                    consumption = 0; // if they don't eat or drink, remove any levels of consumption
-            }
-        }
         protected double? startingColonyPopulation;
         public double? StartingColonyPopulation
         { 
@@ -93,33 +45,30 @@ namespace GurpsSpace
 
         public List<Trait> Traits;
 
-
         public Species(Setting setting)
         {
             this.setting = setting;
             Traits = new List<Trait>();
         }
         public Species(Setting setting, string name, string description,
-            eSpeciesDiet diet, int consumption, bool doesNotEatOrDrink,
+            eSpeciesDiet diet,
             long startingColonyPopulation, double annualGrowthRate, double affinityMultiplier)
         {
             this.setting = setting;
             this.name = name;
             this.description = description;
             this.diet = diet;
-            this.consumption = consumption;
-            this.doesNotEatOrDrink = doesNotEatOrDrink;
             this.startingColonyPopulation = startingColonyPopulation;
             this.annualGrowthRate = annualGrowthRate;
             this.affinityMultiplier = affinityMultiplier;
             Traits = new List<Trait>();
         }
         public Species(Setting s, string name) : this(s, name, "A generic species",
-            eSpeciesDiet.Omnivore, 0, false,
+            eSpeciesDiet.Omnivore,
             10000, 0.023, 2)
         { }
         public Species(Setting s, string name, string description) : this(s, name, description,
-            eSpeciesDiet.Omnivore, 0, false,
+            eSpeciesDiet.Omnivore,
             10000, 0.023, 2)
         { }
 
@@ -133,8 +82,6 @@ namespace GurpsSpace
             Name = s.Name;
             Description = s.Description;
             Diet = s.Diet;
-            Consumption = s.Consumption;
-            DoesNotEatOrDrink = s.DoesNotEatOrDrink;
             StartingColonyPopulation = s.StartingColonyPopulation;
             AnnualGrowthRate = s.AnnualGrowthRate;
             AffinityMultiplier = s.AffinityMultiplier;
@@ -254,27 +201,29 @@ namespace GurpsSpace
         }
         protected double CarryingCapacityIncreasedConsumptionModifier()
         {
-            double power = IncreasedConsumption ?? 0;
+            double power = GetTraitLevel(eTrait.IncreasedConsumption);
             return Math.Pow(2, -power);
         }
         protected double CarryingCapacityReducedConsumptionModifier()
         {
-            if (DoesNotEatOrDrink ?? false)
+            int redCon = GetTraitLevel(eTrait.ReducedConsumption);
+
+            if (HasTrait(eTrait.DoesntEatOrDrink))
                 return 1; // the modifier for doesn't eat or drink supersedes this
-            else if (ReducedConsumption == 0)
+            else if (redCon == 0)
                 return 1;
-            else if (ReducedConsumption == 1)
+            else if (redCon == 1)
                 return 1.5;
-            else if (ReducedConsumption == 2)
+            else if (redCon == 2)
                 return 3;
-            else if (ReducedConsumption >= 3)
+            else if (redCon >= 3)
                 return 10;
             else
                 return 1;
         }
         protected double CarryingCapacityDoesNotEatOrDrinkModifier()
         {
-            if (DoesNotEatOrDrink ?? false)
+            if (HasTrait(eTrait.DoesntEatOrDrink))
                 return 10;
             else
                 return 1;
@@ -287,6 +236,13 @@ namespace GurpsSpace
                     return true;
 
             return false;
+        }
+        public int GetTraitLevel(eTrait trait)
+        {
+            foreach (Trait t in Traits)
+                if (t.TraitType==trait)
+                    return t.Level;
+            return 0;
         }
         public void RemoveTrait(eTrait traitToRemove)
         {
@@ -308,6 +264,12 @@ namespace GurpsSpace
                 RemoveTrait(bannedTrait);
 
             // return the added trait so it can be further amended
+            return t;
+        }
+        public Trait AddTrait(eTrait traitToAdd, int traitLevel)
+        {
+            Trait t = AddTrait(traitToAdd);
+            t.Level = traitLevel;
             return t;
         }
 

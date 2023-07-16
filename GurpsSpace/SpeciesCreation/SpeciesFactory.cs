@@ -12,6 +12,28 @@ namespace GurpsSpace.SpeciesCreation
         private Species species;
         public Species Species { get { return species; } }
 
+        public List<Trait> Traits { get { return species.Traits; } }
+        public bool HasTrait(eTrait trait)
+        {
+            return species.HasTrait(trait);
+        }
+        public int GetTraitLevel(eTrait trait)
+        {
+            return species.GetTraitLevel(trait);
+        }
+        public void RemoveTrait(eTrait traitToRemove)
+        {
+            species.RemoveTrait(traitToRemove);
+        }
+        public Trait AddTrait(eTrait traitToAdd)
+        {
+            return species.AddTrait(traitToAdd);
+        }
+        public Trait AddTrait(eTrait traitToAdd, int traitLevel)
+        {
+            return species.AddTrait(traitToAdd, traitLevel);
+        }
+
         public Setting Setting { get { return species.Setting; } }
 
         private ISpeciesCreator randomiser;
@@ -23,11 +45,6 @@ namespace GurpsSpace.SpeciesCreation
         public double? StartingColonyPopulation { get { return species.StartingColonyPopulation; }  }
         public double? AnnualGrowthRate { get { return species.AnnualGrowthRate; }  }
         public double? AffinityMultiplier { get { return species.AffinityMultiplier; } } 
-
-        public int? Consumption { get { return species.Consumption; } }
-        public bool? DoesNotEatOrDrink { get { return species.DoesNotEatOrDrink; } }
-        public int? ReducedConsumption { get { return species.ReducedConsumption; } }
-        public int? IncreasedConsumption { get { return species.IncreasedConsumption; } }
 
         public eLifeChemistry? LifeChemistry { get { return species.LifeChemistry; } }
 
@@ -113,8 +130,19 @@ namespace GurpsSpace.SpeciesCreation
             (consumption, noEatOrDrink) = sc.GetConsumption(this);
             if (consumption != null && noEatOrDrink != null)
             {
-                species.Consumption = consumption;
-                species.DoesNotEatOrDrink = noEatOrDrink;
+                if (consumption > 0)
+                    species.AddTrait(eTrait.IncreasedConsumption, consumption ?? 0);
+                else if (consumption < 0)
+                    species.AddTrait(eTrait.ReducedConsumption, -consumption ?? 0);
+                else // consumption ==0
+                {
+                    species.RemoveTrait(eTrait.IncreasedConsumption);
+                    species.RemoveTrait(eTrait.ReducedConsumption);
+                    species.RemoveTrait(eTrait.DoesntEatOrDrink); // can remove here, as adding in next if needed
+                }
+
+                if (noEatOrDrink == true)
+                    species.AddTrait(eTrait.DoesntEatOrDrink);
             }
         }
 
