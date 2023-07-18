@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -73,6 +74,18 @@ namespace GurpsSpace.ViewModels
         {
             setting.Species.Add(s);
             speciesList.Add(new ViewModelSpecies(s));
+            MemberUpdated();
+        }
+        public void Replace(Planet p, int index)
+        {
+            setting.Planets[index] = p;
+            planetList.Items[index] = new ViewModelPlanet(p);
+            MemberUpdated();
+        }
+        public void Replace(Species s, int index)
+        {
+            setting.Species[index] = s;
+            speciesList.Items[index] = new ViewModelSpecies(s);
             MemberUpdated();
         }
         public void Remove(Planet p)

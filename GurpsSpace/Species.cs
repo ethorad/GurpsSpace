@@ -85,6 +85,9 @@ namespace GurpsSpace
             StartingColonyPopulation = s.StartingColonyPopulation;
             AnnualGrowthRate = s.AnnualGrowthRate;
             AffinityMultiplier = s.AffinityMultiplier;
+            Traits = new List<Trait>();
+            foreach (Trait trait in s.Traits)
+                Traits.Add(new Trait(trait));
         }
 
         public virtual int Habitability(Planet p)
@@ -166,13 +169,13 @@ namespace GurpsSpace
         }
         protected long DefaultCarryingCapacity(Planet p)
         {
-            double defaultCarryCap = CarryingCapacityBase(p)
-                * CarryingCapacityMultiplier(p)
-                * CarryingCapacityPlanetSizeModifier(p)
-                * CarryingCapacityDietModifier(p)
-                * CarryingCapacityIncreasedConsumptionModifier()
-                * CarryingCapacityReducedConsumptionModifier()
-                * CarryingCapacityDoesNotEatOrDrinkModifier();
+            double defaultCarryCap = CarryingCapacityBase(p);
+            defaultCarryCap *= CarryingCapacityMultiplier(p);
+            defaultCarryCap *= CarryingCapacityPlanetSizeModifier(p);
+            defaultCarryCap *= CarryingCapacityDietModifier(p);
+            defaultCarryCap *= CarryingCapacityIncreasedConsumptionModifier();
+            defaultCarryCap *= CarryingCapacityReducedConsumptionModifier();
+            defaultCarryCap *= CarryingCapacityDoesNotEatOrDrinkModifier();
 
             long carryCap = (long)defaultCarryCap;
 

@@ -10,11 +10,12 @@ namespace GurpsSpace
     public class Trait
     {
         public eTrait TraitType;
-        private TraitParameters parameters {get{return RuleBook.TraitParams[TraitType];} }
-        public string Name { get { return parameters.Name; } }
         public string Specialty;
         public int Level;
         public int VariableCost;
+
+        private TraitParameters parameters { get { return RuleBook.TraitParams[TraitType]; } }
+        public string Name { get { return parameters.Name; } }
         public int Cost { get { return parameters.BaseCost + parameters.LevelCost * Level + VariableCost; } }
 
         public Trait(eTrait traitType, string specialty, int level, int variableCost)
@@ -30,6 +31,13 @@ namespace GurpsSpace
             Specialty = specialty;
             Level = 0;
             VariableCost = 0;
+        }
+        public Trait(Trait t)
+        {
+            TraitType = t.TraitType;
+            Specialty = t.Specialty;
+            Level = t.Level;
+            VariableCost = t.VariableCost;
         }
 
     }
