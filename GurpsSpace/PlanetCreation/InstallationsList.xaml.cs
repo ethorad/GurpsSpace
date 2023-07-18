@@ -13,7 +13,6 @@ namespace GurpsSpace.PlanetCreation
         {
             this.DataContext = lst;
             InitializeComponent();
-
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)

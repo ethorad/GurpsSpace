@@ -20,8 +20,8 @@ namespace GurpsSpace.SpeciesCreation
             vmSpeciesFactory = new ViewModelSpeciesFactory(speciesFactory);
             if (fullRandom)
                 vmSpeciesFactory.FullRandom();
-            InitializeComponent();
             this.DataContext = vmSpeciesFactory;
+            InitializeComponent();
         }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public SpeciesCreator(Species s, bool fullRandom = false)
@@ -31,8 +31,8 @@ namespace GurpsSpace.SpeciesCreation
             vmSpeciesFactory = new ViewModelSpeciesFactory(speciesFactory);
             if (fullRandom)
                 vmSpeciesFactory.FullRandom();
-            InitializeComponent();
             this.DataContext = vmSpeciesFactory;
+            InitializeComponent();
         }
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
@@ -52,5 +52,9 @@ namespace GurpsSpace.SpeciesCreation
             this.DialogResult = true;
         }
 
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Number of traits = " + vmSpeciesFactory.TraitList.Count);
+        }
     }
 }

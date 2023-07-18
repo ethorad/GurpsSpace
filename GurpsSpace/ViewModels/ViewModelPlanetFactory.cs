@@ -467,22 +467,11 @@ namespace GurpsSpace.PlanetCreation
         }
 
         private ViewModelList<ViewModelInstallation> installationsList;
-        public ViewModelList<ViewModelInstallation> InstallationsList
-        {
-            get { return installationsList; }
-            //set
-            //{
-            //    installationsList = value;
-            //    planetFactory.Installations.Clear();
-            //    foreach (ViewModelInstallation vmInst in installationsList.Items)
-            //        planetFactory.Installations.Add(vmInst.Installation);
-            //    MemberUpdated();
-            //}
-        }
+        public ViewModelList<ViewModelInstallation> InstallationsList { get { return installationsList; } }
 
-        public ViewModelPlanetFactory(PlanetFactory pf)
+        public ViewModelPlanetFactory(PlanetFactory planetFactory)
         {
-            planetFactory = pf;
+            this.planetFactory = planetFactory;
             installationsList = new ViewModelList<ViewModelInstallation>();
             UpdateInstallationList();
         }

@@ -21,13 +21,16 @@ namespace GurpsSpace
             Species sp;
 
             sp = new Species(setting, "Humans", "Generic humans.");
+            sp.LifeChemistry = eLifeChemistry.Water;
             vmSetting.Add(sp);
 
             sp = new Species(setting, "Eldar", "Noble and arrogant.");
+            sp.LifeChemistry = eLifeChemistry.Water;
             sp.AddTrait(eTrait.IncreasedConsumption, 1);
             vmSetting.Add(sp);
 
             sp = new Species(setting, "Orks", "Savage and warlike.");
+            sp.LifeChemistry = eLifeChemistry.Water;
             sp.AddTrait(eTrait.ReducedConsumption, 1);
             vmSetting.Add(sp);
 

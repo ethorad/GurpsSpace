@@ -85,6 +85,8 @@ namespace GurpsSpace
             StartingColonyPopulation = s.StartingColonyPopulation;
             AnnualGrowthRate = s.AnnualGrowthRate;
             AffinityMultiplier = s.AffinityMultiplier;
+            LifeChemistry = s.LifeChemistry;
+
             Traits = new List<Trait>();
             foreach (Trait trait in s.Traits)
                 Traits.Add(new Trait(trait));

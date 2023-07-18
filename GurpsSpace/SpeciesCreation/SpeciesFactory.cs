@@ -13,6 +13,7 @@ namespace GurpsSpace.SpeciesCreation
         public Species Species { get { return species; } }
 
         public List<Trait> Traits { get { return species.Traits; } }
+
         public bool HasTrait(eTrait trait)
         {
             return species.HasTrait(trait);

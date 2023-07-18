@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GurpsSpace.PlanetCreation;
+using GurpsSpace.ViewModels;
 
 namespace GurpsSpace.SpeciesCreation
 {
@@ -14,7 +17,21 @@ namespace GurpsSpace.SpeciesCreation
         public ViewModelSpeciesFactory(SpeciesFactory speciesFactory)
         {
             this.speciesFactory = speciesFactory;
+            traitList = new ViewModelList<ViewModelTrait>();
+            UpdateTraitList();
         }
+        private void UpdateTraitList()
+        {
+            traitList.Clear();
+            foreach (Trait t in speciesFactory.Traits)
+                traitList.Add(new ViewModelTrait(t));
+            MemberUpdated();
+        }
+
+        private ViewModelList<ViewModelTrait> traitList;
+        public ViewModelList<ViewModelTrait> TraitList { get { return traitList; } }
+        public ObservableCollection<ViewModelTrait> TraitListItems { get { return traitList.Items; } }
+        
 
         public string Name
         { 
@@ -93,17 +110,17 @@ namespace GurpsSpace.SpeciesCreation
         public void RandomParameter(string param)
         {
             speciesFactory.RandomParameter(param);
-            MemberUpdated();
+            UpdateTraitList();
         }
         public void SelectParameter(string param)
         {
             speciesFactory.SelectParameter(param);
-            MemberUpdated();
+            UpdateTraitList();
         }
         public void FullRandom()
         {
             speciesFactory.FullRandom();
-            MemberUpdated();
+            UpdateTraitList();
         }
     }
 }
