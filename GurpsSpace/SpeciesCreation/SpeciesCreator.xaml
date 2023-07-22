@@ -140,12 +140,15 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
+                    
 
-                    <ListView Grid.Row="1" ItemsSource="{Binding Path=TraitListItems}">
+                    <ListView Grid.Row="1" ItemsSource="{Binding Path=TraitList.Items}">
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Trait Name"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Trait Name"/>
+                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
+                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=Specialty}" Header="Specialty"/>
+                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=LevelString}" Header="Level"/>
+                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=CostString}" Header="Cost"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
