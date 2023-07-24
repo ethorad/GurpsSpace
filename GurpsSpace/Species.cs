@@ -257,16 +257,13 @@ namespace GurpsSpace
         }
         public Trait AddTrait(eTrait traitToAdd)
         {
-            // remove the trait if it already exists
-            RemoveTrait(traitToAdd);
+            // remove any banned traits
+            foreach (eTrait bannedTrait in RuleBook.TraitParams[traitToAdd].BannedTraits)
+                RemoveTrait(bannedTrait);
 
             // then add it
             Trait t = new Trait(traitToAdd, "");
             Traits.Add(t);
-
-            // remove any banned traits
-            foreach (eTrait bannedTrait in RuleBook.TraitParams[traitToAdd].BannedTraits)
-                RemoveTrait(bannedTrait);
 
             // return the added trait so it can be further amended
             return t;
