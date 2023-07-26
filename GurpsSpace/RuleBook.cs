@@ -934,6 +934,10 @@ namespace GurpsSpace
         {
             TraitParameters tp;
 
+            tp = new TraitParameters(eTrait.Group,"Group", "Group", 0, 0, 0);
+            tp.AllowDuplicates = true;
+            TraitParams.Add(tp.Trait, tp);
+
             tp = new TraitParameters(eTrait.IncreasedConsumption, "Increased consumption", "", 0, -10, 0);
             tp.BannedTraits.Add(eTrait.ReducedConsumption);
             tp.BannedTraits.Add(eTrait.DoesntEatOrDrink);

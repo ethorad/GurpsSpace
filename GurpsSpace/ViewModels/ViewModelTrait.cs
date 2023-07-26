@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,41 +12,48 @@ namespace GurpsSpace.SpeciesCreation
         private Trait trait;
         public Trait Trait { get { return trait; } }
 
+        private ObservableCollection<ViewModelTrait> items;
+        public ObservableCollection<ViewModelTrait> Items { get { return items; } }
+
         public ViewModelTrait(Trait trait)
         {
             this.trait = trait;
+            items = new ObservableCollection<ViewModelTrait>();
+            foreach(Trait t in trait.SubTraits)
+            {
+                items.Add(new ViewModelTrait(t));
+            }
             MemberUpdated();
         }
 
         public override string SummaryType { get { return TraitType; } }
 
         public string TraitType { get { return trait.TraitType.ToString(); } }
-        public string Name { get { return trait.Name; } }
-        public string Specialty
-        {
-            get
+        public string NameString
+        { 
+            get 
             {
                 if (trait.Specialty == "")
-                    return "-";
+                    return trait.Name;
                 else
-                    return trait.Specialty;
-            }
+                    return trait.Name + ": " + trait.Specialty;
+            } 
         }
         public string LevelString
         {
             get
             {
                 if (trait.Level == 0)
-                    return "-";
+                    return "";
                 else
-                    return trait.Level.ToString();
+                    return "Lvl: "+trait.Level.ToString();
             }
         }
         public string CostString
         {
             get
             {
-                return trait.Cost.ToString("N0");
+                return "[" + trait.Cost.ToString("N0") + "]";
             }
         }
 

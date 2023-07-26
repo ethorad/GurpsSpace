@@ -82,7 +82,7 @@ namespace GurpsSpace.SpeciesCreation
                 return null;
         }
 
-        public (eLifeChemistry?, List<Trait>?) GetLifeChemistry(SpeciesFactory sf)
+        public (eLifeChemistry?, Trait?) GetLifeChemistry(SpeciesFactory sf)
         {
             List<(int, string, string)> options = new List<(int, string, string)>();
             List<int> vals = ((int[])Enum.GetValues(typeof(eLifeChemistry))).ToList<int>();
@@ -112,7 +112,7 @@ namespace GurpsSpace.SpeciesCreation
             if (radioDiag.ShowDialog() == true)
             {
                 chem = (eLifeChemistry)radioDiag.Answer.Item1;
-                return (chem, new List<Trait>());
+                return (chem, new Trait(eTrait.Group, chem.ToString() ?? "Unknown chemistry"));
             }
             else // clicked cancel
                 return (null, null);

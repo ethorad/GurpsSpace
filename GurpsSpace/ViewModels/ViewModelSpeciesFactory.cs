@@ -31,7 +31,6 @@ namespace GurpsSpace.SpeciesCreation
 
         private ViewModelList<ViewModelTrait> traitList;
         public ViewModelList<ViewModelTrait> TraitList { get { return traitList; } }
-        //public ObservableCollection<ViewModelTrait> TraitListItems { get { return traitList.Items; } }
         
 
         public string Name

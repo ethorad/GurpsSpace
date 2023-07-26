@@ -203,6 +203,7 @@ namespace GurpsSpace
 
     public enum eTrait
     {
+        Group,
         IncreasedConsumption,
         ReducedConsumption,
         DoesntEatOrDrink,
