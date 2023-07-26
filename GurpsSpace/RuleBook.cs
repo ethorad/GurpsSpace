@@ -935,21 +935,28 @@ namespace GurpsSpace
             TraitParameters tp;
 
             tp = new TraitParameters(eTrait.IncreasedConsumption, "Increased consumption", "", 0, -10, 0);
-            tp.BannedTraits.Add(eTrait.IncreasedConsumption);
             tp.BannedTraits.Add(eTrait.ReducedConsumption);
             tp.BannedTraits.Add(eTrait.DoesntEatOrDrink);
             TraitParams.Add(tp.Trait, tp);
 
             tp = new TraitParameters(eTrait.ReducedConsumption, "Reduced consumption", "", 0, 2, 4);
             tp.BannedTraits.Add(eTrait.IncreasedConsumption);
-            tp.BannedTraits.Add(eTrait.ReducedConsumption);
             tp.BannedTraits.Add(eTrait.DoesntEatOrDrink);
             TraitParams.Add(tp.Trait, tp);
 
             tp = new TraitParameters(eTrait.DoesntEatOrDrink, "Doesn't eat or drink", "", 10, 0, 0);
             tp.BannedTraits.Add(eTrait.IncreasedConsumption);
             tp.BannedTraits.Add(eTrait.ReducedConsumption);
-            tp.BannedTraits.Add(eTrait.DoesntEatOrDrink);
+            TraitParams.Add(tp.Trait, tp);
+
+            tp = new TraitParameters(eTrait.DecreasedTimeRate, "Decreased time rate", "", -100, 0, 0);
+            TraitParams.Add(tp.Trait, tp);
+
+            tp = new TraitParameters(eTrait.ReducedBasicSpeed, "Reduced basic speed", "", 0, -5, 100);
+            tp.BannedTraits.Add(eTrait.IncreasedBasicSpeed);
+            TraitParams.Add(tp.Trait, tp);
+            tp = new TraitParameters(eTrait.IncreasedBasicSpeed, "Increased basic speed", "", 0, 5, 100);
+            tp.BannedTraits.Add(eTrait.ReducedBasicSpeed);
             TraitParams.Add(tp.Trait, tp);
         }
 

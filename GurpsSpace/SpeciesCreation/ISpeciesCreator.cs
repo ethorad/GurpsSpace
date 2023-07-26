@@ -20,6 +20,6 @@ namespace GurpsSpace.SpeciesCreation
 
         double? GetAffinityMultiplier(SpeciesFactory sf);
 
-        eLifeChemistry? GetLifeChemistry(SpeciesFactory sf);
+        (eLifeChemistry?, List<Trait>?) GetLifeChemistry(SpeciesFactory sf);
     }
 }

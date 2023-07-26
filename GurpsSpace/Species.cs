@@ -257,6 +257,10 @@ namespace GurpsSpace
         }
         public Trait AddTrait(eTrait traitToAdd)
         {
+            // if duplicates aren't allowed, remove the existing one
+            if (RuleBook.TraitParams[traitToAdd].AllowDuplicates == false)
+                RemoveTrait(traitToAdd);
+
             // remove any banned traits
             foreach (eTrait bannedTrait in RuleBook.TraitParams[traitToAdd].BannedTraits)
                 RemoveTrait(bannedTrait);
@@ -273,6 +277,18 @@ namespace GurpsSpace
             Trait t = AddTrait(traitToAdd);
             t.Level = traitLevel;
             return t;
+        }
+        public Trait AddTrait(Trait traitToAdd)
+        {
+            // remove any banned traits
+            foreach (eTrait bannedTrait in RuleBook.TraitParams[traitToAdd.TraitType].BannedTraits)
+                RemoveTrait(bannedTrait);
+
+            // then add it
+            Traits.Add(traitToAdd);
+
+            // return the added trait so it can be further amended
+            return traitToAdd;
         }
 
     }

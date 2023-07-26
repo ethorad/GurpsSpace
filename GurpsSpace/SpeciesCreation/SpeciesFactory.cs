@@ -170,9 +170,15 @@ namespace GurpsSpace.SpeciesCreation
 
         private void SetLifeChemistry(ISpeciesCreator sc)
         {
-            eLifeChemistry? lifeChem = sc.GetLifeChemistry(this);
-            if (lifeChem != null)
+            eLifeChemistry? lifeChem;
+            List<Trait>? traits;
+            (lifeChem, traits) = sc.GetLifeChemistry(this);
+            if (lifeChem != null && traits != null)
+            {
                 species.LifeChemistry = lifeChem;
+                foreach (Trait t in traits)
+                    species.AddTrait(t);
+            }
         }
     }
 }

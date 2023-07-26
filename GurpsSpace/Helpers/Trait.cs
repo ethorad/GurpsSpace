@@ -32,6 +32,13 @@ namespace GurpsSpace
             Level = 0;
             VariableCost = 0;
         }
+        public Trait(eTrait traitType)
+        {
+            TraitType = traitType;
+            Specialty = "";
+            Level = 0;
+            VariableCost = 0;
+        }
         public Trait(Trait t)
         {
             TraitType = t.TraitType;

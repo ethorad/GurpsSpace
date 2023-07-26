@@ -16,6 +16,7 @@ namespace GurpsSpace.Helpers
         public int LevelCost;
         public int MaxLevel;
 
+        public bool AllowDuplicates;
         public List<eTrait> BannedTraits;
 
         public TraitParameters(eTrait trait, string name, string specialty, int baseCost, int levelCost, int maxLevel)
@@ -26,6 +27,7 @@ namespace GurpsSpace.Helpers
             BaseCost = baseCost;
             LevelCost = levelCost;
             MaxLevel = maxLevel;
+            AllowDuplicates = false;
             BannedTraits = new List<eTrait>();
         }
     }

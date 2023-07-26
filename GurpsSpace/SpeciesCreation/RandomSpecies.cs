@@ -136,10 +136,26 @@ namespace GurpsSpace.SpeciesCreation
             return 1 + (double)DiceBag.Roll(3) / 10;
         }
 
-        public eLifeChemistry? GetLifeChemistry(SpeciesFactory sf)
+        public (eLifeChemistry?, List<Trait>?) GetLifeChemistry(SpeciesFactory sf)
         {
             int roll = DiceBag.Roll(3);
-            return RuleBook.LifeChemistry[roll];
+            eLifeChemistry chem = RuleBook.LifeChemistry[roll];
+            chem = eLifeChemistry.Hydrogen;
+
+            List<Trait> traitLst = new List<Trait>();
+            Trait t;
+
+            switch (chem)
+            {
+                case eLifeChemistry.Hydrogen:
+                    traitLst.Add(new Trait(eTrait.DecreasedTimeRate));
+                    t = new Trait(eTrait.ReducedBasicSpeed);
+                    t.Level = 4;
+                    traitLst.Add(t);
+                    break;
+            }
+
+            return (chem, traitLst);
         }
     }
 }

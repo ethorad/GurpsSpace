@@ -205,6 +205,9 @@ namespace GurpsSpace
     {
         IncreasedConsumption,
         ReducedConsumption,
-        DoesntEatOrDrink
+        DoesntEatOrDrink,
+        DecreasedTimeRate,
+        ReducedBasicSpeed,
+        IncreasedBasicSpeed
     }
 }
