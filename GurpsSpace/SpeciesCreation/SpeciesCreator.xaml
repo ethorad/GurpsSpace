@@ -150,12 +150,10 @@
                                         <Grid Width="400">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="3*"/>
-                                                <ColumnDefinition Width="3*"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" Content="{Binding Path=Name}"/>
-                                            <Label Grid.Column="1" Content="{Binding Path=SpecialtyString}"/>
+                                            <Label Grid.Column="0" Content="{Binding Path=NameString}"/>
                                             <Label Grid.Column="2" Content="{Binding Path=LevelString}"/>
                                             <Label Grid.Column="3" HorizontalAlignment="Right" Content="{Binding Path=CostString}"/>
                                         </Grid>

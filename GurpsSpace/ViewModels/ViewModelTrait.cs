@@ -29,23 +29,22 @@ namespace GurpsSpace.SpeciesCreation
         public override string SummaryType { get { return TraitType; } }
 
         public string TraitType { get { return trait.TraitType.ToString(); } }
-        public string Name { get { return trait.Name; } }
-        public string SpecialtyString
-        {
-            get
+        public string NameString
+        { 
+            get 
             {
                 if (trait.Specialty == "")
-                    return "";
+                    return trait.Name;
                 else
-                    return "(" + trait.Specialty + ")";
-            }
+                    return trait.Name + ": " + trait.Specialty;
+            } 
         }
         public string LevelString
         {
             get
             {
                 if (trait.Level == 0)
-                    return "x";
+                    return "";
                 else
                     return "Lvl: "+trait.Level.ToString();
             }
