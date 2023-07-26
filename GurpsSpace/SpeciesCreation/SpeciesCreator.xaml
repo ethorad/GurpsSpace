@@ -134,24 +134,37 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
+                    <Label Grid.Row="0">List of traits present in the species template.</Label>
+
+                    <TreeView Grid.Row="1" ItemsSource="{Binding Path=TraitList.Items}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Items}" DataType="{x:Type local:ViewModelTrait}">
+
+                                <TreeViewItem>
+                                    <TreeViewItem.Header>
+                                        <Grid Width="400">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Content="{Binding Path=Name}"/>
+                                            <Label Grid.Column="1" Content="{Binding Path=SpecialtyString}"/>
+                                            <Label Grid.Column="1" HorizontalAlignment="Right" Content="{Binding Path=CostString}"/>
+                                        </Grid>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                     
 
-                    <ListView Grid.Row="1" ItemsSource="{Binding Path=TraitList.Items}">
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
-                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=Specialty}" Header="Specialty"/>
-                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=LevelString}" Header="Level"/>
-                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Path=CostString}" Header="Cost"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
                 </Grid>
                 
             </TabItem>

@@ -21,14 +21,14 @@ namespace GurpsSpace.SpeciesCreation
 
         public string TraitType { get { return trait.TraitType.ToString(); } }
         public string Name { get { return trait.Name; } }
-        public string Specialty
+        public string SpecialtyString
         {
             get
             {
                 if (trait.Specialty == "")
-                    return "-";
+                    return "";
                 else
-                    return trait.Specialty;
+                    return "(" + trait.Specialty + ")";
             }
         }
         public string LevelString
@@ -36,16 +36,16 @@ namespace GurpsSpace.SpeciesCreation
             get
             {
                 if (trait.Level == 0)
-                    return "-";
+                    return "";
                 else
-                    return trait.Level.ToString();
+                    return "Lvl: "+trait.Level.ToString();
             }
         }
         public string CostString
         {
             get
             {
-                return trait.Cost.ToString("N0");
+                return "[" + trait.Cost.ToString("N0") + "]";
             }
         }
 
